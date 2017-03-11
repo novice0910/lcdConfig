@@ -20,6 +20,7 @@ void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         item = new myItem(widgetType);
         addItem(item);
         item->setPos(mouseEvent->scenePos());
+        emit signalItemHasInserted(item);
     }
     QGraphicsScene::mousePressEvent(mouseEvent);
 }

@@ -13,6 +13,9 @@ class myScene :public QGraphicsScene
 public:
     myScene(QObject *parent = 0);
     void setItemType(itemType type);
+signals:
+    void signalItemHasInserted(myItem *item);
+
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
 private:

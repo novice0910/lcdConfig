@@ -8,9 +8,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     scene = new myScene(ui->widget);
     scene->setSceneRect(QRectF(0, 0, 10, 10));
-
+    connect(scene,SIGNAL(signalItemHasInserted(myItem*)),this,SLOT(slotItemHasInserted(myItem*)));
     view = new QGraphicsView(scene,ui->widget);
     view->setGeometry(0,0,800,480);
+
 }
 
 MainWindow::~MainWindow()
@@ -45,4 +46,8 @@ void MainWindow::deleteItem()
 //         scene->removeItem(item);
 //         delete item;
 //     }
+}
+void MainWindow::slotItemHasInserted(myItem *item)
+{
+    scene->setItemType(MOVE_ITEM);
 }
