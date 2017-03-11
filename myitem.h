@@ -15,6 +15,7 @@ public:
 
 private:
     itemType m_type;
+    QPolygonF myPolygon;
 
 };
 

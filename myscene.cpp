@@ -1,7 +1,9 @@
 #include "myscene.h"
 
-myScene::myScene()
+myScene::myScene( QObject *parent)
+    :QGraphicsScene(parent)
 {
+
 }
 
 void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
@@ -18,5 +20,6 @@ void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
 void myScene::setItemType(itemType type)
 {
+    qDebug()<<"type"<<type;
     widgetType = type;
 }

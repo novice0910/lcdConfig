@@ -9,16 +9,16 @@ myItem::myItem(itemType type)
         setBrush(QBrush(Qt::yellow));
         break;
     case LABEL:
-        setBrush(QBrush(Qt::yellow));
+        setBrush(QBrush(Qt::blue));
         break;
     case MSG:
-        setBrush(QBrush(Qt::yellow));
+        setBrush(QBrush(Qt::gray));
         break;
     case INPUT_BTN:
         setBrush(QBrush(Qt::yellow));
         break;
     case RTC:
-        setBrush(QBrush(Qt::yellow));
+        setBrush(QBrush(Qt::white));
         break;
     default:
         break;
