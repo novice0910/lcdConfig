@@ -23,6 +23,11 @@ myItem::myItem(itemType type)
     default:
         break;
     }
+    myPolygon << QPointF(-50, -25) << QPointF(50, -25)
+              << QPointF(50, 25) << QPointF(-50, 25)
+              << QPointF(-50, -25);
+
+    setPolygon(myPolygon);
     setFlag(QGraphicsItem::ItemIsMovable, true);
     setFlag(QGraphicsItem::ItemIsSelectable, true);
     setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
