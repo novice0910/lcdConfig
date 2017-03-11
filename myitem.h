@@ -4,7 +4,7 @@
 #include <QGraphicsPolygonItem>
 #include <QBrush>
 
-enum itemType { BTN,LABEL,MSG ,INPUT_BTN,RTC};
+enum itemType { BTN,LABEL,MSG ,INPUT_BTN,RTC,MOVE_ITEM};
 
 class myItem :public QGraphicsPolygonItem
 {
