@@ -205,6 +205,12 @@ void myItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
     update();
     QGraphicsItem::hoverMoveEvent(event);
 }
+QVariant myItem::itemChange(GraphicsItemChange change, const QVariant &value)
+{
+//    qDebug()<<"change"<<change;
+    return QGraphicsItem::itemChange(change,value);
+}
+
 void myItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
 //    qDebug()<<"hover leave event"<<direction;
@@ -217,10 +223,21 @@ void myItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 }
 void myItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-//    qDebug()<<"Scale"<<cScale<<direction;
-    if(event->button()==Qt::LeftButton){
-        start=event->scenePos();
-        cScale=true;
+    qDebug()<<"Scale"<<cScale<<direction;
+    if(event->button()==Qt::LeftButton)
+    {
+        if(m_cursor->shape() == Qt::ArrowCursor)
+        {
+            m_cursor->setShape(Qt::SizeAllCursor);
+            this->setCursor(*m_cursor);
+            update();
+            setFlag(QGraphicsItem::ItemIsMovable, true);
+        }
+        else{
+            setFlag(QGraphicsItem::ItemIsMovable, false);
+            start=event->scenePos();
+            cScale=true;
+        }
     }
     update();
     QGraphicsItem::mousePressEvent(event);
@@ -312,6 +329,7 @@ void myItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void myItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
+    setFlag(QGraphicsItem::ItemIsMovable, true);
     cScale=false;
     direction = 0;
     qDebug()<<"release event"<<cScale<<direction;
