@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QGraphicsView>
+#include <QGraphicsPathItem>
 #include "myitem.h"
 #include "myscene.h"
 #include <QMouseEvent>

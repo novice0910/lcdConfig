@@ -12,7 +12,17 @@ void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         return;
     if(widgetType == MOVE_ITEM)
     {
+        itemList = selectedItems();
+        myItem *item = 0;
 
+        if(itemList.count() == 1 )
+        {
+            item = qgraphicsitem_cast<myItem*>(itemList.first());
+        }
+        if(item != 0)
+        {
+//            item->hitTest(mouseEvent->pos());
+        }
     }
     else
     {
@@ -22,6 +32,7 @@ void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         item->setPos(mouseEvent->scenePos());
         emit signalItemHasInserted(item);
     }
+    update();
     QGraphicsScene::mousePressEvent(mouseEvent);
 }
 
