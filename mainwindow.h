@@ -46,7 +46,10 @@ private:
     QTableWidget *pageTabWidget;
     QStackedWidget *propertyShow;
     BtnPropertyShow *btnPropertyShow;
-    void widgetInit();
+    void widgetCreate();
+    void toolBarCreate();
+    void leftDockWidgetCreate();
+    void rightDockWidgetCreate();
     void deleteItem();
 
 };

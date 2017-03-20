@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
     view->resize(centralWidget->size());
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    widgetInit();
+    widgetCreate();
 }
 
 MainWindow::~MainWindow()
@@ -28,7 +28,13 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::widgetInit()
+void MainWindow::widgetCreate()
+{
+    leftDockWidgetCreate();
+    rightDockWidgetCreate();
+}
+
+void MainWindow::leftDockWidgetCreate()
 {
     QDockWidget * dockWidgetPageProperty = new QDockWidget("image",this);
     dockWidgetPageProperty->setAllowedAreas(Qt::LeftDockWidgetArea);
@@ -36,7 +42,6 @@ void MainWindow::widgetInit()
     this->addDockWidget(Qt::LeftDockWidgetArea,dockWidgetPageProperty);
     QMainWindow *leftDockMainwindow = new QMainWindow;
     leftDockMainwindow->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-//    leftDockMainwindow->setStyleSheet("background-image:url(10.bmp)");
     dockWidgetPageProperty->setWidget(leftDockMainwindow);
     leftDockMainwindow->setParent(dockWidgetPageProperty);
     pageTabWidget = new QTableWidget(leftDockMainwindow);
@@ -47,7 +52,10 @@ void MainWindow::widgetInit()
     pToolBar->addAction(tr("删除"),this,SLOT(slotActionNewPage()));
     pToolBar->addAction(tr("上移"),this,SLOT(slotActionNewPage()));
     pToolBar->addAction(tr("下移"),this,SLOT(slotActionNewPage()));
+}
 
+void MainWindow::rightDockWidgetCreate()
+{
     QDockWidget *dockWidgetPropertyShow = new QDockWidget(tr("属性"),this);
     dockWidgetPropertyShow->setAllowedAreas(Qt::LeftDockWidgetArea);
     dockWidgetPropertyShow->setFeatures(QDockWidget::DockWidgetMovable);
@@ -56,11 +64,9 @@ void MainWindow::widgetInit()
     dockWidgetPropertyShow->setWidget(property);
     propertyShow = new QStackedWidget;
     property->setCentralWidget(propertyShow);
-
     //按键信息页
     btnPropertyShow = new BtnPropertyShow;
     propertyShow->addWidget(btnPropertyShow);
-//    propertyShow->setStyleSheet("background-image:url(10.bmp)");
 }
 
 void MainWindow::on_drawBtn_triggered()
