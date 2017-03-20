@@ -20,12 +20,24 @@ MainWindow::MainWindow(QWidget *parent) :
     view->resize(centralWidget->size());
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    toolBarCreate();
     widgetCreate();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::toolBarCreate()
+{
+    QToolBar *toolBar = new QToolBar;
+    this->addToolBar(toolBar);
+    QAction *drawAciton = new QAction(tr("按键"),this);
+    drawAciton->setToolTip(tr("按键返回"));
+    toolBar->addAction(drawAciton);
+    connect(drawAciton,SIGNAL(triggered()),this,SLOT(slotDrawBtnTriggered()));
+    toolBar->addAction(tr("显示框"),this,SLOT(slotDrawLabTrigger()));
 }
 
 void MainWindow::widgetCreate()
@@ -69,10 +81,16 @@ void MainWindow::rightDockWidgetCreate()
     propertyShow->addWidget(btnPropertyShow);
 }
 
-void MainWindow::on_drawBtn_triggered()
+void MainWindow::slotDrawBtnTriggered()
 {
+    qDebug()<<"drawbtn click";
     scene->setItemType(BTN);
 }
+void MainWindow::slotDrawLabTrigger()
+{
+    scene->setItemType(LABEL);
+}
+
 void MainWindow::mouseDoubleClickEvent(QMouseEvent *)
 {
     qDebug()<<"doubule click";

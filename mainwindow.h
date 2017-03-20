@@ -35,7 +35,8 @@ public:
 public slots:
     void slotItemHasInserted(myItem *item);
 private slots:
-    void on_drawBtn_triggered();
+    void slotDrawBtnTriggered();
+    void slotDrawLabTrigger();
     void mouseDoubleClickEvent(QMouseEvent *);
     void slotActionNewPage();
 private:
