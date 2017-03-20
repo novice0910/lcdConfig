@@ -7,9 +7,11 @@
 #include <unistd.h>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsSceneHoverEvent>
+#include <QStyleOptionGraphicsItem>
 #include <QPen>
 #include <QCursor>
 #include <QDebug>
+
 enum itemType { BTN,LABEL,MSG ,INPUT_BTN,RTC,MOVE_ITEM};
 enum Direction { LeftTop , Top, RightTop, Right, RightBottom, Bottom, LeftBottom, Left , Center, None};
 
@@ -41,6 +43,8 @@ private:
     QPointF start;
     QPointF end;
     int direction;
+    QTimer *timer;
+
 };
 
 #endif // MYITEM_H

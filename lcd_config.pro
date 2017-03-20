@@ -15,10 +15,14 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     myitem.cpp \
-    myscene.cpp
+    myscene.cpp \
+    BtnPropertyShow.cpp
 
 HEADERS  += mainwindow.h \
     myitem.h \
-    myscene.h
+    myscene.h \
+    BtnPropertyShow.h
 
 FORMS    += mainwindow.ui
+
+RESOURCES +=

@@ -4,10 +4,23 @@
 #include <QMainWindow>
 #include <QGraphicsView>
 #include <QGraphicsPathItem>
-#include "myitem.h"
-#include "myscene.h"
+#include <QDockWidget>
 #include <QMouseEvent>
 #include <QDebug>
+#include <QMenuBar>
+#include <QMenu>
+#include <QPushButton>
+#include <QHBoxLayout>
+#include <QGroupBox>
+#include <QToolBar>
+#include <QTableWidget>
+#include <QStackedWidget>
+#include <QGridLayout>
+#include <QLabel>
+#include <QSpinBox>
+#include "myitem.h"
+#include "BtnPropertyShow.h"
+#include "myscene.h"
 namespace Ui {
 class MainWindow;
 }
@@ -24,12 +37,18 @@ public slots:
 private slots:
     void on_drawBtn_triggered();
     void mouseDoubleClickEvent(QMouseEvent *);
+    void slotActionNewPage();
 private:
     Ui::MainWindow *ui;
     myScene *scene;
     QGraphicsView *view;
-
+    QWidget *centralWidget;
+    QTableWidget *pageTabWidget;
+    QStackedWidget *propertyShow;
+    BtnPropertyShow *btnPropertyShow;
+    void widgetInit();
     void deleteItem();
+
 };
 
 #endif // MAINWINDOW_H
