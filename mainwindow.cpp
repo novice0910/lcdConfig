@@ -8,18 +8,19 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     centralWidget = new QWidget(ui->centralWidget);
-    centralWidget->setStyleSheet("background-image:url(10.bmp)");
-    centralWidget->resize(QSize(800,480));
+//    centralWidget->setStyleSheet("background-image:url(10.bmp)");
+    centralWidget->resize(QSize(850,480));
     scene = new myScene(centralWidget);
     int w =static_cast< QWidget *>(scene->parent())->size().width();
     int h =static_cast< QWidget *>(scene->parent())->size().height();
-    scene->setSceneRect(QRectF(0, 0, w, h));
+    scene->setSceneRect(QRectF(50, 0, w, h));
     connect(scene,SIGNAL(signalItemHasInserted(myItem*)),this,SLOT(slotItemHasInserted(myItem*)));
     view = new QGraphicsView(scene,centralWidget);
-    view->setGeometry(0,0,800,480);
+    view->setGeometry(50,0,850,480);
     view->resize(centralWidget->size());
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view->setStyleSheet("background-image:url(10.bmp)");
     toolBarCreate();
     widgetCreate();
     connect(scene,SIGNAL(signalSendBtnInfoToUI(BTN_INFO*)),this,SLOT(slotGetBtnInfoFromScene(BTN_INFO*)));
