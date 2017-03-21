@@ -22,6 +22,9 @@ MainWindow::MainWindow(QWidget *parent) :
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     toolBarCreate();
     widgetCreate();
+    connect(scene,SIGNAL(signalSendBtnInfoToUI(BTN_INFO*)),this,SLOT(slotGetBtnInfoFromScene(BTN_INFO*)));
+    connect(scene,SIGNAL(signalSendBtnInfoToUI(BTN_INFO*)),btnPropertyShow,SLOT(slotGetBtnInfoFromScene(BTN_INFO*)));
+    setMouseTracking(true);
 }
 
 MainWindow::~MainWindow()
@@ -83,7 +86,6 @@ void MainWindow::rightDockWidgetCreate()
 
 void MainWindow::slotDrawBtnTriggered()
 {
-    qDebug()<<"drawbtn click";
     scene->setItemType(BTN);
 }
 void MainWindow::slotDrawLabTrigger()
@@ -95,6 +97,13 @@ void MainWindow::mouseDoubleClickEvent(QMouseEvent *)
 {
     qDebug()<<"doubule click";
 }
+void MainWindow::mouseMoveEvent(QMouseEvent *ev)
+{
+    QString size;
+    size = tr("this pos is %1,%2").arg(ev->pos().x(),ev->pos().y());
+//    this->setToolTip(size);
+}
+
 void MainWindow::deleteItem()
 {
 //    foreach (QGraphicsItem *item, scene->selectedItems()) {
@@ -120,7 +129,24 @@ void MainWindow::slotItemHasInserted(myItem *item)
     scene->setItemType(MOVE_ITEM);
 }
 
+void MainWindow::slotGetBtnInfoFromScene(BTN_INFO * btn)
+{
+    propertyShow->setCurrentIndex(0);
+}
+
 void MainWindow::slotActionNewPage()
+{
+
+}
+void MainWindow::slotActionDeletePage()
+{
+
+}
+void MainWindow::slotActionUp()
+{
+
+}
+void MainWindow::slotActionDown()
 {
 
 }

@@ -29,6 +29,7 @@ void BtnPropertyShow::widgetInit()
     btn_x = new QSpinBox(gridLayoutWidget);
     btn_x->setObjectName(QString::fromUtf8("btn_x"));
     btn_x->setMaximum(800);
+    btn_x->setMinimum(-200);
     gridLayout->addWidget(btn_x, 0, 1, 1, 1);
 
     btn_w = new QSpinBox(gridLayoutWidget);
@@ -134,4 +135,12 @@ void BtnPropertyShow::widgetInit()
     gLayout->addWidget(rBtninputByBit,1,1,1,1);
     gLayout->addWidget(rBtninputByHighByte,2,0,1,2);
     gLayout->addWidget(rBtninputByLowByte,3,0,1,2);
+}
+
+void BtnPropertyShow::slotGetBtnInfoFromScene(BTN_INFO * btn)
+{
+    btn_x->setValue(btn->x);
+    btn_y->setValue(btn->y);
+    btn_h->setValue(btn->h);
+    btn_w->setValue(btn->w);
 }

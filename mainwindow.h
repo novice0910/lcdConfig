@@ -21,6 +21,8 @@
 #include "myitem.h"
 #include "BtnPropertyShow.h"
 #include "myscene.h"
+#include "data.h"
+
 namespace Ui {
 class MainWindow;
 }
@@ -34,11 +36,16 @@ public:
     ~MainWindow();
 public slots:
     void slotItemHasInserted(myItem *item);
+    void slotGetBtnInfoFromScene(BTN_INFO *);
 private slots:
     void slotDrawBtnTriggered();
     void slotDrawLabTrigger();
     void mouseDoubleClickEvent(QMouseEvent *);
+    void mouseMoveEvent(QMouseEvent *ev);
     void slotActionNewPage();
+    void slotActionDeletePage();
+    void slotActionUp();
+    void slotActionDown();
 private:
     Ui::MainWindow *ui;
     myScene *scene;

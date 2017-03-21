@@ -21,7 +21,8 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     myitem.h \
     myscene.h \
-    BtnPropertyShow.h
+    BtnPropertyShow.h \
+    data.h
 
 FORMS    += mainwindow.ui
 

@@ -4,6 +4,7 @@ myScene::myScene( QObject *parent)
     :QGraphicsScene(parent)
 {
     widgetType = MOVE_ITEM;
+    m_selectedItem = new myItem(widgetType);
 }
 
 void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
@@ -14,17 +15,15 @@ void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     if(widgetType == MOVE_ITEM)
     {
         itemList = selectedItems();
-        myItem *item = 0;
 
-        if(itemList.size() == 1 )
+        foreach(QGraphicsItem *item,selectedItems())
         {
-             qDebug()<<"item size >1";
-            item = qgraphicsitem_cast<myItem*>(itemList.first());
-        }
-        if(item != 0)
-        {
-//            item->hitTest(mouseEvent->pos());
-            qDebug()<<"item pos x"<<item->scenePos().x();
+            if(item->type() == myItem::Type)
+            {
+                m_selectedItem = qgraphicsitem_cast<myItem *>(item);
+                qDebug()<<"select item type"<<m_selectedItem->getItemType();
+                qDebug()<<"item pos x"<<item->scenePos().x();
+            }
         }
     }
     else
@@ -39,7 +38,23 @@ void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     QGraphicsScene::mousePressEvent(mouseEvent);
 }
 
+void myScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    getItemInfo(m_selectedItem);
+}
+
 void myScene::setItemType(itemType type)
 {
     widgetType = type;
+}
+
+void myScene::getItemInfo(myItem *item)
+{
+    BTN_INFO btn;
+   btn.x = m_selectedItem->scenePos().x();
+   btn.y = m_selectedItem->scenePos().y();
+//   m_selectedItem->m_rect.width();
+//   m_selectedItem->m_rect.height();
+//    BTN_INFO btn =  item->getBtnInfo();
+    emit signalSendBtnInfoToUI(&btn);
 }

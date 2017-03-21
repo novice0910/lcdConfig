@@ -11,9 +11,11 @@ myItem::myItem(itemType type)
     switch (m_type) {
     case BTN:
         setBrush(QBrush(Qt::yellow));
+        setToolTip("this is a pushbutton");
         break;
     case LABEL:
         setBrush(QBrush(Qt::blue));
+        setToolTip("this is a label");
         break;
     case MSG:
         setBrush(QBrush(Qt::gray));
@@ -31,7 +33,7 @@ myItem::myItem(itemType type)
               << QPointF(50, 25) << QPointF(-50, 25)
               << QPointF(-50, -25);
 
-    m_rect = QRectF(0,0,100,40);
+    m_rect = QRectF(0,0,200,40);
 //    setRect(0,0,20,10);
     setFlag(QGraphicsItem::ItemIsMovable, true);
     setFlag(QGraphicsItem::ItemIsSelectable, true);
@@ -43,6 +45,7 @@ myItem::myItem(itemType type)
     cScale=false;
     m_cursor=new QCursor;
     direction=0;
+    m_btnInfo = new BTN_INFO;
 }
 
 void myItem::ResetRect(QRectF rect){
@@ -64,20 +67,26 @@ QPainterPath myItem::shape()const{
 void myItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget){
     Q_UNUSED(option);
     Q_UNUSED(widget);
-//    QPen pen;
-//    pen.setColor(Qt::black);
-//    pen.setWidth(2);
-//    setBrush(QBrush(Qt::yellow));
-    painter->setBrush(Qt::yellow);
-//    painter->setPen(pen);
-    painter->drawRect(m_rect);
+
     if (option->state & QStyle::State_Selected)
     {
         QPen pen;
         pen.setColor(Qt::black);
-        pen.setWidth(2);
-        setBrush(QBrush(Qt::white));
+        pen.setWidth(5);
+        pen.setStyle(Qt::DashDotLine);
+        painter->setBrush(QBrush(Qt::yellow));
         painter->setPen(pen);
+        painter->drawRect(m_rect);
+    }
+    else
+    {
+        //    QPen pen;
+        //    pen.setColor(Qt::black);
+        //    pen.setWidth(2);
+        //    setBrush(QBrush(Qt::yellow));
+            painter->setBrush(Qt::yellow);
+        //    painter->setPen(pen);
+            painter->drawRect(m_rect);
     }
 }
 
@@ -348,4 +357,13 @@ void myItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 //    qDebug()<<"release event"<<cScale<<direction;
     update();
     QGraphicsItem::mouseReleaseEvent(event);
+}
+
+BTN_INFO myItem::getBtnInfo()
+{
+    m_btnInfo->x = this->scenePos().x();
+    m_btnInfo->y = this->scenePos().y();
+    m_btnInfo->w = m_rect.width();
+    m_btnInfo->h = m_rect.height();
+    return *m_btnInfo;
 }
