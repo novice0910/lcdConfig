@@ -5,9 +5,9 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QColor>
 #include <QDebug>
-#include "myitem.h"
 #include <QList>
 #include "data.h"
+#include "MyWidget.h"
 
 typedef QList<QGraphicsItem*> ITEM_LIST;
 
@@ -26,7 +26,7 @@ signals:
 
 private:
     ITEM_LIST itemList;
-    ITEM_TYPE widgetType;
+    ITEM_TYPE m_ItemType;
     QGraphicsPathItem * dashRect;
     myItem *m_selectedItem;
     void getItemInfo(myItem *item);

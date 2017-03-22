@@ -1,5 +1,9 @@
 #include "MyWidget.h"
 
-MyWidget::MyWidget()
+BtnWidget::BtnWidget()
 {
+    setBrushColor(Qt::yellow);
+    m_itemType = BTN;
 }
+
+
