@@ -10,12 +10,16 @@
 #include "data.h"
 
 typedef QList<QGraphicsItem*> ITEM_LIST;
+enum ITEM_TYPE{
+    BTN,LABEL,MSG,INPUT_BTN,RTC,MOVE_ITEM
+};
+
 class myScene :public QGraphicsScene
 {
     Q_OBJECT
 public:
     myScene(QObject *parent = 0);
-    void setItemType(itemType type);
+    void setItemType(ITEM_TYPE type);
     void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
@@ -25,7 +29,7 @@ signals:
 
 private:
     ITEM_LIST itemList;
-    itemType widgetType;
+    ITEM_TYPE widgetType;
     QGraphicsPathItem * dashRect;
     myItem *m_selectedItem;
     void getItemInfo(myItem *item);

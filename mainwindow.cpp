@@ -21,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setStyleSheet("background-image:url(10.bmp)");
+    view->centerOn(50,0);
     toolBarCreate();
     widgetCreate();
     connect(scene,SIGNAL(signalSendBtnInfoToUI(BTN_INFO*)),this,SLOT(slotGetBtnInfoFromScene(BTN_INFO*)));
@@ -91,7 +92,7 @@ void MainWindow::slotDrawBtnTriggered()
 }
 void MainWindow::slotDrawLabTrigger()
 {
-    scene->setItemType(LABEL);
+//    scene->setItemType(LABEL);
 }
 
 void MainWindow::mouseDoubleClickEvent(QMouseEvent *)

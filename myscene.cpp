@@ -4,7 +4,7 @@ myScene::myScene( QObject *parent)
     :QGraphicsScene(parent)
 {
     widgetType = MOVE_ITEM;
-    m_selectedItem = new myItem(widgetType);
+    m_selectedItem = new myItem;
 }
 
 void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
@@ -21,7 +21,7 @@ void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             if(item->type() == myItem::Type)
             {
                 m_selectedItem = qgraphicsitem_cast<myItem *>(item);
-                qDebug()<<"select item type"<<m_selectedItem->getItemType();
+//                qDebug()<<"select item type"<<m_selectedItem->getItemType();
                 qDebug()<<"item pos x"<<item->scenePos().x();
             }
         }
@@ -29,9 +29,9 @@ void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     else
     {
         myItem *item;
-        item = new myItem(widgetType);
-        addItem(item);
-        item->moveBy(mouseEvent->scenePos().rx(),mouseEvent->scenePos().ry());
+        item = new myItem();
+        this->addItem(item);
+        item->setPos(mouseEvent->scenePos());
         emit signalItemHasInserted(item);
     }
     update();
@@ -43,7 +43,7 @@ void myScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     getItemInfo(m_selectedItem);
 }
 
-void myScene::setItemType(itemType type)
+void myScene::setItemType(ITEM_TYPE type)
 {
     widgetType = type;
 }
