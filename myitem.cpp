@@ -1,11 +1,12 @@
 #include "myitem.h"
 
-myItem::myItem(qreal wid,qreal hgt)
+myItem::myItem(qreal width, qreal height)
 {
-    m_width=wid;m_height=hgt;
+    m_width=width;
+    m_height=height;
     setAcceptDrops(true);
     setAcceptHoverEvents(true);
-    setFlags(ItemIgnoresTransformations|ItemIsSelectable | /*ItemIsMovable |*/ ItemIsFocusable);
+    setFlags(ItemIgnoresTransformations|ItemIsSelectable | ItemIsFocusable);
     setZValue(0);
     m_cursor=new QCursor;
     direction = NONE;
@@ -270,7 +271,11 @@ void myItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 
 void myItem::judgeMousePosition(QPointF pointF)
 {
-    if(!m_isSelected) return;
+    if(!m_isSelected)
+    {
+        this->cursor().setShape(Qt::ArrowCursor);
+        return;
+    }
     QPointF mousePos = pointF;
     QPointF leftTop = QPointF(this->scenePos().x(),this->scenePos().y());
     QPointF leftBottom = QPointF(this->scenePos().x(),this->scenePos().y()+m_height);

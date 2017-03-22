@@ -24,7 +24,7 @@ enum DIRECTION{
 class myItem :public QGraphicsItem
 {
 public:
-    myItem(qreal wid,qreal hgt);
+    myItem(qreal width = 20,qreal height = 10);
     QRectF boundingRect()const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     QPainterPath shape()const;
