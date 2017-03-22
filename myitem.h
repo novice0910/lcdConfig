@@ -1,59 +1,49 @@
 #ifndef MYITEM_H
 #define MYITEM_H
 
-#include <QGraphicsRectItem>
-#include <QBrush>
+#include <QGraphicsItem>
 #include <QPainter>
+#include <QRectF>
+#include <QPainterPath>
+#include <QPen>
 #include <unistd.h>
+#include <QDebug>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsSceneHoverEvent>
 #include <QStyleOptionGraphicsItem>
-#include <QPen>
 #include <QCursor>
-#include <QDebug>
-#include "data.h"
 
-enum itemType { BTN,LABEL,MSG ,INPUT_BTN,RTC,MOVE_ITEM};
-enum Direction { LeftTop , Top, RightTop, Right, RightBottom, Bottom, LeftBottom, Left , Center, None};
+#define VERTEX_DIS 3
+#define SIZE_WIDTH 800
+#define SIZE_HIGHT 480
+enum DIRECTION{
+    NONE,LEFT,RIGHT,TOP,BOTTOM,LEFT_TOP,
+    RIGHT_TOP,LEFT_BOTTOM,RIGHT_BOTTOM,MOVE
+};
 
-class myItem :public QGraphicsRectItem
+class myItem :public QGraphicsItem
 {
 public:
-    enum { Type = UserType + 15 };
-
-    myItem(itemType type);
-    int type() const
-        { return Type; }
-    itemType getItemType() const
-    { return m_type;}
-
-    void ResetRect(QRectF rect);
-
-    QRectF boundingRect() const;
-    QPainterPath shape() const;
+    myItem(qreal wid,qreal hgt);
+    QRectF boundingRect()const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-    void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
-    void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
-    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+    QPainterPath shape()const;
+protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-    QVariant itemChange(GraphicsItemChange change, const QVariant &value);
-    BTN_INFO getBtnInfo();
+    void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+    void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
 private:
-    itemType m_type;
-    QPolygonF myPolygon;
-    typedef QList<QGraphicsItem*> Handles;
-    QRectF m_rect;
+    qreal m_width;
+    qreal m_height;
     QCursor *m_cursor;
-    bool cScale;
+    bool m_isSelected;
     QPointF start;
     QPointF end;
-    int direction;
-    QTimer *timer;
-
-    BTN_INFO *m_btnInfo;
-
+    DIRECTION direction;
+    void judgeMousePosition(QPointF pointF);
 };
 
 #endif // MYITEM_H

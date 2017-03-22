@@ -1,242 +1,55 @@
 #include "myitem.h"
 
-myItem::myItem(itemType type)
+myItem::myItem(qreal wid,qreal hgt)
 {
-    m_type = type;
-    setOpacity(0.4);
-    QPen pen;
-    pen.setColor(Qt::black);
-    pen.setWidth(2);
-    setPen(pen);
-    switch (m_type) {
-    case BTN:
-        setBrush(QBrush(Qt::yellow));
-        setToolTip("this is a pushbutton");
-        break;
-    case LABEL:
-        setBrush(QBrush(Qt::blue));
-        setToolTip("this is a label");
-        break;
-    case MSG:
-        setBrush(QBrush(Qt::gray));
-        break;
-    case INPUT_BTN:
-        setBrush(QBrush(Qt::yellow));
-        break;
-    case RTC:
-        setBrush(QBrush(Qt::white));
-        break;
-    default:
-        break;
-    }
-    myPolygon << QPointF(-50, -25) << QPointF(50, -25)
-              << QPointF(50, 25) << QPointF(-50, 25)
-              << QPointF(-50, -25);
-
-    m_rect = QRectF(0,0,200,40);
-//    setRect(0,0,20,10);
-    setFlag(QGraphicsItem::ItemIsMovable, true);
-    setFlag(QGraphicsItem::ItemIsSelectable, true);
-    setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
-    setFlag(QGraphicsItem::ItemIsFocusable,true);
-    setZValue(0);
+    m_width=wid;m_height=hgt;
     setAcceptDrops(true);
-    setAcceptsHoverEvents(true);
-    cScale=false;
+    setAcceptHoverEvents(true);
+    setFlags(ItemIgnoresTransformations|ItemIsSelectable | /*ItemIsMovable |*/ ItemIsFocusable);
+    setZValue(0);
     m_cursor=new QCursor;
-    direction=0;
-    m_btnInfo = new BTN_INFO;
+    direction = NONE;
+    m_isSelected = false;
 }
-
-void myItem::ResetRect(QRectF rect){
-    m_rect=rect;
-    update(boundingRect());
+QRectF myItem::boundingRect()const{
+    return QRectF(0,0,m_width,m_height);
+    //每个item都有自己的一个坐标系，
+//这个设置相当于把item相对于自身的坐标系的原点（0,0）放到自己的正中央。
 }
-
-QRectF myItem::boundingRect()const
-{
-    return QRectF(m_rect.x()-2,m_rect.y()-2,m_rect.width()+4,m_rect.height()+4);
-}
-
 QPainterPath myItem::shape()const{
     QPainterPath path;
-    path.addRect(m_rect);
+    path.addRect(QRectF(0,0,m_width,m_height));
     return path;
 }
-
 void myItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget){
-    Q_UNUSED(option);
+//    Q_UNUSED(option);
     Q_UNUSED(widget);
-
     if (option->state & QStyle::State_Selected)
     {
         QPen pen;
         pen.setColor(Qt::black);
-        pen.setWidth(5);
+        pen.setWidth(2);
         pen.setStyle(Qt::DashDotLine);
         painter->setBrush(QBrush(Qt::yellow));
         painter->setPen(pen);
-        painter->drawRect(m_rect);
+        painter->drawRect(QRectF(0,0,m_width,m_height));
+        m_isSelected=true;
     }
     else
     {
-        //    QPen pen;
-        //    pen.setColor(Qt::black);
-        //    pen.setWidth(2);
-        //    setBrush(QBrush(Qt::yellow));
-            painter->setBrush(Qt::yellow);
-        //    painter->setPen(pen);
-            painter->drawRect(m_rect);
+            QPen pen;
+            pen.setColor(Qt::black);
+            pen.setWidth(2);
+            painter->setBrush(Qt::blue);
+            painter->setPen(pen);
+            painter->drawRect(QRectF(0,0,m_width,m_height));
+            m_isSelected = false;
     }
+    qDebug()<<"paint"<<this->scenePos().x()<<this->x()<<"m_isSelected"<<m_isSelected;
 }
 
-void myItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
-{
-//    qDebug()<<"hover enter event"<<direction;
-    QPointF pos1=event->scenePos();
-    QPointF lt=this->scenePos()+QPointF(m_rect.x(),m_rect.y());
-    QPointF lb=this->scenePos()+QPointF(m_rect.x(),m_rect.y()+m_rect.height());
-    QPointF rt=this->scenePos()+QPointF(m_rect.x()+m_rect.width(),m_rect.y());
-    QPointF rb=this->scenePos()+QPointF(m_rect.x()+m_rect.width(),m_rect.y()+m_rect.height());
-    if((pos1.x()<=lt.x()+2&&pos1.y()<=lt.y()+2)
-     ||(pos1.x()>=rb.x()-2&&pos1.y()>=rb.y()-2))
-    {
-        usleep(5);
-        if((pos1.x()<=lt.x()+2&&pos1.y()<=lt.y()+2)
-         ||(pos1.x()>=rb.x()-2&&pos1.y()>=rb.y()-2))
-        {
-            m_cursor->setShape(Qt::SizeFDiagCursor);
-            if(pos1.x()<=lt.x()+2)direction=8;
-            else direction=4;
-
-        }
-    }
-    else if((pos1.x()<=lb.x()+2&&pos1.y()>=lb.y()-2)
-             ||(pos1.x()>=rt.x()-2&&pos1.y()<=rt.y()+2))
-    {
-        usleep(5);
-        if((pos1.x()<=lb.x()+2&&pos1.y()>=lb.y()-2)
-                ||(pos1.x()>=rt.x()-2&&pos1.y()<=rt.y()+2))
-        {
-            m_cursor->setShape(Qt::SizeBDiagCursor);
-            if(pos1.x()<=lb.x()+2)direction=6;
-            else direction=2;
-        }
-    }
-    else if((pos1.x()<=lt.x()+2||pos1.x()>=rt.x()-2)
-             &&(pos1.y()<=lb.y()&&pos1.y()>=lt.y()))
-    {
-        usleep(5);
-        if((pos1.x()<=lt.x()+2||pos1.x()>=rt.x()-2)
-                     &&(pos1.y()<=lb.y()&&pos1.y()>=lt.y()))
-        {
-            m_cursor->setShape(Qt::SizeHorCursor);
-            if(pos1.x()<=lt.x()+2)direction=7;
-            else direction=3;
-        }
-    }
-    else if((pos1.y()<=lt.y()+2||pos1.y()>=lb.y()-2)
-             &&(pos1.x()>=lt.x()&&pos1.x()<=rt.x()))
-    {
-        usleep(5);
-        if((pos1.y()<=lt.y()+2||pos1.y()>=lb.y()-2)
-                     &&(pos1.x()>=lt.x()&&pos1.x()<=rt.x()))
-        {
-            m_cursor->setShape(Qt::SizeVerCursor);
-            if(pos1.y()<=lt.y()+2)direction=1;
-            else direction=5;
-        }
-    }
-    else
-    {
-        direction =0;
-        cScale=false;
-        m_cursor->setShape(Qt::ArrowCursor);
-    }
-    this->setCursor(*m_cursor);
-    update();
-    QGraphicsItem::hoverEnterEvent(event);
-}
-void myItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
-{
-    QPointF pos1=event->scenePos();
-    QPointF lt=this->scenePos()+QPointF(m_rect.x(),m_rect.y());
-    QPointF lb=this->scenePos()+QPointF(m_rect.x(),m_rect.y()+m_rect.height());
-    QPointF rt=this->scenePos()+QPointF(m_rect.x()+m_rect.width(),m_rect.y());
-    QPointF rb=this->scenePos()+QPointF(m_rect.x()+m_rect.width(),m_rect.y()+m_rect.height());
-    if((pos1.x()<=lt.x()+2&&pos1.y()<=lt.y()+2)
-     ||(pos1.x()>=rb.x()-2&&pos1.y()>=rb.y()-2))
-    {
-        usleep(5);
-        if((pos1.x()<=lt.x()+2&&pos1.y()<=lt.y()+2)
-         ||(pos1.x()>=rb.x()-2&&pos1.y()>=rb.y()-2))
-        {
-            m_cursor->setShape(Qt::SizeFDiagCursor);
-            if(pos1.x()<=lt.x()+2)direction=8;
-            else direction=4;
-
-        }
-    }
-    else if((pos1.x()<=lb.x()+2&&pos1.y()>=lb.y()-2)
-             ||(pos1.x()>=rt.x()-2&&pos1.y()<=rt.y()+2))
-    {
-        usleep(5);
-        if((pos1.x()<=lb.x()+2&&pos1.y()>=lb.y()-2)
-                ||(pos1.x()>=rt.x()-2&&pos1.y()<=rt.y()+2))
-        {
-            m_cursor->setShape(Qt::SizeBDiagCursor);
-            if(pos1.x()<=lb.x()+2)direction=6;
-            else direction=2;
-        }
-    }
-    else if((pos1.x()<=lt.x()+2||pos1.x()>=rt.x()-2)
-             &&(pos1.y()<=lb.y()&&pos1.y()>=lt.y()))
-    {
-        usleep(5);
-        if((pos1.x()<=lt.x()+2||pos1.x()>=rt.x()-2)
-                     &&(pos1.y()<=lb.y()&&pos1.y()>=lt.y()))
-        {
-            m_cursor->setShape(Qt::SizeHorCursor);
-            if(pos1.x()<=lt.x()+2)direction=7;
-            else direction=3;
-        }
-    }
-    else if((pos1.y()<=lt.y()+2||pos1.y()>=lb.y()-2)
-             &&(pos1.x()>=lt.x()&&pos1.x()<=rt.x()))
-    {
-        usleep(5);
-        if((pos1.y()<=lt.y()+2||pos1.y()>=lb.y()-2)
-                     &&(pos1.x()>=lt.x()&&pos1.x()<=rt.x()))
-        {
-            m_cursor->setShape(Qt::SizeVerCursor);
-            if(pos1.y()<=lt.y()+2)direction=1;
-            else direction=5;
-        }
-    }
-    else
-    {
-        cScale=false;
-        direction = 0;
-        m_cursor->setShape(Qt::ArrowCursor);
-    }
-    this->setCursor(*m_cursor);
-    update();
-    QGraphicsItem::hoverMoveEvent(event);
-}
-
-void myItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
-{
-//    qDebug()<<"hover leave event"<<direction;
-    direction = 0;
-    m_cursor->setShape(Qt::ArrowCursor);
-    cScale=false;
-    this->setCursor(*m_cursor);
-    update();
-    QGraphicsItem::hoverLeaveEvent(event);
-}
 void myItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-//    qDebug()<<"Scale"<<cScale<<direction;
     if(event->button()==Qt::LeftButton)
     {
         if(m_cursor->shape() == Qt::ArrowCursor)
@@ -244,126 +57,301 @@ void myItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
             m_cursor->setShape(Qt::SizeAllCursor);
             this->setCursor(*m_cursor);
             update();
-            setFlag(QGraphicsItem::ItemIsMovable, true);
+            direction = MOVE;
+            start = event->scenePos();
         }
         else{
-            setFlag(QGraphicsItem::ItemIsMovable, false);
             start=event->scenePos();
-            cScale=true;
         }
     }
     update();
     QGraphicsItem::mousePressEvent(event);
 }
+
 void myItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    int t=0;
-    t++;
-    t--;
-    if(cScale){
+//    if(cScale)
+    {
         QPointF dis;
         end=event->scenePos();
         dis=end-start;
         start=end;
-        switch(direction){
-            case 1:
+        switch (direction) {
+        case TOP://top
+        {
+            if(end.y()>=0)
             {
-                QRectF tem=QRectF(m_rect.x(),m_rect.y()+dis.y()/2,m_rect.width(),m_rect.height()-dis.y());
-                this->ResetRect(tem);
+                m_height = m_height - dis.y();
                 update(boundingRect());
-                this->moveBy(0,dis.y()/2);
-                break;
-            }
-            case 2:
-            {
-                QRectF tem=QRectF(m_rect.x()+dis.x()/2,m_rect.y()+dis.y()/2,
-                                  m_rect.width()+dis.x(),m_rect.height()-dis.y());
-                this->ResetRect(tem);
-                update(boundingRect());
-                this->moveBy(-dis.x()/2,-dis.y()/2);
-                break;
-            }
-            case 3:
-            {
-                QRectF tem=QRectF(m_rect.x()+dis.x()/2,m_rect.y(),m_rect.width()+dis.x(),m_rect.height());
-                this->ResetRect(tem);
-                update(boundingRect());
-                this->moveBy(-dis.x()/2,0);
-                break;
-            }
-            case 4:
-            {
-                QRectF tem=QRectF(m_rect.x()+dis.x()/2,m_rect.y()+dis.y()/2,
-                                  m_rect.width()+dis.x(),m_rect.height()+dis.y());
-                this->ResetRect(tem);
-                update(boundingRect());
-                this->moveBy(-dis.x()/2,-dis.y()/2);
-                break;
-            }
-            case 5:
-            {
-                QRectF tem=QRectF(m_rect.x(),m_rect.y()+dis.y()/2,m_rect.width(),m_rect.height()+dis.y());
-                this->ResetRect(tem);
-                update(boundingRect());
-                this->moveBy(0,-dis.y()/2);
-                break;
-            }
-            case 6:
-            {
-                QRectF tem=QRectF(m_rect.x()+dis.x()/2,m_rect.y()+dis.y()/2,
-                                  m_rect.width()-dis.x(),m_rect.height()+dis.y());
-                this->ResetRect(tem);
-                update(boundingRect());
-                this->moveBy(-dis.x()/2,-dis.y()/2);
-                break;
-            }
-            case 7:
-            {
-                QRectF tem=QRectF(m_rect.x()+dis.x()/2,m_rect.y(),m_rect.width()-dis.x(),m_rect.height());
-                this->ResetRect(tem);
-                update(boundingRect());
-                this->moveBy(dis.x()/2,0);
-                break;
-            }
-            case 8:
-            {
-                QRectF tem=QRectF(m_rect.x()+dis.x()/2,m_rect.y()+dis.y()/2,
-                                  m_rect.width()-dis.x(),m_rect.height()-dis.y());
-                this->ResetRect(tem);
-                update(boundingRect());
-                this->moveBy(dis.x()/2,dis.y()/2);
-                break;
+                this->moveBy(0,dis.y());
             }
         }
+            break;
+        case BOTTOM:
+        {
+            if(end.y() <= SIZE_HIGHT)
+            {
+                m_height = m_height + dis.y();
+                update(boundingRect());
+                prepareGeometryChange();
+                this->moveBy(0,0);
+            }
+        }
+            break;
+        case LEFT:
+        {
+            if(end.x() >= 0)
+            {
+                m_width = m_width - dis.x();
+                update(boundingRect());
+                prepareGeometryChange();
+                this->moveBy(dis.x(),0);
+            }
+        }
+            break;
+        case RIGHT:
+        {
+            if(end.x() <= SIZE_WIDTH)
+            {
+                m_width = m_width + dis.x();
+                update(boundingRect());
+                prepareGeometryChange();
+                this->moveBy(0,0);
+            }
+        }
+            break;
+        case LEFT_TOP:
+        {
+            if(end.x()>=0 && end.y() >= 0)
+            {
+                m_width = m_width - dis.x();
+                m_height = m_height - dis.y();
+                this->moveBy(dis.x(),dis.y());
+            }
+            else if(end.x() >= 0 && end.y() <= 0)
+            {
+                m_width = m_width - dis.x();
+                m_height = m_height;
+                this->moveBy(dis.x(),0);
+            }
+            else if(end.x() <= 0 && end.y() >= 0)
+            {
+                m_width = m_width;
+                m_height = m_height - dis.y();
+                this->moveBy(0,dis.y());
+            }
+            update(boundingRect());
+            prepareGeometryChange();
+        }
+            break;
+        case LEFT_BOTTOM:
+        {
+            if(end.x() >= 0 && end.y() <= SIZE_HIGHT)
+            {
+                m_width = m_width - dis.x();
+                m_height = m_height + dis.y();
+                this->moveBy(dis.x(),0);
+            }
+            else if(end.x() <= 0 && end.y() <= SIZE_HIGHT)
+            {
+                m_width = m_width;
+                m_height = m_height + dis.y();
+                this->moveBy(0,0);
+            }
+            else if(end.x() >= 0 && end.y() >= SIZE_HIGHT)
+            {
+                m_width = m_width - dis.x();
+                m_height = m_height;
+                this->moveBy(dis.x(),0);
+            }
+            update(boundingRect());
+            prepareGeometryChange();
+        }
+            break;
+        case RIGHT_TOP:
+        {
+            if(end.x() <= SIZE_WIDTH && end.y() >= 0)
+            {
+                m_width = m_width + dis.x();
+                m_height = m_height - dis.y();
+                this->moveBy(0,dis.y());
+            }
+            else if(end.x() >= SIZE_WIDTH && end.y() >= 0)
+            {
+                m_height = m_height - dis.y();
+                m_width = m_width;
+                this->moveBy(0,dis.y());
+            }
+            else if(end.x() <= SIZE_WIDTH && end.y() <= 0)
+            {
+                m_height = m_height;
+                m_width = m_width + dis.x();
+                this->moveBy(0,0);
+            }
+            update(boundingRect());
+            prepareGeometryChange();
+        }
+            break;
+        case RIGHT_BOTTOM:
+        {
+            if(end.x() <= SIZE_WIDTH && end.y() <= SIZE_HIGHT)
+            {
+                m_width = m_width + dis.x();
+                m_height = m_height + dis.y();
+                this->moveBy(0,0);
+            }
+            else if(end.x() >= SIZE_WIDTH && end.y() <= SIZE_HIGHT)
+            {
+                m_height = m_height + dis.y();
+                m_width = m_width;
+                this->moveBy(0,0);
+            }
+            else if(end.x() <= SIZE_WIDTH && end.y() >= SIZE_HIGHT)
+            {
+                m_height = m_height;
+                m_width = m_width + dis.x();
+                this->moveBy(0,0);
+            }
+            update(boundingRect());
+            prepareGeometryChange();
+        }
+            break;
+        case MOVE:
+        {
+            QPointF leftTop,rightTop,leftBottom,rightBottom;
+            leftTop = this->scenePos();
+            rightTop = QPointF(leftTop.x() + m_width,leftTop.x());
+            leftBottom = QPointF(leftTop.x(),leftTop.y() + m_height);
+            rightBottom = QPointF(leftTop.x() + m_width,leftTop.y() + m_height);
+            if(leftTop.x() >=0 && leftTop.y()>=0 &&
+               leftBottom.x() >= 0 && leftBottom.y() <= SIZE_HIGHT &&
+               rightTop.x() <= SIZE_WIDTH && rightTop.y() >= 0 &&
+               rightBottom.x() <= SIZE_WIDTH && rightBottom.y() <= SIZE_HIGHT)
+            {
+                qDebug()<<"move "<<dis.x()<<dis.y();
+                this->moveBy(dis.x(),dis.y());
+                update(boundingRect());
+                prepareGeometryChange();
+            }
+        }
+            break;
+        default:
+            break;
+        }
     }
-    update();
     QGraphicsItem::mouseMoveEvent(event);
-}
-
-QVariant myItem::itemChange(GraphicsItemChange change, const QVariant &value)
-{
-   if(change == QGraphicsItem::ItemPositionChange)
-   {
-       qDebug()<<"scence positon"<<this->scenePos().x()<<this->scenePos().y();
-   }
-   return QGraphicsItem::itemChange(change,value);
 }
 
 void myItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     setFlag(QGraphicsItem::ItemIsMovable, true);
-    cScale=false;
-    direction = 0;
-//    qDebug()<<"release event"<<cScale<<direction;
+    direction = NONE;
     update();
     QGraphicsItem::mouseReleaseEvent(event);
 }
 
-BTN_INFO myItem::getBtnInfo()
+void myItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
-    m_btnInfo->x = this->scenePos().x();
-    m_btnInfo->y = this->scenePos().y();
-    m_btnInfo->w = m_rect.width();
-    m_btnInfo->h = m_rect.height();
-    return *m_btnInfo;
+    judgeMousePosition(event->scenePos());
+    QGraphicsItem::hoverEnterEvent(event);
+}
+
+void myItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+{
+    judgeMousePosition(event->scenePos());
+    QGraphicsItem::hoverLeaveEvent(event);
+}
+
+void myItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
+{
+    judgeMousePosition(event->scenePos());
+    QGraphicsItem::hoverMoveEvent(event);
+}
+
+void myItem::judgeMousePosition(QPointF pointF)
+{
+    if(!m_isSelected) return;
+    QPointF mousePos = pointF;
+    QPointF leftTop = QPointF(this->scenePos().x(),this->scenePos().y());
+    QPointF leftBottom = QPointF(this->scenePos().x(),this->scenePos().y()+m_height);
+    QPointF rightTop = QPointF(this->scenePos().x()+m_width,this->scenePos().y());
+    QPointF rightBottom = QPointF(this->scenePos().x()+m_width,this->scenePos().y()+m_height);
+    if((mousePos.x()>= leftTop.x() + VERTEX_DIS) &&
+            (mousePos.x() <= rightTop.x() - VERTEX_DIS)
+            && (mousePos.y() <= leftTop.y() + VERTEX_DIS)
+            && (mousePos.y() >= leftTop.y() -VERTEX_DIS))//top
+    {
+        qDebug()<<"top.y()";
+        m_cursor->setShape(Qt::SizeVerCursor);
+        direction = TOP;
+    }
+    else if((mousePos.x() >= leftBottom.x() + VERTEX_DIS) &&
+            (mousePos.x() <= rightTop.x()- VERTEX_DIS) &&
+            (mousePos.y() >= leftBottom.y() - VERTEX_DIS) &&
+            (mousePos.y() <= leftBottom.y() + VERTEX_DIS))//buttom
+    {
+        qDebug()<<"buttom.y()"<<mousePos.y()<<leftBottom.y() + VERTEX_DIS;
+        m_cursor->setShape(Qt::SizeVerCursor);
+        direction = BOTTOM;
+    }
+    else if((mousePos.y()>= leftTop.y() + VERTEX_DIS) &&
+            (mousePos.y() <= leftBottom.y() - VERTEX_DIS)
+            && (mousePos.x() <= leftTop.x() + VERTEX_DIS)
+            && (mousePos.x() >= leftTop.x() -VERTEX_DIS))//left
+    {
+      qDebug()<<"left"<<mousePos.y();
+      m_cursor->setShape(Qt::SizeHorCursor);
+      direction = LEFT;
+    }
+    else if((mousePos.y()>= rightTop.y() + VERTEX_DIS) &&
+            (mousePos.y() <= rightBottom.y() - VERTEX_DIS)
+            && (mousePos.x() <= rightTop.x() + VERTEX_DIS)
+            && (mousePos.x() >= rightTop.x() -VERTEX_DIS))//right
+    {
+        qDebug()<<"right";
+        m_cursor->setShape(Qt::SizeHorCursor);
+        direction = RIGHT;
+    }
+    else if((mousePos.x() <= leftTop.x() + VERTEX_DIS)&&
+            (mousePos.x() >= leftTop.x() - VERTEX_DIS)&&
+            (mousePos.y() <= leftTop.y() + VERTEX_DIS)&&
+            (mousePos.y() >= leftTop.y() - VERTEX_DIS))//left top
+    {
+        qDebug()<<"left top";
+        m_cursor->setShape(Qt::SizeFDiagCursor);
+        direction = LEFT_TOP;
+    }
+    else if((mousePos.x() <= leftBottom.x() + VERTEX_DIS)&&
+             (mousePos.x() >= leftBottom.x() - VERTEX_DIS)&&
+             (mousePos.y() <= leftBottom.y() + VERTEX_DIS)&&
+             (mousePos.y() >= leftBottom.y() - VERTEX_DIS))//left bottom
+    {
+         qDebug()<<"left bottom";
+         m_cursor->setShape(Qt::SizeBDiagCursor);
+         direction = LEFT_BOTTOM;
+    }
+    else if((mousePos.x() <= rightTop.x() + VERTEX_DIS)&&
+            (mousePos.x() >= rightTop.x() - VERTEX_DIS)&&
+            (mousePos.y() <= rightTop.y() + VERTEX_DIS)&&
+            (mousePos.y() >= rightTop.y() - VERTEX_DIS))//right top
+    {
+        qDebug()<<"right top";
+        m_cursor->setShape(Qt::SizeBDiagCursor);
+        direction = RIGHT_TOP;
+    }
+    else if((mousePos.x() <= rightBottom.x() + VERTEX_DIS)&&
+             (mousePos.x() >= rightBottom.x() - VERTEX_DIS)&&
+             (mousePos.y() <= rightBottom.y() + VERTEX_DIS)&&
+             (mousePos.y() >= rightBottom.y() - VERTEX_DIS))//right bottom
+    {
+         qDebug()<<"right bottom";
+         m_cursor->setShape(Qt::SizeFDiagCursor);
+         direction = RIGHT_BOTTOM;
+    }
+    else
+    {
+        direction = NONE;
+        m_cursor->setShape(Qt::ArrowCursor);
+    }
+    this->setCursor(*m_cursor);
 }
