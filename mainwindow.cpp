@@ -92,7 +92,7 @@ void MainWindow::slotDrawBtnTriggered()
 }
 void MainWindow::slotDrawLabTrigger()
 {
-//    scene->setItemType(LABEL);
+    scene->setItemType(LABEL);
 }
 
 void MainWindow::mouseDoubleClickEvent(QMouseEvent *)
