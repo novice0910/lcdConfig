@@ -46,7 +46,6 @@ void myItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
             painter->drawRect(QRectF(0,0,m_width,m_height));
             m_isSelected = false;
     }
-    qDebug()<<"paint"<<this->scenePos().x()<<this->x()<<"m_isSelected"<<m_isSelected;
 }
 
 void myItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -71,7 +70,6 @@ void myItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void myItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-//    if(cScale)
     {
         QPointF dis;
         end=event->scenePos();
