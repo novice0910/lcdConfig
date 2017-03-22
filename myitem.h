@@ -12,6 +12,7 @@
 #include <QGraphicsSceneHoverEvent>
 #include <QStyleOptionGraphicsItem>
 #include <QCursor>
+#include "data.h"
 
 #define VERTEX_DIS 3
 #define SIZE_WIDTH 800
@@ -24,10 +25,11 @@ enum DIRECTION{
 class myItem :public QGraphicsItem
 {
 public:
-    myItem(qreal width = 20,qreal height = 10);
+    myItem(qreal width = 100, qreal height = 30);
     enum { Type = UserType + 15 };
     int type() const
         { return Type;}
+    void setBrushColor(QColor color);
 protected:
     QRectF boundingRect()const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
@@ -39,6 +41,7 @@ protected:
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
     void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
 private:
+    QColor m_brushColor;
     qreal m_width;
     qreal m_height;
     QCursor *m_cursor;

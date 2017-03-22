@@ -30,6 +30,7 @@ void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     {
         myItem *item;
         item = new myItem();
+        item->setBrushColor(Qt::white);
         this->addItem(item);
         item->setPos(mouseEvent->scenePos());
         emit signalItemHasInserted(item);

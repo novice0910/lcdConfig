@@ -10,9 +10,6 @@
 #include "data.h"
 
 typedef QList<QGraphicsItem*> ITEM_LIST;
-enum ITEM_TYPE{
-    BTN,LABEL,MSG,INPUT_BTN,RTC,MOVE_ITEM
-};
 
 class myScene :public QGraphicsScene
 {

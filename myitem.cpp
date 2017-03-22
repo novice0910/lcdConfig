@@ -4,24 +4,34 @@ myItem::myItem(qreal width, qreal height)
 {
     m_width=width;
     m_height=height;
+    m_brushColor = Qt::yellow;
     setAcceptDrops(true);
     setAcceptHoverEvents(true);
     setFlags(ItemIgnoresTransformations|ItemIsSelectable | ItemIsFocusable);
     setZValue(0);
+    setOpacity(0.5);
     m_cursor=new QCursor;
     direction = NONE;
     m_isSelected = false;
 }
+
 QRectF myItem::boundingRect()const{
     return QRectF(0,0,m_width,m_height);
     //每个item都有自己的一个坐标系，
 //这个设置相当于把item相对于自身的坐标系的原点（0,0）放到自己的正中央。
 }
+
 QPainterPath myItem::shape()const{
     QPainterPath path;
     path.addRect(QRectF(0,0,m_width,m_height));
     return path;
 }
+
+void myItem::setBrushColor(QColor color)
+{
+    m_brushColor = color;
+}
+
 void myItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget){
 //    Q_UNUSED(option);
     Q_UNUSED(widget);
@@ -31,7 +41,7 @@ void myItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         pen.setColor(Qt::black);
         pen.setWidth(2);
         pen.setStyle(Qt::DashDotLine);
-        painter->setBrush(QBrush(Qt::yellow));
+        painter->setBrush(m_brushColor);
         painter->setPen(pen);
         painter->drawRect(QRectF(0,0,m_width,m_height));
         m_isSelected=true;
@@ -41,7 +51,7 @@ void myItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
             QPen pen;
             pen.setColor(Qt::black);
             pen.setWidth(2);
-            painter->setBrush(Qt::blue);
+            painter->setBrush(m_brushColor);
             painter->setPen(pen);
             painter->drawRect(QRectF(0,0,m_width,m_height));
             m_isSelected = false;
