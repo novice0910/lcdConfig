@@ -16,13 +16,15 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     myitem.cpp \
     myscene.cpp \
-    BtnPropertyShow.cpp
+    BtnPropertyShow.cpp \
+    MyWidget.cpp
 
 HEADERS  += mainwindow.h \
     myitem.h \
     myscene.h \
     BtnPropertyShow.h \
-    data.h
+    data.h \
+    MyWidget.h
 
 FORMS    += mainwindow.ui
 
