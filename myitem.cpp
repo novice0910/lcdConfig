@@ -227,7 +227,6 @@ void myItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
                rightTop.x() <= SIZE_WIDTH && rightTop.y() >= 0 &&
                rightBottom.x() <= SIZE_WIDTH && rightBottom.y() <= SIZE_HIGHT)
             {
-                qDebug()<<"move "<<dis.x()<<dis.y();
                 this->moveBy(dis.x(),dis.y());
                 update(boundingRect());
                 prepareGeometryChange();
@@ -284,7 +283,6 @@ void myItem::judgeMousePosition(QPointF pointF)
             && (mousePos.y() <= leftTop.y() + VERTEX_DIS)
             && (mousePos.y() >= leftTop.y() -VERTEX_DIS))//top
     {
-        qDebug()<<"top.y()";
         m_cursor->setShape(Qt::SizeVerCursor);
         direction = TOP;
     }
@@ -293,7 +291,6 @@ void myItem::judgeMousePosition(QPointF pointF)
             (mousePos.y() >= leftBottom.y() - VERTEX_DIS) &&
             (mousePos.y() <= leftBottom.y() + VERTEX_DIS))//buttom
     {
-        qDebug()<<"buttom.y()"<<mousePos.y()<<leftBottom.y() + VERTEX_DIS;
         m_cursor->setShape(Qt::SizeVerCursor);
         direction = BOTTOM;
     }
@@ -302,7 +299,6 @@ void myItem::judgeMousePosition(QPointF pointF)
             && (mousePos.x() <= leftTop.x() + VERTEX_DIS)
             && (mousePos.x() >= leftTop.x() -VERTEX_DIS))//left
     {
-      qDebug()<<"left"<<mousePos.y();
       m_cursor->setShape(Qt::SizeHorCursor);
       direction = LEFT;
     }
@@ -311,7 +307,6 @@ void myItem::judgeMousePosition(QPointF pointF)
             && (mousePos.x() <= rightTop.x() + VERTEX_DIS)
             && (mousePos.x() >= rightTop.x() -VERTEX_DIS))//right
     {
-        qDebug()<<"right";
         m_cursor->setShape(Qt::SizeHorCursor);
         direction = RIGHT;
     }
@@ -320,7 +315,6 @@ void myItem::judgeMousePosition(QPointF pointF)
             (mousePos.y() <= leftTop.y() + VERTEX_DIS)&&
             (mousePos.y() >= leftTop.y() - VERTEX_DIS))//left top
     {
-        qDebug()<<"left top";
         m_cursor->setShape(Qt::SizeFDiagCursor);
         direction = LEFT_TOP;
     }
@@ -329,7 +323,6 @@ void myItem::judgeMousePosition(QPointF pointF)
              (mousePos.y() <= leftBottom.y() + VERTEX_DIS)&&
              (mousePos.y() >= leftBottom.y() - VERTEX_DIS))//left bottom
     {
-         qDebug()<<"left bottom";
          m_cursor->setShape(Qt::SizeBDiagCursor);
          direction = LEFT_BOTTOM;
     }
@@ -338,7 +331,6 @@ void myItem::judgeMousePosition(QPointF pointF)
             (mousePos.y() <= rightTop.y() + VERTEX_DIS)&&
             (mousePos.y() >= rightTop.y() - VERTEX_DIS))//right top
     {
-        qDebug()<<"right top";
         m_cursor->setShape(Qt::SizeBDiagCursor);
         direction = RIGHT_TOP;
     }
@@ -347,7 +339,6 @@ void myItem::judgeMousePosition(QPointF pointF)
              (mousePos.y() <= rightBottom.y() + VERTEX_DIS)&&
              (mousePos.y() >= rightBottom.y() - VERTEX_DIS))//right bottom
     {
-         qDebug()<<"right bottom";
          m_cursor->setShape(Qt::SizeFDiagCursor);
          direction = RIGHT_BOTTOM;
     }

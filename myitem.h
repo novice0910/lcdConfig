@@ -25,7 +25,9 @@ class myItem :public QGraphicsItem
 {
 public:
     myItem(qreal width = 20,qreal height = 10);
-
+    enum { Type = UserType + 15 };
+    int type() const
+        { return Type;}
 protected:
     QRectF boundingRect()const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
