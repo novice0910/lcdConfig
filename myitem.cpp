@@ -247,6 +247,12 @@ void myItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             break;
         }
     }
+    QRectF rectF;
+    rectF.setX(this->scenePos().x());
+    rectF.setY(this->scenePos().y());
+    rectF.setWidth(m_width);
+    rectF.setHeight(m_height);
+    emit signalSendItemQRectF(rectF);
     QGraphicsItem::mouseMoveEvent(event);
 }
 
@@ -274,6 +280,16 @@ void myItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 {
     judgeMousePosition(event->scenePos());
     QGraphicsItem::hoverMoveEvent(event);
+}
+
+void myItem::slotChangeRect(CHANGE_RECT rect)
+{
+    qDebug()<<"move new Posion"<<rect.disx<<rect.disy;
+    m_width = rect.width;
+    m_height = rect.height;
+    update(boundingRect());
+    prepareGeometryChange();
+    this->moveBy(rect.disx,rect.disy);
 }
 
 void myItem::judgeMousePosition(QPointF pointF)

@@ -5,6 +5,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QColor>
 #include <QDebug>
+#include <QObject>
 #include <QList>
 #include "data.h"
 #include "MyWidget.h"
@@ -19,8 +20,13 @@ public:
     void setItemType(ITEM_TYPE type);
     void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+public slots:
+    void slotBtnRectQRectF(QRectF rect);
+    void slotGetBtnInfoChanged(BTN_INFO *btn);
+    void slotRectChanged(CHANGE_RECT rect);
 
 signals:
+    void signalSendBtnItemQRectF(QRectF rect);
     void signalItemHasInserted(myItem *item);
     void signalSendBtnInfoToUI(BTN_INFO *);
 

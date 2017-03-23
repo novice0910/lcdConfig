@@ -22,8 +22,9 @@ enum DIRECTION{
     RIGHT_TOP,LEFT_BOTTOM,RIGHT_BOTTOM,MOVE
 };
 
-class myItem :public QGraphicsItem
+class myItem :public QObject,public QGraphicsItem
 {
+    Q_OBJECT
 public:
     myItem(qreal width = 100, qreal height = 30);
     enum { Type = UserType + 15 };
@@ -39,11 +40,13 @@ public:
     {
         m_itemType = type;
     }
-
     ITEM_TYPE m_itemType;
     qreal m_width;
     qreal m_height;
-
+signals:
+    void signalSendItemQRectF(QRectF rectF);//only emit by mouse drag
+public slots:
+    void slotChangeRect(CHANGE_RECT rect);
 protected:
     QRectF boundingRect()const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);

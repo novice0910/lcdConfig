@@ -18,13 +18,15 @@ public:
 
         return m_btnInfo;
     }
-    void setProperty(BTN_INFO  btn)//set except QPointF
+    void setProperty(BTN_INFO  btn)//set except QRect
     {
         m_btnInfo = btn;
-        m_btnInfo.x = this->scenePos().x();
-        m_btnInfo.y = this->scenePos().y();
-        m_btnInfo.w = this->m_width;
-        m_btnInfo.h = this->m_height;
+        QRect rect;
+        rect.setX(btn.x);
+        rect.setY(btn.y);
+        rect.setWidth(btn.w);
+        rect.setHeight(btn.h);
+//        this->setNewPosion(rect);
     }
     BTN_INFO m_btnInfo;
 

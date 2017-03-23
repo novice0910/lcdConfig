@@ -18,6 +18,12 @@
 enum ITEM_TYPE{
     BTN,LABEL,MSG,INPUT_BTN,RTC,MOVE_ITEM
 };
+typedef struct{
+    int disx;
+    int disy;
+    int height;
+    int width;
+}CHANGE_RECT;
 //显示类型
 enum DATA_TYPE{
     INT,BCD,CARD_NUMBER,CHAGER_LENGTH,ASCII

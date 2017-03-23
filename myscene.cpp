@@ -21,7 +21,9 @@ void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         BtnWidget *item = new BtnWidget;
         this->addItem(item);
         item->setPos(mouseEvent->scenePos());
-        item->setProperty(btn);
+//        item->setProperty(btn);
+//        getItemInfo(item);
+        connect(item,SIGNAL(signalSendItemQRectF(QRectF)),this,SLOT(slotBtnRectQRectF(QRectF)));
     }
         break;
     case LABEL:
@@ -30,6 +32,7 @@ void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         LabelWidget *item = new LabelWidget;
         this->addItem(item);
         item->setPos(mouseEvent->scenePos());
+        getItemInfo(item);
     }
         break;
     case MOVE_ITEM:
@@ -39,7 +42,7 @@ void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             if(item->type() == myItem::Type)
             {
                 m_selectedItem = qgraphicsitem_cast<myItem *>(item);
-                getItemInfo(m_selectedItem);
+//                getItemInfo(m_selectedItem);
             }
         }
     }
@@ -53,7 +56,7 @@ void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 
 void myScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    getItemInfo(m_selectedItem);
+//    getItemInfo(m_selectedItem);
 }
 
 void myScene::setItemType(ITEM_TYPE type)
@@ -64,7 +67,6 @@ void myScene::setItemType(ITEM_TYPE type)
 void myScene::getItemInfo(myItem *item)
 {
     if(item ==0) return;
-    qDebug()<<"item type"<<item->getItemType();
     switch (item->getItemType()) {
     case BTN:
     {
@@ -76,4 +78,21 @@ void myScene::getItemInfo(myItem *item)
     default:
         break;
     }
+}
+
+void myScene::slotBtnRectQRectF(QRectF rect)
+{
+    emit signalSendBtnItemQRectF(rect);
+}
+
+void myScene::slotGetBtnInfoChanged(BTN_INFO *btn)
+{
+    if(m_selectedItem == 0) return;
+    BtnWidget *btnItem = qgraphicsitem_cast<BtnWidget *>(m_selectedItem);
+    btnItem->setProperty(*btn);
+}
+
+void myScene::slotRectChanged(CHANGE_RECT rect)
+{
+    if(m_selectedItem == 0) return;
 }

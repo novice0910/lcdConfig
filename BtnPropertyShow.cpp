@@ -4,6 +4,8 @@ BtnPropertyShow::BtnPropertyShow(QWidget *parent) :
     QWidget(parent)
 {
     widgetInit();
+    connectInit();
+    m_btnInfo = new BTN_INFO;
 }
 
 void BtnPropertyShow::widgetInit()
@@ -30,6 +32,7 @@ void BtnPropertyShow::widgetInit()
     btn_x->setObjectName(QString::fromUtf8("btn_x"));
     btn_x->setMaximum(800);
     btn_x->setMinimum(-200);
+    btn_x->setSingleStep(3);
     gridLayout->addWidget(btn_x, 0, 1, 1, 1);
 
     btn_w = new QSpinBox(gridLayoutWidget);
@@ -65,6 +68,9 @@ void BtnPropertyShow::widgetInit()
     btn_h->setMaximum(480);
     btn_h->setValue(0);
     gridLayout->addWidget(btn_h, 1, 3, 1, 1);
+    btn_y->setSingleStep(3);
+    btn_w->setSingleStep(3);
+    btn_h->setSingleStep(3);
 
     QGroupBox *gBoxPageSwitch = new QGroupBox(this);
     gBoxPageSwitch->setObjectName(QString::fromUtf8("gBoxPageSwitch"));
@@ -136,13 +142,58 @@ void BtnPropertyShow::widgetInit()
     gLayout->addWidget(rBtninputByHighByte,2,0,1,2);
     gLayout->addWidget(rBtninputByLowByte,3,0,1,2);
 }
+void BtnPropertyShow::connectInit()
+{
+    connect(btn_x,SIGNAL(valueChanged(int)),this,SLOT(slotBtnXChanged(int)));
+    connect(btn_y,SIGNAL(valueChanged(int)),this,SLOT(slotBtnYChanged(int)));
+    connect(btn_w,SIGNAL(valueChanged(int)),this,SLOT(slotBtnWChanged(int)));
+    connect(btn_h,SIGNAL(valueChanged(int)),this,SLOT(slotBtnHChanged(int)));
+}
+
+void BtnPropertyShow::slotGetBtnItemQRectF(QRectF rect)
+{
+    btn_x->setValue(rect.x());
+    btn_y->setValue(rect.y());
+    btn_h->setValue(rect.height());
+    btn_w->setValue(rect.width());
+}
 
 void BtnPropertyShow::slotGetBtnInfoFromScene(BTN_INFO * btnInfo)
 {
-    qDebug()<<"btn_x"<<btnInfo->x<<btnInfo->y<<btnInfo->w<<btnInfo->h;
+//    m_btnInfo = btnInfo;
     btn_x->setValue(btnInfo->x);
     btn_y->setValue(btnInfo->y);
     btn_h->setValue(btnInfo->h);
     btn_w->setValue(btnInfo->w);
-    update();
+}
+
+void BtnPropertyShow::slotBtnXChanged(int x)
+{
+    qDebug()<<"x"<<x<<m_btnInfo->x;
+    CHANGE_RECT rect;
+    rect.disx = x - m_btnInfo->x;
+    m_btnInfo->x = x;
+    rect.disy = 0;
+    rect.height = m_btnInfo->h;
+    rect.width = m_btnInfo->w;
+//    emit signalSendBtnInfo(m_btnInfo);
+    emit signalSendRectChanged(rect);
+}
+
+void BtnPropertyShow::slotBtnYChanged(int y)
+{
+    m_btnInfo->y = y;
+    emit signalSendBtnInfo(m_btnInfo);
+}
+
+void BtnPropertyShow::slotBtnWChanged(int w)
+{
+    m_btnInfo->w = w;
+    emit signalSendBtnInfo(m_btnInfo);
+}
+
+void BtnPropertyShow::slotBtnHChanged(int h)
+{
+    m_btnInfo->h = h;
+    emit signalSendBtnInfo(m_btnInfo);
 }
