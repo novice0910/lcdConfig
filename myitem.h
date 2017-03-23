@@ -67,6 +67,7 @@ private:
     QPointF end;
     DIRECTION direction;
     void judgeMousePosition(QPointF pointF);
+    void sendItemQRectF();
 };
 
 #endif // MYITEM_H

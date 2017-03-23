@@ -9,7 +9,6 @@ myScene::myScene( QObject *parent)
 
 void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
-    qDebug()<<"mouse press event";
     m_selectedItem = 0;
     if (mouseEvent->button() != Qt::LeftButton)
         return;
@@ -17,8 +16,10 @@ void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     case BTN:
     {
         BTN_INFO btn;
-        m_ItemType = MOVE_ITEM;
+        m_ItemType = MOVE_ITEM;      
         BtnWidget *item = new BtnWidget;
+        m_selectedItem = item;
+        btnItemList.append(item);
         this->addItem(item);
         item->setPos(mouseEvent->scenePos());
 //        item->setProperty(btn);
@@ -30,6 +31,7 @@ void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     {
         m_ItemType = MOVE_ITEM;
         LabelWidget *item = new LabelWidget;
+        m_selectedItem = item;
         this->addItem(item);
         item->setPos(mouseEvent->scenePos());
         getItemInfo(item);
@@ -37,13 +39,10 @@ void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         break;
     case MOVE_ITEM:
     {
-        itemList = selectedItems();
-        foreach (QGraphicsItem *item, selectedItems()) {
-            if(item->type() == myItem::Type)
-            {
-                m_selectedItem = qgraphicsitem_cast<myItem *>(item);
-//                getItemInfo(m_selectedItem);
-            }
+        QGraphicsItem *item = itemAt(mouseEvent->scenePos());
+        if(item)
+        {
+            m_selectedItem = qgraphicsitem_cast<myItem *>(item);
         }
     }
         break;
@@ -94,6 +93,9 @@ void myScene::slotGetBtnInfoChanged(BTN_INFO *btn)
 
 void myScene::slotSelectRectChanged(QRectF rect)
 {
-    if(m_selectedItem == 0) return;
+    if(m_selectedItem == 0)
+    {
+        return;
+    }
     m_selectedItem->slotChangeRect(rect);
 }

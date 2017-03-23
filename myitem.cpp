@@ -78,6 +78,7 @@ void myItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void myItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
+    sendItemQRectF();
     {
         QPointF dis;
         end=event->scenePos();
@@ -282,8 +283,18 @@ void myItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 QVariant myItem::itemChange(GraphicsItemChange change,
                      const QVariant &value)
 {
-    qDebug()<<change;
-    if (change == QGraphicsItem::ItemPositionHasChanged)
+    if(change == QGraphicsItem::ItemSelectedChange)
+    {
+        m_isSelected = !m_isSelected;
+        qDebug()<<"m_selected"<<m_isSelected;
+    }
+    sendItemQRectF();
+    return value;
+}
+
+void myItem::sendItemQRectF()
+{
+    if(m_isSelected)
     {
         QRectF rectF;
         rectF.setX(this->scenePos().x());
@@ -292,22 +303,18 @@ QVariant myItem::itemChange(GraphicsItemChange change,
         rectF.setHeight(m_height);
         emit signalSendItemQRectF(rectF);
     }
-    if(change == QGraphicsItem::ItemSelectedChange)
-    {
-        m_isSelected = !m_isSelected;
-    }
-
-    return value;
 }
 
 void myItem::slotChangeRect(QRectF rect)
 {
-    qDebug()<<"move new Posion"<<rect.x()<<rect.y()<<rect.width()<<rect.height();
-    m_width = rect.width();
-    m_height = rect.height();
-    update(boundingRect());
-    prepareGeometryChange();
-    this->setPos(rect.x(),rect.y());
+    if(m_isSelected)
+    {
+        m_width = rect.width();
+        m_height = rect.height();
+        update(boundingRect());
+        prepareGeometryChange();
+        this->setPos(rect.x(),rect.y());
+    }
 }
 
 void myItem::judgeMousePosition(QPointF pointF)

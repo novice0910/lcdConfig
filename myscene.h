@@ -11,7 +11,7 @@
 #include "MyWidget.h"
 
 typedef QList<QGraphicsItem*> ITEM_LIST;
-
+typedef QList<BtnWidget*> BTN_ITEM_LIST;
 class myScene :public QGraphicsScene
 {
     Q_OBJECT
@@ -32,6 +32,7 @@ signals:
 
 private:
     ITEM_LIST itemList;
+    BTN_ITEM_LIST btnItemList;
     ITEM_TYPE m_ItemType;
     QGraphicsPathItem * dashRect;
     myItem *m_selectedItem;
