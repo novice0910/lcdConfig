@@ -137,10 +137,12 @@ void BtnPropertyShow::widgetInit()
     gLayout->addWidget(rBtninputByLowByte,3,0,1,2);
 }
 
-void BtnPropertyShow::slotGetBtnInfoFromScene(BTN_INFO * btn)
+void BtnPropertyShow::slotGetBtnInfoFromScene(BTN_INFO * btnInfo)
 {
-    btn_x->setValue(btn->x);
-    btn_y->setValue(btn->y);
-    btn_h->setValue(btn->h);
-    btn_w->setValue(btn->w);
+    qDebug()<<"btn_x"<<btnInfo->x<<btnInfo->y<<btnInfo->w<<btnInfo->h;
+    btn_x->setValue(btnInfo->x);
+    btn_y->setValue(btnInfo->y);
+    btn_h->setValue(btnInfo->h);
+    btn_w->setValue(btnInfo->w);
+    update();
 }

@@ -3,7 +3,14 @@
 BtnWidget::BtnWidget()
 {
     setBrushColor(Qt::yellow);
-    m_itemType = BTN;
+    setItemType(BTN);
+    setToolTip("btn");
 }
 
+LabelWidget::LabelWidget()
+{
+    setBrushColor(QColor(128,255,255));
+    setItemType(LABEL);
+    setToolTip("data display");
+}
 

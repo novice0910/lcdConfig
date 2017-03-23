@@ -30,6 +30,20 @@ public:
     int type() const
         { return Type;}
     void setBrushColor(QColor color);
+    virtual ITEM_TYPE getItemType() const
+    {
+        return m_itemType;
+    }
+
+    void setItemType(ITEM_TYPE type)
+    {
+        m_itemType = type;
+    }
+
+    ITEM_TYPE m_itemType;
+    qreal m_width;
+    qreal m_height;
+
 protected:
     QRectF boundingRect()const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
@@ -42,8 +56,6 @@ protected:
     void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
 private:
     QColor m_brushColor;
-    qreal m_width;
-    qreal m_height;
     QCursor *m_cursor;
     bool m_isSelected;
     QPointF start;

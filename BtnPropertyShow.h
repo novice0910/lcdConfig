@@ -8,6 +8,7 @@
 #include <QGroupBox>
 #include <QLineEdit>
 #include <QRadioButton>
+#include <QDebug>
 #include "data.h"
 class BtnPropertyShow : public QWidget
 {
@@ -18,7 +19,7 @@ public:
 signals:
 
 public slots:
-    void slotGetBtnInfoFromScene(BTN_INFO *);
+    void slotGetBtnInfoFromScene(BTN_INFO *btnInfo);
 private:
     QSpinBox *btn_x;
     QSpinBox *btn_y;

@@ -10,13 +10,24 @@ myScene::myScene( QObject *parent)
 void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
     qDebug()<<"mouse press event";
+    m_selectedItem = 0;
     if (mouseEvent->button() != Qt::LeftButton)
         return;
     switch (m_ItemType) {
     case BTN:
     {
+        BTN_INFO btn;
         m_ItemType = MOVE_ITEM;
         BtnWidget *item = new BtnWidget;
+        this->addItem(item);
+        item->setPos(mouseEvent->scenePos());
+        item->setProperty(btn);
+    }
+        break;
+    case LABEL:
+    {
+        m_ItemType = MOVE_ITEM;
+        LabelWidget *item = new LabelWidget;
         this->addItem(item);
         item->setPos(mouseEvent->scenePos());
     }
@@ -28,6 +39,7 @@ void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             if(item->type() == myItem::Type)
             {
                 m_selectedItem = qgraphicsitem_cast<myItem *>(item);
+                getItemInfo(m_selectedItem);
             }
         }
     }
@@ -35,27 +47,6 @@ void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     default:
         break;
     }
-//    if(m_ItemType == MOVE_ITEM)
-//    {
-//        itemList = selectedItems();
-
-//        foreach(QGraphicsItem *item,selectedItems())
-//        {
-//            if(item->type() == myItem::Type)
-//            {
-//                m_selectedItem = qgraphicsitem_cast<myItem *>(item);
-//            }
-//        }
-//    }
-//    else
-//    {
-//        myItem *item;
-//        item = new myItem();
-//        item->setBrushColor(Qt::white);
-//        this->addItem(item);
-//        item->setPos(mouseEvent->scenePos());
-//        emit signalItemHasInserted(item);
-//    }
     update();
     QGraphicsScene::mousePressEvent(mouseEvent);
 }
@@ -72,11 +63,17 @@ void myScene::setItemType(ITEM_TYPE type)
 
 void myScene::getItemInfo(myItem *item)
 {
-    BTN_INFO btn;
-   btn.x = m_selectedItem->scenePos().x();
-   btn.y = m_selectedItem->scenePos().y();
-//   m_selectedItem->m_rect.width();
-//   m_selectedItem->m_rect.height();
-//    BTN_INFO btn =  item->getBtnInfo();
-    emit signalSendBtnInfoToUI(&btn);
+    if(item ==0) return;
+    qDebug()<<"item type"<<item->getItemType();
+    switch (item->getItemType()) {
+    case BTN:
+    {
+        BtnWidget *btnItem = qgraphicsitem_cast<BtnWidget *>(item);
+        BTN_INFO btn = btnItem->getInfo();
+        emit signalSendBtnInfoToUI(&btn);
+    }
+        break;
+    default:
+        break;
+    }
 }
