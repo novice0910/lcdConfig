@@ -44,7 +44,6 @@ void myItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         painter->setBrush(m_brushColor);
         painter->setPen(pen);
         painter->drawRect(QRectF(0,0,m_width,m_height));
-        m_isSelected=true;
     }
     else
     {
@@ -54,7 +53,6 @@ void myItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
             painter->setBrush(m_brushColor);
             painter->setPen(pen);
             painter->drawRect(QRectF(0,0,m_width,m_height));
-            m_isSelected = false;
     }
 }
 
@@ -247,12 +245,12 @@ void myItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             break;
         }
     }
-    QRectF rectF;
-    rectF.setX(this->scenePos().x());
-    rectF.setY(this->scenePos().y());
-    rectF.setWidth(m_width);
-    rectF.setHeight(m_height);
-    emit signalSendItemQRectF(rectF);
+//    QRectF rectF;
+//    rectF.setX(this->scenePos().x());
+//    rectF.setY(this->scenePos().y());
+//    rectF.setWidth(m_width);
+//    rectF.setHeight(m_height);
+//    emit signalSendItemQRectF(rectF);
     QGraphicsItem::mouseMoveEvent(event);
 }
 
@@ -281,6 +279,27 @@ void myItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
     QGraphicsItem::hoverMoveEvent(event);
 }
 
+QVariant myItem::itemChange(GraphicsItemChange change,
+                     const QVariant &value)
+{
+    qDebug()<<change;
+    if (change == QGraphicsItem::ItemPositionHasChanged)
+    {
+        QRectF rectF;
+        rectF.setX(this->scenePos().x());
+        rectF.setY(this->scenePos().y());
+        rectF.setWidth(m_width);
+        rectF.setHeight(m_height);
+        emit signalSendItemQRectF(rectF);
+    }
+    if(change == QGraphicsItem::ItemSelectedChange)
+    {
+        m_isSelected = !m_isSelected;
+    }
+
+    return value;
+}
+
 void myItem::slotChangeRect(QRectF rect)
 {
     qDebug()<<"move new Posion"<<rect.x()<<rect.y()<<rect.width()<<rect.height();
@@ -295,7 +314,9 @@ void myItem::judgeMousePosition(QPointF pointF)
 {
     if(!m_isSelected)
     {
-        this->cursor().setShape(Qt::ArrowCursor);
+        direction = NONE;
+        m_cursor->setShape(Qt::ArrowCursor);
+        this->setCursor(*m_cursor);
         return;
     }
     QPointF mousePos = pointF;

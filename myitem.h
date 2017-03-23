@@ -43,6 +43,8 @@ public:
     ITEM_TYPE m_itemType;
     qreal m_width;
     qreal m_height;
+    bool m_isSelected;
+
 signals:
     void signalSendItemQRectF(QRectF rectF);//only emit by mouse drag
 public slots:
@@ -57,10 +59,10 @@ protected:
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
     void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
+    QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 private:
     QColor m_brushColor;
     QCursor *m_cursor;
-    bool m_isSelected;
     QPointF start;
     QPointF end;
     DIRECTION direction;
