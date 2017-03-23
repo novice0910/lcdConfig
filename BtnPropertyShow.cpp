@@ -3,11 +3,6 @@
 BtnPropertyShow::BtnPropertyShow(QWidget *parent) :
     QWidget(parent)
 {
-    m_btnXBak = 0;
-    m_btnYBak = 0;
-    m_btnWBak = 0;
-    m_btnHBak = 0;
-
     widgetInit();
     connectInit();
     m_btnInfo = new BTN_INFO;
@@ -24,7 +19,6 @@ void BtnPropertyShow::widgetInit()
     gridLayoutWidget->setGeometry(QRect(11, 19, 171, 80));
     QGridLayout *gridLayout = new QGridLayout(gridLayoutWidget);
     gridLayout->setSpacing(6);
-//    gridLayout->setContentsMargins(11, 11, 11, 11);
     gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
     gridLayout->setContentsMargins(0, 0, 0, 0);
     QLabel *label = new QLabel(gridLayoutWidget);
@@ -165,7 +159,6 @@ void BtnPropertyShow::slotGetBtnItemQRectF(QRectF rect)
 
 void BtnPropertyShow::slotGetBtnInfoFromScene(BTN_INFO * btnInfo)
 {
-//    m_btnInfo = btnInfo;
     btn_x->setValue(btnInfo->x);
     btn_y->setValue(btnInfo->y);
     btn_h->setValue(btnInfo->h);

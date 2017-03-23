@@ -41,10 +41,6 @@ private:
     QRadioButton *rBtninputByHighByte;
     QRadioButton *rBtninputByLowByte;
     BTN_INFO *m_btnInfo;
-    int m_btnXBak;
-    int m_btnYBak;
-    int m_btnWBak;
-    int m_btnHBak;
 };
 
 #endif // BTNPROPERTYSHOW_H
