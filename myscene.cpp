@@ -92,7 +92,8 @@ void myScene::slotGetBtnInfoChanged(BTN_INFO *btn)
     btnItem->setProperty(*btn);
 }
 
-void myScene::slotRectChanged(CHANGE_RECT rect)
+void myScene::slotSelectRectChanged(QRectF rect)
 {
     if(m_selectedItem == 0) return;
+    m_selectedItem->slotChangeRect(rect);
 }

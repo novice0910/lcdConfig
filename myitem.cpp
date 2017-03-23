@@ -258,7 +258,6 @@ void myItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void myItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    setFlag(QGraphicsItem::ItemIsMovable, true);
     direction = NONE;
     update();
     QGraphicsItem::mouseReleaseEvent(event);
@@ -282,14 +281,14 @@ void myItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
     QGraphicsItem::hoverMoveEvent(event);
 }
 
-void myItem::slotChangeRect(CHANGE_RECT rect)
+void myItem::slotChangeRect(QRectF rect)
 {
-    qDebug()<<"move new Posion"<<rect.disx<<rect.disy;
-    m_width = rect.width;
-    m_height = rect.height;
+    qDebug()<<"move new Posion"<<rect.x()<<rect.y()<<rect.width()<<rect.height();
+    m_width = rect.width();
+    m_height = rect.height();
     update(boundingRect());
     prepareGeometryChange();
-    this->moveBy(rect.disx,rect.disy);
+    this->setPos(rect.x(),rect.y());
 }
 
 void myItem::judgeMousePosition(QPointF pointF)

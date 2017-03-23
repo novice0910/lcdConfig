@@ -46,7 +46,7 @@ public:
 signals:
     void signalSendItemQRectF(QRectF rectF);//only emit by mouse drag
 public slots:
-    void slotChangeRect(CHANGE_RECT rect);
+    void slotChangeRect(QRectF rect);//change Rect by other
 protected:
     QRectF boundingRect()const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);

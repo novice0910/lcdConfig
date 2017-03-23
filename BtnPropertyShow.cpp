@@ -3,6 +3,11 @@
 BtnPropertyShow::BtnPropertyShow(QWidget *parent) :
     QWidget(parent)
 {
+    m_btnXBak = 0;
+    m_btnYBak = 0;
+    m_btnWBak = 0;
+    m_btnHBak = 0;
+
     widgetInit();
     connectInit();
     m_btnInfo = new BTN_INFO;
@@ -169,31 +174,40 @@ void BtnPropertyShow::slotGetBtnInfoFromScene(BTN_INFO * btnInfo)
 
 void BtnPropertyShow::slotBtnXChanged(int x)
 {
-    qDebug()<<"x"<<x<<m_btnInfo->x;
-    CHANGE_RECT rect;
-    rect.disx = x - m_btnInfo->x;
-    m_btnInfo->x = x;
-    rect.disy = 0;
-    rect.height = m_btnInfo->h;
-    rect.width = m_btnInfo->w;
-//    emit signalSendBtnInfo(m_btnInfo);
-    emit signalSendRectChanged(rect);
+    QRectF rect;
+    rect.setX(x);
+    rect.setY(btn_y->value());
+    rect.setHeight(btn_h->value());
+    rect.setWidth(btn_w->value());
+    emit signalSendBtnRectChanged(rect);
 }
 
 void BtnPropertyShow::slotBtnYChanged(int y)
 {
-    m_btnInfo->y = y;
-    emit signalSendBtnInfo(m_btnInfo);
+    QRectF rect;
+    rect.setX(btn_x->value());
+    rect.setY(y);
+    rect.setHeight(btn_h->value());
+    rect.setWidth(btn_w->value());
+    emit signalSendBtnRectChanged(rect);
 }
 
 void BtnPropertyShow::slotBtnWChanged(int w)
 {
-    m_btnInfo->w = w;
-    emit signalSendBtnInfo(m_btnInfo);
+    QRectF rect;
+    rect.setX(btn_x->value());
+    rect.setY(btn_y->value());
+    rect.setHeight(btn_h->value());
+    rect.setWidth(w);
+    emit signalSendBtnRectChanged(rect);
 }
 
 void BtnPropertyShow::slotBtnHChanged(int h)
 {
-    m_btnInfo->h = h;
-    emit signalSendBtnInfo(m_btnInfo);
+    QRectF rect;
+    rect.setX(btn_x->value());
+    rect.setY(btn_y->value());
+    rect.setHeight(h);
+    rect.setWidth(btn_w->value());
+    emit signalSendBtnRectChanged(rect);
 }

@@ -19,7 +19,7 @@ public:
     void connectInit();
 signals:
     void signalSendBtnInfo(BTN_INFO *btn_info);
-    void signalSendRectChanged(CHANGE_RECT rect);
+    void signalSendBtnRectChanged(QRectF rect);//send the select btn item has changed to scene
 public slots:
     void slotGetBtnItemQRectF(QRectF rect);
     void slotGetBtnInfoFromScene(BTN_INFO *btnInfo);
@@ -41,6 +41,10 @@ private:
     QRadioButton *rBtninputByHighByte;
     QRadioButton *rBtninputByLowByte;
     BTN_INFO *m_btnInfo;
+    int m_btnXBak;
+    int m_btnYBak;
+    int m_btnWBak;
+    int m_btnHBak;
 };
 
 #endif // BTNPROPERTYSHOW_H

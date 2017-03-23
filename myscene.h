@@ -21,12 +21,12 @@ public:
     void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 public slots:
-    void slotBtnRectQRectF(QRectF rect);
+    void slotBtnRectQRectF(QRectF rect);//get item rect QRectF from myItem
     void slotGetBtnInfoChanged(BTN_INFO *btn);
-    void slotRectChanged(CHANGE_RECT rect);
+    void slotSelectRectChanged(QRectF rect);//change the selected item QRectF
 
 signals:
-    void signalSendBtnItemQRectF(QRectF rect);
+    void signalSendBtnItemQRectF(QRectF rect);//retransmission btn Item QRectF to btn
     void signalItemHasInserted(myItem *item);
     void signalSendBtnInfoToUI(BTN_INFO *);
 
