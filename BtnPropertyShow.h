@@ -31,6 +31,7 @@ private slots:
     void slotBtnYChanged(int y);
     void slotBtnWChanged(int w);
     void slotBtnHChanged(int h);
+    void slotRBtnClicked();
 private:
     //
     BTN_INFO *m_btnInfo;
@@ -51,7 +52,7 @@ private:
     QRectF readRectF();
     void getAndSendRectF();
     BTN_INFO readBtnInfo();
-    void getAndSenBtnInfo();
+    void getAndSendBtnInfo();
 };
 
 #endif // BTNPROPERTYSHOW_H

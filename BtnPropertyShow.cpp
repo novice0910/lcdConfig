@@ -154,6 +154,10 @@ void BtnPropertyShow::connectInit()
     connect(btn_y,SIGNAL(valueChanged(int)),this,SLOT(slotBtnYChanged(int)));
     connect(btn_w,SIGNAL(valueChanged(int)),this,SLOT(slotBtnWChanged(int)));
     connect(btn_h,SIGNAL(valueChanged(int)),this,SLOT(slotBtnHChanged(int)));
+    connect(rBtninputByByte,SIGNAL(clicked()),this,SLOT(slotRBtnClicked()));
+    connect(rBtninputByBit,SIGNAL(clicked()),this,SLOT(slotRBtnClicked()));
+    connect(rBtninputByHighByte,SIGNAL(clicked()),this,SLOT(slotRBtnClicked()));
+    connect(rBtninputByLowByte,SIGNAL(clicked()),this,SLOT(slotRBtnClicked()));
 }
 
 void BtnPropertyShow::getAndSendRectF()
@@ -167,7 +171,7 @@ void BtnPropertyShow::getAndSendRectF()
     emit signalSendBtnRectChanged(rect);
 }
 
-void BtnPropertyShow::getAndSenBtnInfo()
+void BtnPropertyShow::getAndSendBtnInfo()
 {
     BTN_INFO info;
     info.x = btn_x->value();
@@ -200,23 +204,28 @@ void BtnPropertyShow::slotGetBtnInfoFromScene(BTN_INFO * btnInfo)
 void BtnPropertyShow::slotBtnXChanged(int x)
 {
     getAndSendRectF();
-    getAndSenBtnInfo();
+    getAndSendBtnInfo();
 }
 
 void BtnPropertyShow::slotBtnYChanged(int y)
 {
     getAndSendRectF();
-    getAndSenBtnInfo();
+    getAndSendBtnInfo();
 }
 
 void BtnPropertyShow::slotBtnWChanged(int w)
 {
     getAndSendRectF();
-    getAndSenBtnInfo();
+    getAndSendBtnInfo();
 }
 
 void BtnPropertyShow::slotBtnHChanged(int h)
 {
     getAndSendRectF();
-    getAndSenBtnInfo();
+    getAndSendBtnInfo();
+}
+
+void BtnPropertyShow::slotRBtnClicked()
+{
+    getAndSendBtnInfo();
 }
