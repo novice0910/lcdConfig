@@ -46,7 +46,7 @@ public:
     bool m_isSelected;
 
 signals:
-    void signalSendItemQRectF(QRectF rectF);//only emit by mouse drag
+    void signalSendItemQRectF(QRectF rectF);//only emit when it has been selected
 public slots:
     void slotChangeRect(QRectF rect);//change Rect by other
 protected:

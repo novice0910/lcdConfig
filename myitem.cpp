@@ -246,12 +246,6 @@ void myItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             break;
         }
     }
-//    QRectF rectF;
-//    rectF.setX(this->scenePos().x());
-//    rectF.setY(this->scenePos().y());
-//    rectF.setWidth(m_width);
-//    rectF.setHeight(m_height);
-//    emit signalSendItemQRectF(rectF);
     QGraphicsItem::mouseMoveEvent(event);
 }
 
@@ -286,7 +280,6 @@ QVariant myItem::itemChange(GraphicsItemChange change,
     if(change == QGraphicsItem::ItemSelectedChange)
     {
         m_isSelected = !m_isSelected;
-        qDebug()<<"m_selected"<<m_isSelected;
     }
     sendItemQRectF();
     return value;
