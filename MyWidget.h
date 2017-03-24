@@ -2,6 +2,7 @@
 #define MYWIDGET_H
 #include <QString>
 #include <QObject>
+#include <QDebug>
 #include "myitem.h"
 #include "data.h"
 
@@ -20,13 +21,12 @@ public:
     }
     void setProperty(BTN_INFO  btn)//set except QRect
     {
+//        qDebug()<<"slot btn"<<btn.x<<btn.y<<btn.w<<btn.h<<
+//                  "data"<<btn.dataData
+//               <<"next page"<<btn.regesitData
+//               <<"addr"<<btn.dataStartAddr
+//                  <<btn.dataType;
         m_btnInfo = btn;
-        QRect rect;
-        rect.setX(btn.x);
-        rect.setY(btn.y);
-        rect.setWidth(btn.w);
-        rect.setHeight(btn.h);
-//        this->setNewPosion(rect);
     }
     BTN_INFO m_btnInfo;
 

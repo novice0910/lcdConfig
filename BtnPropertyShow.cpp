@@ -97,8 +97,7 @@ void BtnPropertyShow::widgetInit()
     lEditkeyNum = new QLineEdit(gBoxkeyNum);
     lEditkeyNum->setObjectName(QString::fromUtf8("lineEdit"));
     lEditkeyNum->setGeometry(QRect(50, 34, 69, 26));
-    label_5->raise();
-    lEditkeyNum->raise();
+    lEditkeyNum->setText("0000");
 
     QGroupBox * gBoxAddr = new QGroupBox(this);
     gBoxAddr->setObjectName(QString::fromUtf8("gBoxAddr"));
@@ -113,6 +112,7 @@ void BtnPropertyShow::widgetInit()
     lEditAddr = new QLineEdit(gBoxAddr);
     lEditAddr->setObjectName(QString::fromUtf8("lineEdit_2"));
     lEditAddr->setGeometry(QRect(110, 6, 50, 30));
+    lEditAddr->setText("0000");
     rBtninputByByte = new QRadioButton(gBoxAddr);
     rBtninputByByte->setObjectName(QString::fromUtf8("RBinputByByte"));
     rBtninputByByte->setGeometry(QRect(6, 42, 102, 31));
@@ -150,14 +150,17 @@ void BtnPropertyShow::widgetInit()
 }
 void BtnPropertyShow::connectInit()
 {
-    connect(btn_x,SIGNAL(valueChanged(int)),this,SLOT(slotBtnXChanged(int)));
-    connect(btn_y,SIGNAL(valueChanged(int)),this,SLOT(slotBtnYChanged(int)));
-    connect(btn_w,SIGNAL(valueChanged(int)),this,SLOT(slotBtnWChanged(int)));
-    connect(btn_h,SIGNAL(valueChanged(int)),this,SLOT(slotBtnHChanged(int)));
+    connect(btn_x,SIGNAL(valueChanged(int)),this,SLOT(slotSpinBoxChanged(int)));
+    connect(btn_y,SIGNAL(valueChanged(int)),this,SLOT(slotSpinBoxChanged(int)));
+    connect(btn_w,SIGNAL(valueChanged(int)),this,SLOT(slotSpinBoxChanged(int)));
+    connect(btn_h,SIGNAL(valueChanged(int)),this,SLOT(slotSpinBoxChanged(int)));
+    connect(sBoxNextPage,SIGNAL(valueChanged(int)),this,SLOT(slotSpinBoxChanged(int)));
     connect(rBtninputByByte,SIGNAL(clicked()),this,SLOT(slotRBtnClicked()));
     connect(rBtninputByBit,SIGNAL(clicked()),this,SLOT(slotRBtnClicked()));
     connect(rBtninputByHighByte,SIGNAL(clicked()),this,SLOT(slotRBtnClicked()));
     connect(rBtninputByLowByte,SIGNAL(clicked()),this,SLOT(slotRBtnClicked()));
+    connect(lEditAddr,SIGNAL(textChanged(QString)),this,SLOT(slotLineEditChanged()));
+    connect(lEditkeyNum,SIGNAL(textChanged(QString)),this,SLOT(slotLineEditChanged()));
 }
 
 void BtnPropertyShow::getAndSendRectF()
@@ -180,6 +183,7 @@ void BtnPropertyShow::getAndSendBtnInfo()
     info.h = btn_h->value();
     info.regesitData = sBoxNextPage->value();
     info.dataStartAddr = lEditAddr->text().toInt(0,16);
+    info.dataData = lEditkeyNum->text().toInt(0,16);
     info.dataType = btnGroup->checkedId();
 
     emit signalSendBtnInfoToScene(&info);
@@ -201,31 +205,19 @@ void BtnPropertyShow::slotGetBtnInfoFromScene(BTN_INFO * btnInfo)
     btn_w->setValue(btnInfo->w);
 }
 
-void BtnPropertyShow::slotBtnXChanged(int x)
+void BtnPropertyShow::slotSpinBoxChanged(int value)
 {
-    getAndSendRectF();
-    getAndSendBtnInfo();
-}
-
-void BtnPropertyShow::slotBtnYChanged(int y)
-{
-    getAndSendRectF();
-    getAndSendBtnInfo();
-}
-
-void BtnPropertyShow::slotBtnWChanged(int w)
-{
-    getAndSendRectF();
-    getAndSendBtnInfo();
-}
-
-void BtnPropertyShow::slotBtnHChanged(int h)
-{
+    Q_UNUSED(value);
     getAndSendRectF();
     getAndSendBtnInfo();
 }
 
 void BtnPropertyShow::slotRBtnClicked()
+{
+    getAndSendBtnInfo();
+}
+
+void BtnPropertyShow::slotLineEditChanged()
 {
     getAndSendBtnInfo();
 }

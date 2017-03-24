@@ -27,11 +27,9 @@ public slots:
     void slotGetBtnInfoFromScene(BTN_INFO *btnInfo);//show the btn information when it has selected
 
 private slots:
-    void slotBtnXChanged(int x);
-    void slotBtnYChanged(int y);
-    void slotBtnWChanged(int w);
-    void slotBtnHChanged(int h);
+    void slotSpinBoxChanged(int value);
     void slotRBtnClicked();
+    void slotLineEditChanged();
 private:
     //
     BTN_INFO *m_btnInfo;
