@@ -9,6 +9,7 @@
 #include <QLineEdit>
 #include <QRadioButton>
 #include <QDebug>
+#include <QButtonGroup>
 #include "data.h"
 class BtnPropertyShow : public QWidget
 {
@@ -19,7 +20,7 @@ public:
     void connectInit();
 signals:
     void signalSendBtnRectChanged(QRectF rect);//send the select btn item has changed to scene
-    void signalSendBtnInfo(BTN_INFO *btn_info);//send the show btn information to scene's item
+    void signalSendBtnInfoToScene(BTN_INFO *btn_info);//send the show btn information to scene's item
 
 public slots:
     void slotGetBtnItemQRectF(QRectF rect);//get item QRectF from scene because of item has changed
@@ -39,12 +40,18 @@ private:
     QSpinBox *btn_y;
     QSpinBox *btn_w;
     QSpinBox *btn_h;
-    QLineEdit * lEditkeyNum;
+    QLineEdit * lEditkeyNum;//
+    QLineEdit *lEditAddr;
     QSpinBox *sBoxNextPage;
+    QButtonGroup *btnGroup;
     QRadioButton *rBtninputByByte;
     QRadioButton *rBtninputByBit;
     QRadioButton *rBtninputByHighByte;
     QRadioButton *rBtninputByLowByte;
+    QRectF readRectF();
+    void getAndSendRectF();
+    BTN_INFO readBtnInfo();
+    void getAndSenBtnInfo();
 };
 
 #endif // BTNPROPERTYSHOW_H

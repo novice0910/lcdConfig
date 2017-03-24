@@ -110,7 +110,7 @@ void BtnPropertyShow::widgetInit()
     labAddr->setText(tr("变量地址(0x)"));
 
 
-    QLineEdit *lEditAddr = new QLineEdit(gBoxAddr);
+    lEditAddr = new QLineEdit(gBoxAddr);
     lEditAddr->setObjectName(QString::fromUtf8("lineEdit_2"));
     lEditAddr->setGeometry(QRect(110, 6, 50, 30));
     rBtninputByByte = new QRadioButton(gBoxAddr);
@@ -136,10 +136,17 @@ void BtnPropertyShow::widgetInit()
     gLayout->setContentsMargins(0, 0, 0, 0);
     gLayout->addWidget(labAddr,0,0,1,1);
     gLayout->addWidget(lEditAddr,0,1,1,1);
+    btnGroup = new QButtonGroup;
+//    gLayout->addWidget(btnGroup);
+    btnGroup->addButton(rBtninputByByte,0);
+    btnGroup->addButton(rBtninputByBit,1);
+    btnGroup->addButton(rBtninputByHighByte,2);
+    btnGroup->addButton(rBtninputByLowByte,3);
     gLayout->addWidget(rBtninputByByte,1,0,1,1);
     gLayout->addWidget(rBtninputByBit,1,1,1,1);
     gLayout->addWidget(rBtninputByHighByte,2,0,1,2);
     gLayout->addWidget(rBtninputByLowByte,3,0,1,2);
+    rBtninputByByte->setChecked(true);
 }
 void BtnPropertyShow::connectInit()
 {
@@ -147,6 +154,31 @@ void BtnPropertyShow::connectInit()
     connect(btn_y,SIGNAL(valueChanged(int)),this,SLOT(slotBtnYChanged(int)));
     connect(btn_w,SIGNAL(valueChanged(int)),this,SLOT(slotBtnWChanged(int)));
     connect(btn_h,SIGNAL(valueChanged(int)),this,SLOT(slotBtnHChanged(int)));
+}
+
+void BtnPropertyShow::getAndSendRectF()
+{
+    QRectF rect;
+    rect.setX(btn_x->value());
+    rect.setY(btn_y->value());
+    rect.setHeight(btn_h->value());
+    rect.setWidth(btn_w->value());
+
+    emit signalSendBtnRectChanged(rect);
+}
+
+void BtnPropertyShow::getAndSenBtnInfo()
+{
+    BTN_INFO info;
+    info.x = btn_x->value();
+    info.y = btn_y->value();
+    info.w = btn_w->value();
+    info.h = btn_h->value();
+    info.regesitData = sBoxNextPage->value();
+    info.dataStartAddr = lEditAddr->text().toInt(0,16);
+    info.dataType = btnGroup->checkedId();
+
+    emit signalSendBtnInfoToScene(&info);
 }
 
 void BtnPropertyShow::slotGetBtnItemQRectF(QRectF rect)
@@ -167,40 +199,24 @@ void BtnPropertyShow::slotGetBtnInfoFromScene(BTN_INFO * btnInfo)
 
 void BtnPropertyShow::slotBtnXChanged(int x)
 {
-    QRectF rect;
-    rect.setX(x);
-    rect.setY(btn_y->value());
-    rect.setHeight(btn_h->value());
-    rect.setWidth(btn_w->value());
-    emit signalSendBtnRectChanged(rect);
+    getAndSendRectF();
+    getAndSenBtnInfo();
 }
 
 void BtnPropertyShow::slotBtnYChanged(int y)
 {
-    QRectF rect;
-    rect.setX(btn_x->value());
-    rect.setY(y);
-    rect.setHeight(btn_h->value());
-    rect.setWidth(btn_w->value());
-    emit signalSendBtnRectChanged(rect);
+    getAndSendRectF();
+    getAndSenBtnInfo();
 }
 
 void BtnPropertyShow::slotBtnWChanged(int w)
 {
-    QRectF rect;
-    rect.setX(btn_x->value());
-    rect.setY(btn_y->value());
-    rect.setHeight(btn_h->value());
-    rect.setWidth(w);
-    emit signalSendBtnRectChanged(rect);
+    getAndSendRectF();
+    getAndSenBtnInfo();
 }
 
 void BtnPropertyShow::slotBtnHChanged(int h)
 {
-    QRectF rect;
-    rect.setX(btn_x->value());
-    rect.setY(btn_y->value());
-    rect.setHeight(h);
-    rect.setWidth(btn_w->value());
-    emit signalSendBtnRectChanged(rect);
+    getAndSendRectF();
+    getAndSenBtnInfo();
 }
