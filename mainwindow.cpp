@@ -84,7 +84,7 @@ void MainWindow::rightDockWidgetCreate()
     //按键信息页
     btnPropertyShow = new BtnPropertyShow;
     propertyShow->addWidget(btnPropertyShow);
-    connect(btnPropertyShow,SIGNAL(signalSendBtnInfo(BTN_INFO*)),scene,SLOT(slotGetBtnInfoChanged(BTN_INFO*)));
+    connect(btnPropertyShow,SIGNAL(signalSendBtnInfoToScene(BTN_INFO*)),scene,SLOT(slotGetBtnInfoChanged(BTN_INFO*)));
     connect(btnPropertyShow,SIGNAL(signalSendBtnRectChanged(QRectF)),scene,SLOT(slotSelectRectChanged(QRectF)));
     connect(scene,SIGNAL(signalSendBtnItemQRectF(QRectF)),btnPropertyShow,SLOT(slotGetBtnItemQRectF(QRectF)));
 }
