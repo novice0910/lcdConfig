@@ -38,7 +38,8 @@ void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         break;
     case MOVE_ITEM:
     {
-        QGraphicsItem *item = itemAt(mouseEvent->scenePos());
+        QTransform transform;
+        QGraphicsItem *item = itemAt(mouseEvent->scenePos(),transform);
         if(item)
         {
             m_selectedItem = qgraphicsitem_cast<myItem *>(item);
