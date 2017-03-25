@@ -16,7 +16,7 @@
 #define MAX_NUM_BTN_NUM 6
 
 enum ITEM_TYPE{
-    BTN,LABEL,MSGBOX,INPUT_BTN,RTC,MOVE_ITEM
+    BTN,LABEL,MSG,INPUT_BTN,RTC,MOVE_ITEM
 };
 typedef struct{
     int disx;
