@@ -49,11 +49,15 @@ void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
                 emit signalSendWhichItemHasSelected(BTN_INDEX);
                 break;
             case LABEL:
+                emit signalSendWhichItemHasSelected(LABEL_INDEX);
                 break;
             default:
-                emit signalSendWhichItemHasSelected(MAIN_INDEX);
                 break;
             }
+        }
+        else
+        {
+            emit signalSendWhichItemHasSelected(MAIN_INDEX);
         }
     }
         break;

@@ -120,9 +120,6 @@ void MainWindow::rightDockWidgetCreate()
     //按键信息页
     btnPropertyShow = new BtnPropertyShow;
     propertyShow->addWidget(btnPropertyShow);
-//    connect(btnPropertyShow,SIGNAL(signalSendBtnInfoToScene(BTN_INFO*)),scene,SLOT(slotGetBtnInfoChanged(BTN_INFO*)));
-//    connect(btnPropertyShow,SIGNAL(signalSendBtnRectChanged(QRectF)),scene,SLOT(slotSelectRectChanged(QRectF)));
-//    connect(scene,SIGNAL(signalSendBtnItemQRectF(QRectF)),btnPropertyShow,SLOT(slotGetBtnItemQRectF(QRectF)));
 //    dockWidgetPropertyShow->hide();
 }
 
@@ -162,6 +159,7 @@ void MainWindow::slotNewProject()
         delete conf;
         dockWidgetPropertyShow->show();
         dockWidgetPageProperty->show();
+        tabWidget->setCurrentIndex(1);
     }
 }
 
@@ -273,6 +271,7 @@ void MainWindow::newOnePage()
     connect(btnPropertyShow,SIGNAL(signalSendBtnInfoToScene(BTN_INFO*)),pageScene,SLOT(slotGetBtnInfoChanged(BTN_INFO*)));
     connect(btnPropertyShow,SIGNAL(signalSendBtnRectChanged(QRectF)),pageScene,SLOT(slotSelectRectChanged(QRectF)));
     connect(pageScene,SIGNAL(signalSendBtnItemQRectF(QRectF)),btnPropertyShow,SLOT(slotGetBtnItemQRectF(QRectF)));
+    connect(pageScene,SIGNAL(signalSendWhichItemHasSelected(PROPERETY_SHOW_INDEX)),this,SLOT(slotGetWhichItemHasSelected(PROPERETY_SHOW_INDEX)));
 }
 
 void MainWindow::slotActionDeletePage()
@@ -290,8 +289,8 @@ void MainWindow::slotActionDown()
 
 void MainWindow::slotPageTableWidgetSelectedChanged()
 {
-    lableCurrentIndex->setText(QString::number(m_selectedPageNum));
     m_selectedPageNum = pageTableWidget->currentRow();
+    lableCurrentIndex->setText(QString::number(m_selectedPageNum));
     stackedView->setCurrentIndex(m_selectedPageNum);
     viewList.at(m_selectedPageNum)->setStyleSheet(tr("background-image:url(%1/background/%2)")
                                                   .arg(m_prjFileInfo.path())
@@ -301,7 +300,7 @@ void MainWindow::slotPageTableWidgetSelectedChanged()
 
 void MainWindow::slotGetWhichItemHasSelected(PROPERETY_SHOW_INDEX index)
 {
-    stackedView->setCurrentIndex(index);
+    propertyShow->setCurrentIndex(index);
 }
 
 void MainWindow::mouseDoubleClickEvent(QMouseEvent *)
