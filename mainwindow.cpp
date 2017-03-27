@@ -6,27 +6,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
-    centralWidget = new QWidget(ui->centralWidget);
-//    centralWidget->setStyleSheet("background-image:url(10.bmp)");
-    centralWidget->resize(QSize(850,480));
-    scene = new myScene(centralWidget);
-    int w =static_cast< QWidget *>(scene->parent())->size().width();
-    int h =static_cast< QWidget *>(scene->parent())->size().height();
-    scene->setSceneRect(QRectF(0, 0, w, h));
-    connect(scene,SIGNAL(signalItemHasInserted(myItem*)),this,SLOT(slotItemHasInserted(myItem*)));
-    view = new QGraphicsView(scene,centralWidget);
-    view->setGeometry(50,0,850,480);
-    view->resize(centralWidget->size());
-    view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    view->setStyleSheet("background-image:url(10.bmp)");
-    view->centerOn(0,0);
+    setMouseTracking(true);
+    dataInit();
     toolBarCreate();
-    widgetCreate();
+    allWidgetCreate();
     connect(scene,SIGNAL(signalSendBtnInfoToUI(BTN_INFO*)),this,SLOT(slotGetBtnInfoFromScene(BTN_INFO*)));
     connect(scene,SIGNAL(signalSendBtnInfoToUI(BTN_INFO*)),btnPropertyShow,SLOT(slotGetBtnInfoFromScene(BTN_INFO*)));
-    setMouseTracking(true);
 }
 
 MainWindow::~MainWindow()
@@ -36,6 +21,27 @@ MainWindow::~MainWindow()
 
 void MainWindow::toolBarCreate()
 {
+    //about project
+    QToolBar *toolBarProject = new QToolBar;
+    this->addToolBar(toolBarProject);
+    this->addToolBarBreak(Qt::TopToolBarArea);
+    QAction *actionNewProject = new QAction(tr("新建"),this);
+    actionNewProject->setToolTip(tr("新建工程"));
+    connect(actionNewProject,SIGNAL(triggered()),this,SLOT(slotNewProject()));
+    toolBarProject->addAction(actionNewProject);
+    QAction *actionOpenProject = new QAction(tr("打开"),this);
+    actionOpenProject->setToolTip(tr("打开工程"));
+    connect(actionOpenProject,SIGNAL(triggered()),this,SLOT(slotOpenProject()));
+    toolBarProject->addAction(actionOpenProject);
+    QAction *actionSaveProject = new QAction(tr("保存"),this);
+    actionSaveProject->setToolTip(tr("保存"));
+    connect(actionSaveProject,SIGNAL(triggered()),this,SLOT(slotSaveProject()));
+    toolBarProject->addAction(actionSaveProject);
+    QAction *actionSetProject = new QAction(tr("设置"),this);
+    actionSetProject->setToolTip(tr("串口设置"));
+    connect(actionSetProject,SIGNAL(triggered()),this,SLOT(slotSetProject()));
+    toolBarProject->addAction(actionSetProject);
+    //draw the item
     QToolBar *toolBar = new QToolBar;
     this->addToolBar(toolBar);
     QAction *drawAciton = new QAction(tr("按键"),this);
@@ -45,15 +51,47 @@ void MainWindow::toolBarCreate()
     toolBar->addAction(tr("显示框"),this,SLOT(slotDrawLabTrigger()));
 }
 
-void MainWindow::widgetCreate()
+void MainWindow::allWidgetCreate()
 {
+    centralWidgetCreate();
     leftDockWidgetCreate();
     rightDockWidgetCreate();
 }
 
+void MainWindow::centralWidgetCreate()
+{
+    tabWidget = new QTabWidget(ui->centralWidget);
+    QWidget * tab_1 = new QWidget(tabWidget);
+    QWidget * tab_2 = new QWidget(tabWidget);
+    tabWidget->addTab(tab_1,tr("欢迎使用"));
+    tabWidget->addTab(tab_2,tr("配置"));
+    tabWidget->resize(ui->centralWidget->size());
+    QLabel * lab = new QLabel(tr("欢迎使用!"));
+    lab->setGeometry(0,0,300,50);
+    stackedView = new QStackedWidget(tab_2);
+    stackedView->resize(QSize(850,480));
+    stackedView->move(50,0);
+    QWidget *page_0 = new QWidget(stackedView);
+    stackedView->addWidget(page_0);
+    centralWidget = new QWidget(ui->centralWidget);
+    centralWidget->resize(QSize(850,480));
+    scene = new myScene(centralWidget);
+    centralWidget->hide();
+    int w =static_cast< QWidget *>(scene->parent())->size().width();
+    int h =static_cast< QWidget *>(scene->parent())->size().height();
+    scene->setSceneRect(QRectF(0, 0, w, h));
+    connect(scene,SIGNAL(signalItemHasInserted(myItem*)),this,SLOT(slotItemHasInserted(myItem*)));
+    view = new QGraphicsView(scene,centralWidget);
+    view->setGeometry(50,0,850,480);
+    view->resize(centralWidget->size());
+    view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view->centerOn(0,0);
+}
+
 void MainWindow::leftDockWidgetCreate()
 {
-    QDockWidget * dockWidgetPageProperty = new QDockWidget("image",this);
+    dockWidgetPageProperty = new QDockWidget("image",this);
     dockWidgetPageProperty->setAllowedAreas(Qt::LeftDockWidgetArea);
     dockWidgetPageProperty->setFeatures(QDockWidget::DockWidgetMovable);
     this->addDockWidget(Qt::LeftDockWidgetArea,dockWidgetPageProperty);
@@ -61,19 +99,26 @@ void MainWindow::leftDockWidgetCreate()
     leftDockMainwindow->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     dockWidgetPageProperty->setWidget(leftDockMainwindow);
     leftDockMainwindow->setParent(dockWidgetPageProperty);
-    pageTabWidget = new QTableWidget(leftDockMainwindow);
-    leftDockMainwindow->setCentralWidget(pageTabWidget);
-    pageTabWidget->setRowCount(2);
+    pageTableWidget = new QTableWidget(leftDockMainwindow);
+    leftDockMainwindow->setCentralWidget(pageTableWidget);
+    QStringList header;
+    header<<tr("页码")<<tr("文件");
+    pageTableWidget->setColumnCount(2);
+    pageTableWidget->setHorizontalHeaderLabels(header);
+    pageTableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
+    pageTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);//item no edit
+    connect(pageTableWidget,SIGNAL(itemSelectionChanged()),this,SLOT(slotPageTableWidgetSelectedChanged()));
     QToolBar *pToolBar = leftDockMainwindow->addToolBar("new");
     pToolBar->addAction(tr("新增"),this,SLOT(slotActionNewPage()));
     pToolBar->addAction(tr("删除"),this,SLOT(slotActionNewPage()));
     pToolBar->addAction(tr("上移"),this,SLOT(slotActionNewPage()));
     pToolBar->addAction(tr("下移"),this,SLOT(slotActionNewPage()));
+//    dockWidgetPageProperty->hide();
 }
 
 void MainWindow::rightDockWidgetCreate()
 {
-    QDockWidget *dockWidgetPropertyShow = new QDockWidget(tr("属性"),this);
+    dockWidgetPropertyShow = new QDockWidget(tr("属性"),this);
     dockWidgetPropertyShow->setAllowedAreas(Qt::LeftDockWidgetArea);
     dockWidgetPropertyShow->setFeatures(QDockWidget::DockWidgetMovable);
     this->addDockWidget(Qt::RightDockWidgetArea,dockWidgetPropertyShow);
@@ -87,6 +132,68 @@ void MainWindow::rightDockWidgetCreate()
     connect(btnPropertyShow,SIGNAL(signalSendBtnInfoToScene(BTN_INFO*)),scene,SLOT(slotGetBtnInfoChanged(BTN_INFO*)));
     connect(btnPropertyShow,SIGNAL(signalSendBtnRectChanged(QRectF)),scene,SLOT(slotSelectRectChanged(QRectF)));
     connect(scene,SIGNAL(signalSendBtnItemQRectF(QRectF)),btnPropertyShow,SLOT(slotGetBtnItemQRectF(QRectF)));
+    dockWidgetPropertyShow->hide();
+}
+
+void MainWindow::dataInit()
+{
+    m_pageSum = -1;
+}
+
+//第一行工具栏
+void MainWindow::slotNewProject()
+{
+    QFileInfo  fileInfo = QFileDialog::getSaveFileName(this,tr("请选择保存路径"),"GKprj.hmi","GKHMI(*.hmi)");
+    if(fileInfo.filePath().isEmpty())
+    {
+        QMessageBox::information(NULL, tr("提示"), tr("没有完成新建!"));
+    }
+    else
+    {
+        m_prjFileInfo = fileInfo;
+        QSettings *prj = new QSettings(m_prjFileInfo.filePath(),QSettings::IniFormat);
+        prj->setValue("INIT/SIZE","800*480");
+        prj->setValue("IMG/00",0);
+        delete prj;
+
+        QDir newDir(m_prjFileInfo.path());
+        newDir.mkdir("setUp");
+        newDir.mkdir("background");
+        newDir.mkdir("keyboard");
+        newDir.mkdir("labTimeBack");
+        newDir.mkdir("messageBox");
+        QSettings *conf = new QSettings(m_prjFileInfo.path() + "/setUp/config.ini",QSettings::IniFormat);
+        conf->setValue("PAGE/pageSum",0);
+        conf->setValue("serial/dev","ttyS1");
+        conf->setValue("serial/baud",9600);
+        conf->setValue("serial/parity","n");
+        delete conf;
+        dockWidgetPropertyShow->show();
+        dockWidgetPageProperty->show();
+    }
+}
+
+void MainWindow::slotOpenProject()
+{
+    QFileInfo  fileInfo = QFileDialog::getOpenFileName(this,tr("请选择工程"),"GKprj.hmi","GKHMI(*.hmi)");
+    if(fileInfo.filePath().isEmpty())
+    {
+        QMessageBox::information(NULL, tr("提示"), tr("选择失败!"));
+    }
+    else
+    {
+        m_prjFileInfo = fileInfo;
+    }
+}
+
+void MainWindow::slotSaveProject()
+{
+
+}
+
+void MainWindow::slotSetProject()
+{
+
 }
 
 void MainWindow::slotDrawBtnTriggered()
@@ -96,17 +203,6 @@ void MainWindow::slotDrawBtnTriggered()
 void MainWindow::slotDrawLabTrigger()
 {
     scene->setItemType(LABEL);
-}
-
-void MainWindow::mouseDoubleClickEvent(QMouseEvent *)
-{
-    qDebug()<<"doubule click";
-}
-void MainWindow::mouseMoveEvent(QMouseEvent *ev)
-{
-    QString size;
-    size = tr("this pos is %1,%2").arg(ev->pos().x(),ev->pos().y());
-//    this->setToolTip(size);
 }
 
 void MainWindow::deleteItem()
@@ -141,7 +237,21 @@ void MainWindow::slotGetBtnInfoFromScene(BTN_INFO * btn)
 
 void MainWindow::slotActionNewPage()
 {
-
+    QFileInfo fileInfo =  QFileDialog::getOpenFileName(this,tr("请选择图片"),"","image file(*.bmp)");
+    if(fileInfo.filePath().isEmpty())
+    {
+        QMessageBox::information(NULL, tr("提示"), tr("选择失败!"));
+    }
+    else
+    {
+        QFileInfo targetFile(m_prjFileInfo.path() + "/background/" +fileInfo.fileName());
+        QFile::copy(fileInfo.filePath(), targetFile.filePath());
+        m_pageSum ++;
+        m_background.insert(m_pageSum,targetFile.fileName());
+        pageTableWidget->insertRow(m_pageSum);
+        pageTableWidget->setItem(m_pageSum,0,new QTableWidgetItem(QString::number(m_pageSum)));
+        pageTableWidget->setItem(m_pageSum,1,new QTableWidgetItem(m_background.value(m_pageSum)));
+    }
 }
 void MainWindow::slotActionDeletePage()
 {
@@ -154,4 +264,23 @@ void MainWindow::slotActionUp()
 void MainWindow::slotActionDown()
 {
 
+}
+
+void MainWindow::slotPageTableWidgetSelectedChanged()
+{
+    int page = pageTableWidget->currentRow();
+    view->setStyleSheet(tr("background-image:url(%1/background/%2)").arg(m_prjFileInfo.path()).arg(m_background.value(page)));
+    //read current page item info and show in this page
+}
+
+void MainWindow::mouseDoubleClickEvent(QMouseEvent *)
+{
+    qDebug()<<"doubule click";
+}
+
+void MainWindow::mouseMoveEvent(QMouseEvent *ev)
+{
+    QString size;
+    size = tr("this pos is %1,%2").arg(ev->pos().x()).arg(ev->pos().y());
+//    this->setToolTip(size);
 }
