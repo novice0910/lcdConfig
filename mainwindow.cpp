@@ -10,8 +10,6 @@ MainWindow::MainWindow(QWidget *parent) :
     dataInit();
     toolBarCreate();
     allWidgetCreate();
-//    connect(scene,SIGNAL(signalSendBtnInfoToUI(BTN_INFO*)),this,SLOT(slotGetBtnInfoFromScene(BTN_INFO*)));
-//    connect(scene,SIGNAL(signalSendBtnInfoToUI(BTN_INFO*)),btnPropertyShow,SLOT(slotGetBtnInfoFromScene(BTN_INFO*)));
 }
 
 MainWindow::~MainWindow()
@@ -110,6 +108,15 @@ void MainWindow::rightDockWidgetCreate()
     dockWidgetPropertyShow->setWidget(property);
     propertyShow = new QStackedWidget;
     property->setCentralWidget(propertyShow);
+    //主页面信息
+    QWidget * pageWidget = new QWidget;
+    QLabel * currentIndex = new QLabel(tr("当前页数"),pageWidget);
+    lableCurrentIndex = new QLabel;
+    QHBoxLayout *hLayout = new QHBoxLayout;
+    hLayout->addWidget(currentIndex);
+    hLayout->addWidget(lableCurrentIndex);
+    pageWidget->setLayout(hLayout);
+    propertyShow->addWidget(pageWidget);
     //按键信息页
     btnPropertyShow = new BtnPropertyShow;
     propertyShow->addWidget(btnPropertyShow);
@@ -221,7 +228,8 @@ void MainWindow::slotItemHasInserted(myItem *item)
 
 void MainWindow::slotGetBtnInfoFromScene(BTN_INFO * btn)
 {
-    propertyShow->setCurrentIndex(0);
+    Q_UNUSED(btn);
+    propertyShow->setCurrentIndex(BTN_INDEX);
 }
 
 void MainWindow::slotActionNewPage()
@@ -265,7 +273,6 @@ void MainWindow::newOnePage()
     connect(btnPropertyShow,SIGNAL(signalSendBtnInfoToScene(BTN_INFO*)),pageScene,SLOT(slotGetBtnInfoChanged(BTN_INFO*)));
     connect(btnPropertyShow,SIGNAL(signalSendBtnRectChanged(QRectF)),pageScene,SLOT(slotSelectRectChanged(QRectF)));
     connect(pageScene,SIGNAL(signalSendBtnItemQRectF(QRectF)),btnPropertyShow,SLOT(slotGetBtnItemQRectF(QRectF)));
-    if(!sceneList.isEmpty()) qDebug()<<sceneList.size();
 }
 
 void MainWindow::slotActionDeletePage()
@@ -283,12 +290,18 @@ void MainWindow::slotActionDown()
 
 void MainWindow::slotPageTableWidgetSelectedChanged()
 {
+    lableCurrentIndex->setText(QString::number(m_selectedPageNum));
     m_selectedPageNum = pageTableWidget->currentRow();
     stackedView->setCurrentIndex(m_selectedPageNum);
     viewList.at(m_selectedPageNum)->setStyleSheet(tr("background-image:url(%1/background/%2)")
                                                   .arg(m_prjFileInfo.path())
                                                   .arg(m_background.value(m_selectedPageNum)));
     //read current page item info and show in this page
+}
+
+void MainWindow::slotGetWhichItemHasSelected(PROPERETY_SHOW_INDEX index)
+{
+    stackedView->setCurrentIndex(index);
 }
 
 void MainWindow::mouseDoubleClickEvent(QMouseEvent *)

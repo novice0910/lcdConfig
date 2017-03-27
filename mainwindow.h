@@ -35,6 +35,7 @@ namespace Ui {
 class MainWindow;
 }
 
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -43,8 +44,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 public slots:
-    void slotItemHasInserted(myItem *item);
-    void slotGetBtnInfoFromScene(BTN_INFO *);
+    void slotItemHasInserted(myItem *item);//the scene has inserted a new item
+    void slotGetBtnInfoFromScene(BTN_INFO *);//get the information from the Scene
+    void slotGetWhichItemHasSelected(PROPERETY_SHOW_INDEX index);//set the stackedView index
 private slots:
     void slotDrawBtnTriggered();//select draw the btn item
     void slotDrawLabTrigger();//select draw the label item
@@ -74,6 +76,7 @@ private:
     QList<myScene*> sceneList;//storage all the scene
     int m_pageSum;
     QMap <int,QString> m_background;
+    QLabel *lableCurrentIndex;//the label show the current page index
     int m_selectedPageNum;//current selected page
 
     void dataInit();

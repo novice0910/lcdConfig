@@ -46,16 +46,12 @@ void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
             ITEM_TYPE type = m_selectedItem->getItemType();
             switch (type){
             case BTN:
-                foreach (BtnWidget *btn, btnItemList) {
-                    if(btn->m_isSelected)
-                    {
-//                        emit signalSendBtnInfoToUI(&btn->m_btnInfo);
-                    }
-                }
+                emit signalSendWhichItemHasSelected(BTN_INDEX);
                 break;
             case LABEL:
                 break;
             default:
+                emit signalSendWhichItemHasSelected(MAIN_INDEX);
                 break;
             }
         }

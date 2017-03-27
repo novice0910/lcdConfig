@@ -29,6 +29,7 @@ signals:
     void signalSendBtnItemQRectF(QRectF rect);//retransmission btn Item QRectF to btn
     void signalItemHasInserted(myItem *item);
     void signalSendBtnInfoToUI(BTN_INFO *);
+    void signalSendWhichItemHasSelected(PROPERETY_SHOW_INDEX);
 
 private:
     ITEM_LIST itemList;
