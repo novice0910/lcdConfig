@@ -10,6 +10,9 @@ class BtnWidget : public myItem
 {
 public:
     BtnWidget();
+
+    BTN_INFO m_btnInfo;
+
     BTN_INFO getInfo() {
 
         m_btnInfo.x = this->scenePos().x();
@@ -28,7 +31,6 @@ public:
 //                  <<btn.dataType;
         m_btnInfo = btn;
     }
-    BTN_INFO m_btnInfo;
 
 private:
 };
