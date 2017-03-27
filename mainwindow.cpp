@@ -10,8 +10,8 @@ MainWindow::MainWindow(QWidget *parent) :
     dataInit();
     toolBarCreate();
     allWidgetCreate();
-    connect(scene,SIGNAL(signalSendBtnInfoToUI(BTN_INFO*)),this,SLOT(slotGetBtnInfoFromScene(BTN_INFO*)));
-    connect(scene,SIGNAL(signalSendBtnInfoToUI(BTN_INFO*)),btnPropertyShow,SLOT(slotGetBtnInfoFromScene(BTN_INFO*)));
+//    connect(scene,SIGNAL(signalSendBtnInfoToUI(BTN_INFO*)),this,SLOT(slotGetBtnInfoFromScene(BTN_INFO*)));
+//    connect(scene,SIGNAL(signalSendBtnInfoToUI(BTN_INFO*)),btnPropertyShow,SLOT(slotGetBtnInfoFromScene(BTN_INFO*)));
 }
 
 MainWindow::~MainWindow()
@@ -65,28 +65,12 @@ void MainWindow::centralWidgetCreate()
     QWidget * tab_2 = new QWidget(tabWidget);
     tabWidget->addTab(tab_1,tr("欢迎使用"));
     tabWidget->addTab(tab_2,tr("配置"));
-    tabWidget->resize(ui->centralWidget->size());
-    QLabel * lab = new QLabel(tr("欢迎使用!"));
+    tabWidget->resize(900,this->height());
+    QLabel * lab = new QLabel(tr("欢迎使用!"),tab_1);
     lab->setGeometry(0,0,300,50);
     stackedView = new QStackedWidget(tab_2);
     stackedView->resize(QSize(850,480));
-    stackedView->move(50,0);
-    QWidget *page_0 = new QWidget(stackedView);
-    stackedView->addWidget(page_0);
-    centralWidget = new QWidget(ui->centralWidget);
-    centralWidget->resize(QSize(850,480));
-    scene = new myScene(centralWidget);
-    centralWidget->hide();
-    int w =static_cast< QWidget *>(scene->parent())->size().width();
-    int h =static_cast< QWidget *>(scene->parent())->size().height();
-    scene->setSceneRect(QRectF(0, 0, w, h));
-    connect(scene,SIGNAL(signalItemHasInserted(myItem*)),this,SLOT(slotItemHasInserted(myItem*)));
-    view = new QGraphicsView(scene,centralWidget);
-    view->setGeometry(50,0,850,480);
-    view->resize(centralWidget->size());
-    view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    view->centerOn(0,0);
+    stackedView->move(20,0);
 }
 
 void MainWindow::leftDockWidgetCreate()
@@ -129,10 +113,10 @@ void MainWindow::rightDockWidgetCreate()
     //按键信息页
     btnPropertyShow = new BtnPropertyShow;
     propertyShow->addWidget(btnPropertyShow);
-    connect(btnPropertyShow,SIGNAL(signalSendBtnInfoToScene(BTN_INFO*)),scene,SLOT(slotGetBtnInfoChanged(BTN_INFO*)));
-    connect(btnPropertyShow,SIGNAL(signalSendBtnRectChanged(QRectF)),scene,SLOT(slotSelectRectChanged(QRectF)));
-    connect(scene,SIGNAL(signalSendBtnItemQRectF(QRectF)),btnPropertyShow,SLOT(slotGetBtnItemQRectF(QRectF)));
-    dockWidgetPropertyShow->hide();
+//    connect(btnPropertyShow,SIGNAL(signalSendBtnInfoToScene(BTN_INFO*)),scene,SLOT(slotGetBtnInfoChanged(BTN_INFO*)));
+//    connect(btnPropertyShow,SIGNAL(signalSendBtnRectChanged(QRectF)),scene,SLOT(slotSelectRectChanged(QRectF)));
+//    connect(scene,SIGNAL(signalSendBtnItemQRectF(QRectF)),btnPropertyShow,SLOT(slotGetBtnItemQRectF(QRectF)));
+//    dockWidgetPropertyShow->hide();
 }
 
 void MainWindow::dataInit()
@@ -251,8 +235,30 @@ void MainWindow::slotActionNewPage()
         pageTableWidget->insertRow(m_pageSum);
         pageTableWidget->setItem(m_pageSum,0,new QTableWidgetItem(QString::number(m_pageSum)));
         pageTableWidget->setItem(m_pageSum,1,new QTableWidgetItem(m_background.value(m_pageSum)));
+
+        newOnePage();
     }
 }
+
+void MainWindow::newOnePage()
+{
+    QWidget *page_0 = new QWidget(stackedView);
+    stackedView->addWidget(page_0);
+    myScene *pageScene_0 = new myScene(page_0);
+    sceneList.append(pageScene_0);
+    int w =static_cast< QWidget *>(stackedView)->size().width();
+    int h =static_cast< QWidget *>(stackedView)->size().height();
+    pageScene_0->setSceneRect(QRectF(0,0,w,h));
+    connect(pageScene_0,SIGNAL(signalItemHasInserted(myItem*)),this,SLOT(slotItemHasInserted(myItem*)));
+    QGraphicsView * pageView_0 = new QGraphicsView(pageScene_0,page_0);
+    viewList.append(pageView_0);
+    pageView_0->resize(QSize(850,480));
+    pageView_0->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    pageView_0->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    pageView_0->centerOn(0,0);
+    pageView_0->show();
+}
+
 void MainWindow::slotActionDeletePage()
 {
 
@@ -269,7 +275,7 @@ void MainWindow::slotActionDown()
 void MainWindow::slotPageTableWidgetSelectedChanged()
 {
     int page = pageTableWidget->currentRow();
-    view->setStyleSheet(tr("background-image:url(%1/background/%2)").arg(m_prjFileInfo.path()).arg(m_background.value(page)));
+//    view->setStyleSheet(tr("background-image:url(%1/background/%2)").arg(m_prjFileInfo.path()).arg(m_background.value(page)));
     //read current page item info and show in this page
 }
 

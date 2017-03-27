@@ -24,6 +24,7 @@
 #include <QLabel>
 #include <QSpinBox>
 #include <QFileDialog>
+#include <QList>
 #include <QMap>
 #include "myitem.h"
 #include "BtnPropertyShow.h"
@@ -71,7 +72,8 @@ private:
     QDockWidget * dockWidgetPageProperty;
     QDockWidget *dockWidgetPropertyShow;
     QFileInfo m_prjFileInfo;//storage the project information include path and project name
-
+    QList<QGraphicsView*> viewList;//storage all the view
+    QList<myScene*> sceneList;//storage all the scene
     int m_pageSum;
     QMap <int,QString> m_background;
     void dataInit();
@@ -81,7 +83,8 @@ private:
     void leftDockWidgetCreate();//create left DockWidget and widget on it
     void rightDockWidgetCreate();//create right dockwidget and widge on it
     void deleteItem();//delete the select Item
-
+    void newOnePage();
+    void delectOnePage();
 };
 
 #endif // MAINWINDOW_H
