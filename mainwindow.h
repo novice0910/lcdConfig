@@ -16,8 +16,15 @@
 #include <QTableWidget>
 #include <QStackedWidget>
 #include <QGridLayout>
+#include <QToolButton>
+#include <QMessageBox>
+#include <QSettings>
+#include <QTabWidget>
+#include <QDir>
 #include <QLabel>
 #include <QSpinBox>
+#include <QFileDialog>
+#include <QMap>
 #include "myitem.h"
 #include "BtnPropertyShow.h"
 #include "myscene.h"
@@ -38,27 +45,42 @@ public slots:
     void slotItemHasInserted(myItem *item);
     void slotGetBtnInfoFromScene(BTN_INFO *);
 private slots:
-    void slotDrawBtnTriggered();
-    void slotDrawLabTrigger();
+    void slotDrawBtnTriggered();//select draw the btn item
+    void slotDrawLabTrigger();//select draw the label item
     void mouseDoubleClickEvent(QMouseEvent *);
     void mouseMoveEvent(QMouseEvent *ev);
     void slotActionNewPage();
     void slotActionDeletePage();
     void slotActionUp();
     void slotActionDown();
+    void slotNewProject();
+    void slotOpenProject();
+    void slotSaveProject();
+    void slotSetProject();
+    void slotPageTableWidgetSelectedChanged();
 private:
     Ui::MainWindow *ui;
     myScene *scene;
     QGraphicsView *view;
     QWidget *centralWidget;
-    QTableWidget *pageTabWidget;
-    QStackedWidget *propertyShow;
-    BtnPropertyShow *btnPropertyShow;
-    void widgetCreate();
-    void toolBarCreate();
-    void leftDockWidgetCreate();
-    void rightDockWidgetCreate();
-    void deleteItem();
+    QTabWidget * tabWidget;//show the welcome page and stackedView
+    QStackedWidget *stackedView;//stackedView to show different page and item
+    QTableWidget *pageTableWidget;//on left dockwidget show the page information
+    QStackedWidget *propertyShow;//on right dockwidget show widget property when it has been selected
+    BtnPropertyShow *btnPropertyShow;//show the btn property
+    QDockWidget * dockWidgetPageProperty;
+    QDockWidget *dockWidgetPropertyShow;
+    QFileInfo m_prjFileInfo;//storage the project information include path and project name
+
+    int m_pageSum;
+    QMap <int,QString> m_background;
+    void dataInit();
+    void centralWidgetCreate();
+    void allWidgetCreate();//create all the widget on the mainwindow
+    void toolBarCreate();//create toolBar and all aciton on this
+    void leftDockWidgetCreate();//create left DockWidget and widget on it
+    void rightDockWidgetCreate();//create right dockwidget and widge on it
+    void deleteItem();//delete the select Item
 
 };
 
