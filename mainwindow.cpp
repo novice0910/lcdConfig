@@ -247,22 +247,25 @@ void MainWindow::slotActionNewPage()
 
 void MainWindow::newOnePage()
 {
-    QWidget *page_0 = new QWidget(stackedView);
-    stackedView->addWidget(page_0);
+    QWidget *page = new QWidget(stackedView);
+    stackedView->addWidget(page);
     int w =static_cast< QWidget *>(stackedView)->size().width();
     int h =static_cast< QWidget *>(stackedView)->size().height();
-    myScene *pageScene_0 = new myScene(page_0);
-    sceneList.append(pageScene_0);
-    pageScene_0->setSceneRect(QRectF(0,0,w,h));
-    connect(pageScene_0,SIGNAL(signalItemHasInserted(myItem*)),this,SLOT(slotItemHasInserted(myItem*)));
-    QGraphicsView * pageView_0 = new QGraphicsView(pageScene_0,page_0);
+    myScene *pageScene = new myScene(page);
+    sceneList.append(pageScene);
+    pageScene->setSceneRect(QRectF(0,0,w,h));
+    connect(pageScene,SIGNAL(signalItemHasInserted(myItem*)),this,SLOT(slotItemHasInserted(myItem*)));
+    QGraphicsView * pageView_0 = new QGraphicsView(pageScene,page);
     viewList.append(pageView_0);
     pageView_0->resize(QSize(800,480));
     pageView_0->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     pageView_0->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     pageView_0->centerOn(0,0);
     pageView_0->show();
-    pageView_0->setStyleSheet("background-image:url(0.bmp)");
+    connect(btnPropertyShow,SIGNAL(signalSendBtnInfoToScene(BTN_INFO*)),pageScene,SLOT(slotGetBtnInfoChanged(BTN_INFO*)));
+    connect(btnPropertyShow,SIGNAL(signalSendBtnRectChanged(QRectF)),pageScene,SLOT(slotSelectRectChanged(QRectF)));
+    connect(pageScene,SIGNAL(signalSendBtnItemQRectF(QRectF)),btnPropertyShow,SLOT(slotGetBtnItemQRectF(QRectF)));
+    if(!sceneList.isEmpty()) qDebug()<<sceneList.size();
 }
 
 void MainWindow::slotActionDeletePage()
@@ -281,7 +284,10 @@ void MainWindow::slotActionDown()
 void MainWindow::slotPageTableWidgetSelectedChanged()
 {
     m_selectedPageNum = pageTableWidget->currentRow();
-//    view->setStyleSheet(tr("background-image:url(%1/background/%2)").arg(m_prjFileInfo.path()).arg(m_background.value(page)));
+    stackedView->setCurrentIndex(m_selectedPageNum);
+    viewList.at(m_selectedPageNum)->setStyleSheet(tr("background-image:url(%1/background/%2)")
+                                                  .arg(m_prjFileInfo.path())
+                                                  .arg(m_background.value(m_selectedPageNum)));
     //read current page item info and show in this page
 }
 

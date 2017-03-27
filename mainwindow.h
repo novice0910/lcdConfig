@@ -61,8 +61,6 @@ private slots:
     void slotPageTableWidgetSelectedChanged();
 private:
     Ui::MainWindow *ui;
-    myScene *scene;
-    QGraphicsView *view;
     QWidget *centralWidget;
     QTabWidget * tabWidget;//show the welcome page and stackedView
     QStackedWidget *stackedView;//stackedView to show different page and item
