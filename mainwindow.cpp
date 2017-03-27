@@ -122,6 +122,7 @@ void MainWindow::rightDockWidgetCreate()
 void MainWindow::dataInit()
 {
     m_pageSum = -1;
+    m_selectedPageNum = 0;
 }
 
 //第一行工具栏
@@ -182,11 +183,13 @@ void MainWindow::slotSetProject()
 
 void MainWindow::slotDrawBtnTriggered()
 {
-    scene->setItemType(BTN);
+    if(!sceneList.isEmpty())
+    sceneList.at(m_selectedPageNum)->setItemType(BTN);
 }
 void MainWindow::slotDrawLabTrigger()
 {
-    scene->setItemType(LABEL);
+    if(!sceneList.isEmpty())
+    sceneList.at(m_selectedPageNum)->setItemType(LABEL);
 }
 
 void MainWindow::deleteItem()
@@ -211,7 +214,9 @@ void MainWindow::deleteItem()
 }
 void MainWindow::slotItemHasInserted(myItem *item)
 {
-    scene->setItemType(MOVE_ITEM);
+    Q_UNUSED(item);
+    if(!sceneList.isEmpty())
+    sceneList.at(m_selectedPageNum)->setItemType(MOVE_ITEM);
 }
 
 void MainWindow::slotGetBtnInfoFromScene(BTN_INFO * btn)
@@ -235,7 +240,7 @@ void MainWindow::slotActionNewPage()
         pageTableWidget->insertRow(m_pageSum);
         pageTableWidget->setItem(m_pageSum,0,new QTableWidgetItem(QString::number(m_pageSum)));
         pageTableWidget->setItem(m_pageSum,1,new QTableWidgetItem(m_background.value(m_pageSum)));
-
+        m_selectedPageNum = m_pageSum;
         newOnePage();
     }
 }
@@ -244,19 +249,20 @@ void MainWindow::newOnePage()
 {
     QWidget *page_0 = new QWidget(stackedView);
     stackedView->addWidget(page_0);
-    myScene *pageScene_0 = new myScene(page_0);
-    sceneList.append(pageScene_0);
     int w =static_cast< QWidget *>(stackedView)->size().width();
     int h =static_cast< QWidget *>(stackedView)->size().height();
+    myScene *pageScene_0 = new myScene(page_0);
+    sceneList.append(pageScene_0);
     pageScene_0->setSceneRect(QRectF(0,0,w,h));
     connect(pageScene_0,SIGNAL(signalItemHasInserted(myItem*)),this,SLOT(slotItemHasInserted(myItem*)));
     QGraphicsView * pageView_0 = new QGraphicsView(pageScene_0,page_0);
     viewList.append(pageView_0);
-    pageView_0->resize(QSize(850,480));
+    pageView_0->resize(QSize(800,480));
     pageView_0->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     pageView_0->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     pageView_0->centerOn(0,0);
     pageView_0->show();
+    pageView_0->setStyleSheet("background-image:url(0.bmp)");
 }
 
 void MainWindow::slotActionDeletePage()
@@ -274,7 +280,7 @@ void MainWindow::slotActionDown()
 
 void MainWindow::slotPageTableWidgetSelectedChanged()
 {
-    int page = pageTableWidget->currentRow();
+    m_selectedPageNum = pageTableWidget->currentRow();
 //    view->setStyleSheet(tr("background-image:url(%1/background/%2)").arg(m_prjFileInfo.path()).arg(m_background.value(page)));
     //read current page item info and show in this page
 }

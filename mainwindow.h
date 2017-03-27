@@ -76,6 +76,8 @@ private:
     QList<myScene*> sceneList;//storage all the scene
     int m_pageSum;
     QMap <int,QString> m_background;
+    int m_selectedPageNum;//current selected page
+
     void dataInit();
     void centralWidgetCreate();
     void allWidgetCreate();//create all the widget on the mainwindow
