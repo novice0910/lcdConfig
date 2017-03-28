@@ -16,7 +16,7 @@ class myScene :public QGraphicsScene
 {
     Q_OBJECT
 public:
-    myScene(QObject *parent = 0);
+    myScene(int page, QObject *parent = 0);
     void setItemType(ITEM_TYPE type);
     void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
@@ -32,6 +32,7 @@ signals:
     void signalSendWhichItemHasSelected(PROPERETY_SHOW_INDEX);
 
 private:
+    int m_page;// which page this scene belongs to ?
     ITEM_LIST itemList;
     BTN_ITEM_LIST btnItemList;
     ITEM_TYPE m_ItemType;

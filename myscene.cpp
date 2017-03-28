@@ -1,10 +1,11 @@
 #include "myscene.h"
 
-myScene::myScene( QObject *parent)
+myScene::myScene(int page, QObject *parent)
     :QGraphicsScene(parent)
 {
     m_ItemType = MOVE_ITEM;
     m_selectedItem = new myItem;
+    m_page = page;
 }
 
 void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
