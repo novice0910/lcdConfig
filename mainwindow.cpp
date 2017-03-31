@@ -183,7 +183,9 @@ void MainWindow::slotSaveProject()
 
 void MainWindow::slotSetProject()
 {
-
+    ComSet *comSet = new ComSet;
+    comSet->setSavePath(m_prjFileInfo.path() + "/setUp/config.ini");
+    comSet->exec();
 }
 
 void MainWindow::slotDrawBtnTriggered()

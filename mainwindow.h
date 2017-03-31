@@ -30,6 +30,7 @@
 #include "BtnPropertyShow.h"
 #include "myscene.h"
 #include "data.h"
+#include "ComSet.h"
 
 namespace Ui {
 class MainWindow;

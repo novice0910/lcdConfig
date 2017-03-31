@@ -17,14 +17,16 @@ SOURCES += main.cpp\
     myitem.cpp \
     myscene.cpp \
     BtnPropertyShow.cpp \
-    MyWidget.cpp
+    MyWidget.cpp \
+    ComSet.cpp
 
 HEADERS  += mainwindow.h \
     myitem.h \
     myscene.h \
     BtnPropertyShow.h \
     data.h \
-    MyWidget.h
+    MyWidget.h \
+    ComSet.h
 
 FORMS    += mainwindow.ui
 
