@@ -35,7 +35,7 @@ void myItem::setBrushColor(QColor color)
 void myItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget){
 //    Q_UNUSED(option);
     Q_UNUSED(widget);
-    if (option->state & QStyle::State_Selected)
+    if (option->state & this->isSelected())
     {
         QPen pen;
         pen.setColor(Qt::black);
@@ -277,18 +277,15 @@ void myItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 QVariant myItem::itemChange(GraphicsItemChange change,
                      const QVariant &value)
 {
-    if(change == QGraphicsItem::ItemSelectedChange)
-    {
-        m_isSelected = !m_isSelected;
-    }
     sendItemQRectF();
     return value;
 }
 
 void myItem::sendItemQRectF()
 {
-    if(m_isSelected)
+    if(this->isSelected())
     {
+
         QRectF rectF;
         rectF.setX(this->scenePos().x());
         rectF.setY(this->scenePos().y());
@@ -300,7 +297,7 @@ void myItem::sendItemQRectF()
 
 void myItem::slotChangeRect(QRectF rect)
 {
-    if(m_isSelected)
+    if(this->isSelected())
     {
         m_width = rect.width();
         m_height = rect.height();
@@ -312,7 +309,7 @@ void myItem::slotChangeRect(QRectF rect)
 
 void myItem::judgeMousePosition(QPointF pointF)
 {
-    if(!m_isSelected)
+    if(!this->isSelected())
     {
         direction = NONE;
         m_cursor->setShape(Qt::ArrowCursor);
