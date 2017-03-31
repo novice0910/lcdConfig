@@ -20,6 +20,7 @@ void BtnWidget::saveItemInfo(QString path,int num)
     conf->setValue(tr("btn/btn%1DataStartAddr").arg(num + 1),m_btnInfo.dataStartAddr);
     conf->setValue(tr("btn/btn%1DataType").arg(num + 1),m_btnInfo.dataType);
     conf->setValue(tr("btn/btn%1DataData").arg(num + 1),m_btnInfo.dataData);
+    delete conf;
 }
 
 LabelWidget::LabelWidget()
