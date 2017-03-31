@@ -20,7 +20,7 @@ public:
     void connectInit();
 signals:
     void signalSendBtnRectChanged(QRectF rect);//send the select btn item has changed to scene
-    void signalSendBtnInfoToScene(BTN_INFO *btn_info);//send the show btn information to scene's item
+    void signalSendBtnInfoToScene(BTN_INFO btn_info);//send the show btn information to scene's item
 
 public slots:
     void slotGetBtnItemQRectF(QRectF rect);//get item QRectF from scene because of item has changed
@@ -31,8 +31,6 @@ private slots:
     void slotRBtnClicked();
     void slotLineEditChanged();
 private:
-    //
-    BTN_INFO *m_btnInfo;
 
     //widget
     QSpinBox *btn_x;

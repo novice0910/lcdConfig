@@ -5,7 +5,6 @@ BtnPropertyShow::BtnPropertyShow(QWidget *parent) :
 {
     widgetInit();
     connectInit();
-    m_btnInfo = new BTN_INFO;
 }
 
 void BtnPropertyShow::widgetInit()
@@ -29,14 +28,14 @@ void BtnPropertyShow::widgetInit()
 
     btn_x = new QSpinBox(gridLayoutWidget);
     btn_x->setObjectName(QString::fromUtf8("btn_x"));
-    btn_x->setMaximum(800);
-    btn_x->setMinimum(-200);
-    btn_x->setSingleStep(3);
+    btn_x->setRange(0,MAX_X_SIZE);
+    btn_x->setValue(0);
     gridLayout->addWidget(btn_x, 0, 1, 1, 1);
 
     btn_w = new QSpinBox(gridLayoutWidget);
     btn_w->setObjectName(QString::fromUtf8("btn_w"));
-    btn_w->setMaximum(800);
+    btn_w->setRange(0,MAX_W_SIZE);
+    btn_w->setValue(0);
     gridLayout->addWidget(btn_w, 1, 1, 1, 1);
 
     QLabel *label_3 = new QLabel(gridLayoutWidget);
@@ -47,7 +46,8 @@ void BtnPropertyShow::widgetInit()
 
     btn_y = new QSpinBox(gridLayoutWidget);
     btn_y->setObjectName(QString::fromUtf8("btn_y"));
-    btn_y->setMaximum(480);
+    btn_y->setRange(0,MAX_Y_SIZE);
+    btn_y->setValue(0);
     gridLayout->addWidget(btn_y, 0, 3, 1, 1);
 
     QLabel *label_2 = new QLabel(gridLayoutWidget);
@@ -64,12 +64,9 @@ void BtnPropertyShow::widgetInit()
 
     btn_h = new QSpinBox(gridLayoutWidget);
     btn_h->setObjectName(QString::fromUtf8("btn_h"));
-    btn_h->setMaximum(480);
+    btn_h->setRange(0,MAX_H_SIZE);
     btn_h->setValue(0);
     gridLayout->addWidget(btn_h, 1, 3, 1, 1);
-    btn_y->setSingleStep(3);
-    btn_w->setSingleStep(3);
-    btn_h->setSingleStep(3);
 
     QGroupBox *gBoxPageSwitch = new QGroupBox(this);
     gBoxPageSwitch->setObjectName(QString::fromUtf8("gBoxPageSwitch"));
@@ -136,8 +133,8 @@ void BtnPropertyShow::widgetInit()
     gLayout->setContentsMargins(0, 0, 0, 0);
     gLayout->addWidget(labAddr,0,0,1,1);
     gLayout->addWidget(lEditAddr,0,1,1,1);
+
     btnGroup = new QButtonGroup;
-//    gLayout->addWidget(btnGroup);
     btnGroup->addButton(rBtninputByByte,0);
     btnGroup->addButton(rBtninputByBit,1);
     btnGroup->addButton(rBtninputByHighByte,2);
@@ -177,6 +174,7 @@ void BtnPropertyShow::getAndSendRectF()
 void BtnPropertyShow::getAndSendBtnInfo()
 {
     BTN_INFO info;
+
     info.x = btn_x->value();
     info.y = btn_y->value();
     info.w = btn_w->value();
@@ -186,7 +184,7 @@ void BtnPropertyShow::getAndSendBtnInfo()
     info.dataData = lEditkeyNum->text().toInt(0,16);
     info.dataType = btnGroup->checkedId();
 
-    emit signalSendBtnInfoToScene(&info);
+    emit signalSendBtnInfoToScene(info);
 }
 
 void BtnPropertyShow::slotGetBtnItemQRectF(QRectF rect)
