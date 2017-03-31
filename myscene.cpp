@@ -1,6 +1,6 @@
 #include "myscene.h"
 
-myScene::myScene(int page, QObject *parent)
+myScene::myScene(QObject *parent, int page)
     :QGraphicsScene(parent)
 {
     m_ItemType = MOVE_ITEM;
@@ -73,6 +73,10 @@ void myScene::setItemType(ITEM_TYPE type)
 {
     m_ItemType = type;
 }
+void myScene::setScenePageIndex(int index)
+{
+    m_page = index;
+}
 
 void myScene::getItemInfo(myItem *item)
 {
@@ -115,7 +119,18 @@ void myScene::slotSelectRectChanged(QRectF rect)
     m_selectedItem->slotChangeRect(rect);
 }
 
-void myScene::slotSaveAllItemOnScene()
+void myScene::slotSaveAllItemOnScene(QString path)
 {
+    QString savePath = path + tr("/page%1/").arg(m_page) + "config.ini";
+    QSettings *conf = new QSettings(savePath,QSettings::IniFormat);
+    if(!btnItemList.isEmpty())
+    {
+        conf->setValue("btn/btnSum",btnItemList.size());
+        for(int i= 0;i<btnItemList.size();i++)
+        {
+            btnItemList.at(i)->saveItemInfo(savePath,i);
+        }
+    }
+
 
 }

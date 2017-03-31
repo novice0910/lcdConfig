@@ -5,6 +5,7 @@
 #include <QDebug>
 #include "myitem.h"
 #include "data.h"
+#include <QSettings>
 
 class BtnWidget : public myItem
 {
@@ -24,14 +25,9 @@ public:
     }
     void setProperty(BTN_INFO  btn)//set except QRect
     {
-//        qDebug()<<"slot btn"<<btn.x<<btn.y<<btn.w<<btn.h<<
-//                  "data"<<btn.dataData
-//               <<"next page"<<btn.regesitData
-//               <<"addr"<<btn.dataStartAddr
-//                  <<btn.dataType;
         m_btnInfo = btn;
     }
-
+    void saveItemInfo(QString path, int num);//save the item in the path  btn?=btn(num)
 private:
 };
 

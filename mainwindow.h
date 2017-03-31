@@ -44,7 +44,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 signals:
-    void signalSaveAllItemToConfig();//send the signal to scene save the all item
+    void signalSaveAllItemToConfig(QString path);//send the signal to scene save the all item in the path
 public slots:
     void slotItemHasInserted(myItem *item);//the scene has inserted a new item
     void slotGetBtnInfoFromScene(BTN_INFO *);//get the information from the Scene

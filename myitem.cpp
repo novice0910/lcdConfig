@@ -277,6 +277,7 @@ void myItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 QVariant myItem::itemChange(GraphicsItemChange change,
                      const QVariant &value)
 {
+    Q_UNUSED(change);
     sendItemQRectF();
     return value;
 }

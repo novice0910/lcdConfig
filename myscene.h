@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QObject>
 #include <QList>
+#include <QSettings>
 #include "data.h"
 #include "MyWidget.h"
 
@@ -16,14 +17,15 @@ class myScene :public QGraphicsScene
 {
     Q_OBJECT
 public:
-    myScene(int page, QObject *parent = 0);
+    myScene(QObject *parent = 0,int page =0);
     void setItemType(ITEM_TYPE type);
+    void setScenePageIndex(int index);
     void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
 public slots:
     void slotBtnRectQRectF(QRectF rect);//get item rect QRectF from myItem
     void slotGetBtnInfoChanged(BTN_INFO btn);
     void slotSelectRectChanged(QRectF rect);//change the selected item QRectF
-    void slotSaveAllItemOnScene();
+    void slotSaveAllItemOnScene(QString path);
 signals:
     void signalSendBtnItemQRectF(QRectF rect);//retransmission btn Item QRectF to btn
     void signalItemHasInserted(myItem *item);

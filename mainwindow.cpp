@@ -178,7 +178,7 @@ void MainWindow::slotOpenProject()
 
 void MainWindow::slotSaveProject()
 {
-    emit signalSaveAllItemToConfig();
+    emit signalSaveAllItemToConfig(m_prjFileInfo.path());
 }
 
 void MainWindow::slotSetProject()
@@ -262,8 +262,9 @@ void MainWindow::newOnePage()
     stackedView->addWidget(page);
     int w =static_cast< QWidget *>(stackedView)->size().width();
     int h =static_cast< QWidget *>(stackedView)->size().height();
-    myScene *pageScene = new myScene(m_pageSum,page);
+    myScene *pageScene = new myScene(page,m_pageSum);
     sceneList.append(pageScene);
+    pageScene->setScenePageIndex(m_pageSum);
     pageScene->setSceneRect(QRectF(0,0,w,h));
     connect(pageScene,SIGNAL(signalItemHasInserted(myItem*)),this,SLOT(slotItemHasInserted(myItem*)));
     QGraphicsView * pageView_0 = new QGraphicsView(pageScene,page);
@@ -277,6 +278,7 @@ void MainWindow::newOnePage()
     connect(btnPropertyShow,SIGNAL(signalSendBtnRectChanged(QRectF)),pageScene,SLOT(slotSelectRectChanged(QRectF)));
     connect(pageScene,SIGNAL(signalSendBtnItemQRectF(QRectF)),btnPropertyShow,SLOT(slotGetBtnItemQRectF(QRectF)));
     connect(pageScene,SIGNAL(signalSendWhichItemHasSelected(PROPERETY_SHOW_INDEX)),this,SLOT(slotGetWhichItemHasSelected(PROPERETY_SHOW_INDEX)));
+    connect(this,SIGNAL(signalSaveAllItemToConfig(QString)),pageScene,SLOT(slotSaveAllItemOnScene(QString)));
 }
 
 void MainWindow::slotActionDeletePage()
