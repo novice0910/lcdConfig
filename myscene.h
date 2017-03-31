@@ -19,17 +19,16 @@ public:
     myScene(int page, QObject *parent = 0);
     void setItemType(ITEM_TYPE type);
     void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 public slots:
     void slotBtnRectQRectF(QRectF rect);//get item rect QRectF from myItem
-    void slotGetBtnInfoChanged(BTN_INFO *btn);
+    void slotGetBtnInfoChanged(BTN_INFO btn);
     void slotSelectRectChanged(QRectF rect);//change the selected item QRectF
-
+    void slotSaveAllItemOnScene();
 signals:
     void signalSendBtnItemQRectF(QRectF rect);//retransmission btn Item QRectF to btn
     void signalItemHasInserted(myItem *item);
     void signalSendBtnInfoToUI(BTN_INFO *);
-    void signalSendWhichItemHasSelected(PROPERETY_SHOW_INDEX);
+    void signalSendWhichItemHasSelected(PROPERETY_SHOW_INDEX);//set index of propertyShow index
 
 private:
     int m_page;// which page this scene belongs to ?

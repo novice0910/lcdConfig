@@ -69,11 +69,6 @@ void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     QGraphicsScene::mousePressEvent(mouseEvent);
 }
 
-void myScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
-{
-//    getItemInfo(m_selectedItem);
-}
-
 void myScene::setItemType(ITEM_TYPE type)
 {
     m_ItemType = type;
@@ -100,11 +95,15 @@ void myScene::slotBtnRectQRectF(QRectF rect)
     emit signalSendBtnItemQRectF(rect);
 }
 
-void myScene::slotGetBtnInfoChanged(BTN_INFO *btn)
+void myScene::slotGetBtnInfoChanged(BTN_INFO btn)
 {
-    if(m_selectedItem == 0) return;
-    BtnWidget *btnItem = qgraphicsitem_cast<BtnWidget *>(m_selectedItem);
-    btnItem->setProperty(*btn);
+    BtnWidget *btnItem;
+    foreach (btnItem , btnItemList) {
+        if(btnItem->isSelected())
+        {
+            btnItem->setProperty(btn);
+        }
+    }
 }
 
 void myScene::slotSelectRectChanged(QRectF rect)
@@ -114,4 +113,9 @@ void myScene::slotSelectRectChanged(QRectF rect)
         return;
     }
     m_selectedItem->slotChangeRect(rect);
+}
+
+void myScene::slotSaveAllItemOnScene()
+{
+
 }
