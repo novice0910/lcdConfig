@@ -43,6 +43,8 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+signals:
+    void signalSaveAllItemToConfig();//send the signal to scene save the all item
 public slots:
     void slotItemHasInserted(myItem *item);//the scene has inserted a new item
     void slotGetBtnInfoFromScene(BTN_INFO *);//get the information from the Scene

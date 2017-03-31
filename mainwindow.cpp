@@ -31,8 +31,8 @@ void MainWindow::toolBarCreate()
     actionOpenProject->setToolTip(tr("打开工程"));
     connect(actionOpenProject,SIGNAL(triggered()),this,SLOT(slotOpenProject()));
     toolBarProject->addAction(actionOpenProject);
-    QAction *actionSaveProject = new QAction(tr("保存"),this);
-    actionSaveProject->setToolTip(tr("保存"));
+    QAction *actionSaveProject = new QAction(tr("Debug"),this);
+    actionSaveProject->setToolTip(tr("生成配置文件"));
     connect(actionSaveProject,SIGNAL(triggered()),this,SLOT(slotSaveProject()));
     toolBarProject->addAction(actionSaveProject);
     QAction *actionSetProject = new QAction(tr("设置"),this);
@@ -178,7 +178,7 @@ void MainWindow::slotOpenProject()
 
 void MainWindow::slotSaveProject()
 {
-
+    emit signalSaveAllItemToConfig();
 }
 
 void MainWindow::slotSetProject()
@@ -247,6 +247,11 @@ void MainWindow::slotActionNewPage()
         pageTableWidget->setItem(m_pageSum,0,new QTableWidgetItem(QString::number(m_pageSum)));
         pageTableWidget->setItem(m_pageSum,1,new QTableWidgetItem(m_background.value(m_pageSum)));
         m_selectedPageNum = m_pageSum;
+
+        //new the page_? folder
+        QDir newDir(m_prjFileInfo.path());
+        newDir.mkdir(tr("page%1").arg(m_pageSum));
+
         newOnePage();
     }
 }
@@ -257,7 +262,7 @@ void MainWindow::newOnePage()
     stackedView->addWidget(page);
     int w =static_cast< QWidget *>(stackedView)->size().width();
     int h =static_cast< QWidget *>(stackedView)->size().height();
-    myScene *pageScene = new myScene(page);
+    myScene *pageScene = new myScene(m_pageSum,page);
     sceneList.append(pageScene);
     pageScene->setSceneRect(QRectF(0,0,w,h));
     connect(pageScene,SIGNAL(signalItemHasInserted(myItem*)),this,SLOT(slotItemHasInserted(myItem*)));
@@ -268,7 +273,7 @@ void MainWindow::newOnePage()
     pageView_0->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     pageView_0->centerOn(0,0);
     pageView_0->show();
-    connect(btnPropertyShow,SIGNAL(signalSendBtnInfoToScene(BTN_INFO*)),pageScene,SLOT(slotGetBtnInfoChanged(BTN_INFO*)));
+    connect(btnPropertyShow,SIGNAL(signalSendBtnInfoToScene(BTN_INFO)),pageScene,SLOT(slotGetBtnInfoChanged(BTN_INFO)));
     connect(btnPropertyShow,SIGNAL(signalSendBtnRectChanged(QRectF)),pageScene,SLOT(slotSelectRectChanged(QRectF)));
     connect(pageScene,SIGNAL(signalSendBtnItemQRectF(QRectF)),btnPropertyShow,SLOT(slotGetBtnItemQRectF(QRectF)));
     connect(pageScene,SIGNAL(signalSendWhichItemHasSelected(PROPERETY_SHOW_INDEX)),this,SLOT(slotGetWhichItemHasSelected(PROPERETY_SHOW_INDEX)));
