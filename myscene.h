@@ -26,6 +26,7 @@ public slots:
     void slotGetBtnInfoChanged(BTN_INFO btn);
     void slotSelectRectChanged(QRectF rect);//change the selected item QRectF
     void slotSaveAllItemOnScene(QString path);
+    void slotOpenReadAllItemOnScene(QString path);//open project read all item
 signals:
     void signalSendBtnItemQRectF(QRectF rect);//retransmission btn Item QRectF to btn
     void signalItemHasInserted(myItem *item);
@@ -39,7 +40,7 @@ private:
     ITEM_TYPE m_ItemType;
     QGraphicsPathItem * dashRect;
     myItem *m_selectedItem;
-    void getItemInfo(myItem *item);
+    BTN_INFO readBtnInfo();
 };
 
 #endif // MYSCENE_H

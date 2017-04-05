@@ -78,8 +78,9 @@ private:
     QFileInfo m_prjFileInfo;//storage the project information include path and project name
     QList<QGraphicsView*> viewList;//storage all the view
     QList<myScene*> sceneList;//storage all the scene
+    QMap <int,QString> m_background;//storage all the background image name
+
     int m_pageSum;//from zero reality page sum is (m_pageSum + 1)
-    QMap <int,QString> m_background;
     QLabel *lableCurrentIndex;//the label show the current page index
     int m_selectedPageNum;//current selected page
 
@@ -91,7 +92,7 @@ private:
     void rightDockWidgetCreate();//create right dockwidget and widge on it
     void deleteItem();//delete the select Item
     void newOnePage();
-    void newOnePage(int index);
+    void newOnePage(int index); //when read project
     void delectOnePage();
 };
 

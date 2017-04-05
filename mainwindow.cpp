@@ -129,7 +129,7 @@ void MainWindow::dataInit()
     m_selectedPageNum = 0;
 }
 
-//第一行工具栏
+//第一行工具栏 新建工程
 void MainWindow::slotNewProject()
 {
     QFileInfo  fileInfo = QFileDialog::getSaveFileName(this,tr("请选择保存路径"),"GKprj.hmi","GKHMI(*.hmi)");
@@ -173,8 +173,20 @@ void MainWindow::slotOpenProject()
     else
     {
         m_prjFileInfo = fileInfo;
+        QSettings *conf = new QSettings(m_prjFileInfo.path() + "/setUp/config.ini",QSettings::IniFormat);
+        m_pageSum = conf->value("PAGE/pageSum").toInt();
+        delete conf;
+
+        for(int i=0;i<= m_pageSum;i++)
+        {
+            m_background.insert(i,tr("%1.bmp").arg(i));
+            pageTableWidget->insertRow(i);
+            pageTableWidget->setItem(i,0,new QTableWidgetItem(QString::number(i)));
+            pageTableWidget->setItem(i,1,new QTableWidgetItem(m_background.value(i)));
+
+            newOnePage(i);
+        }
         emit signalOpenAllItemConfig(m_prjFileInfo.path());
-        newOnePage();
     }
 }
 
@@ -246,9 +258,13 @@ void MainWindow::slotActionNewPage()
     }
     else
     {
-        QFileInfo targetFile(m_prjFileInfo.path() + "/background/" +fileInfo.fileName());
-        QFile::copy(fileInfo.filePath(), targetFile.filePath());
+//        QFileInfo targetFile(m_prjFileInfo.path() + "/background/" +fileInfo.fileName());
+//        QFile::copy(fileInfo.filePath(), targetFile.filePath());
         m_pageSum ++;
+        //将页码背景图 改为页码.bmp
+        QFileInfo targetFile(m_prjFileInfo.path() + tr("/background/%1.bmp").arg(m_pageSum));
+        QFile::copy(fileInfo.filePath(), targetFile.filePath());
+
         m_background.insert(m_pageSum,targetFile.fileName());
         pageTableWidget->insertRow(m_pageSum);
         pageTableWidget->setItem(m_pageSum,0,new QTableWidgetItem(QString::number(m_pageSum)));
@@ -311,6 +327,7 @@ void MainWindow::newOnePage(int index)
     connect(pageScene,SIGNAL(signalSendBtnItemQRectF(QRectF)),btnPropertyShow,SLOT(slotGetBtnItemQRectF(QRectF)));
     connect(pageScene,SIGNAL(signalSendWhichItemHasSelected(PROPERETY_SHOW_INDEX)),this,SLOT(slotGetWhichItemHasSelected(PROPERETY_SHOW_INDEX)));
     connect(this,SIGNAL(signalSaveAllItemToConfig(QString)),pageScene,SLOT(slotSaveAllItemOnScene(QString)));
+    connect(this,SIGNAL(signalOpenAllItemConfig(QString)),pageScene,SLOT(slotOpenReadAllItemOnScene(QString)));
 }
 
 void MainWindow::slotActionDeletePage()

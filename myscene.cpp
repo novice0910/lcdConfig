@@ -22,8 +22,6 @@ void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         btnItemList.append(item);
         this->addItem(item);
         item->setPos(mouseEvent->scenePos());
-//        item->setProperty(btn);
-//        getItemInfo(item);
         connect(item,SIGNAL(signalSendItemQRectF(QRectF)),this,SLOT(slotBtnRectQRectF(QRectF)));
     }
         break;
@@ -77,22 +75,6 @@ void myScene::setScenePageIndex(int index)
     m_page = index;
 }
 
-void myScene::getItemInfo(myItem *item)
-{
-    if(item ==0) return;
-    switch (item->getItemType()) {
-    case BTN:
-    {
-        BtnWidget *btnItem = qgraphicsitem_cast<BtnWidget *>(item);
-        BTN_INFO btn = btnItem->getInfo();
-        emit signalSendBtnInfoToUI(&btn);
-    }
-        break;
-    default:
-        break;
-    }
-}
-
 void myScene::slotBtnRectQRectF(QRectF rect)
 {
     emit signalSendBtnItemQRectF(rect);
@@ -118,10 +100,45 @@ void myScene::slotSelectRectChanged(QRectF rect)
     m_selectedItem->slotChangeRect(rect);
 }
 
+void myScene::slotOpenReadAllItemOnScene(QString path)
+{
+    QString openPath = path + tr("/page%1/").arg(m_page) + "config.ini";
+    QSettings *conf = new QSettings(openPath,QSettings::IniFormat);
+    btnItemList.clear();
+    conf->beginGroup("btn");
+    int sum = conf->value("btnSum").toInt();
+    for(int row=0;row<sum;row++)
+    {
+        BTN_INFO btnInit;
+
+        btnInit.page = conf->value("page",0).toInt();
+        btnInit.ojName = conf->value(tr("btn%1Name").arg(QString::number(row+1)),1).toString();
+        btnInit.x = conf->value(tr("btn%1X").arg(QString::number(row+1)),100).toInt();
+        btnInit.y = conf->value(tr("btn%1Y").arg(QString::number(row+1)),100).toInt();
+        btnInit.w = conf->value(tr("btn%1W").arg(QString::number(row+1)),100).toInt();
+        btnInit.h = conf->value(tr("btn%1H").arg(QString::number(row+1)),100).toInt();
+        btnInit.image = conf->value(tr("btn%1Image").arg(QString::number(row+1)),1).toString();
+        btnInit.regesitData = conf->value(tr("btn%1RegesitData").arg(QString::number(row+1)),-1).toInt();
+        btnInit.dataStartAddr = conf->value(tr("btn%1DataStartAddr").arg(QString::number(row+1)),-1).toInt();
+        btnInit.dataType = conf->value(tr("btn%1DataType").arg(QString::number(row+1)),0).toInt();
+        btnInit.dataData = conf->value(tr("btn%1DataData").arg(QString::number(row+1)),0).toInt();
+
+        BtnWidget *item = new BtnWidget;
+        item->setProperty(btnInit);
+        btnItemList.append(item);
+        this->addItem(item);
+        item->setPos(btnInit.x,btnInit.y);
+        connect(item,SIGNAL(signalSendItemQRectF(QRectF)),this,SLOT(slotBtnRectQRectF(QRectF)));
+    }
+    conf->endGroup();
+    delete conf;
+}
+
 void myScene::slotSaveAllItemOnScene(QString path)
 {
     QString savePath = path + tr("/page%1/").arg(m_page) + "config.ini";
     QSettings *conf = new QSettings(savePath,QSettings::IniFormat);
+    conf->setValue("PAGE/page",m_page);
     if(!btnItemList.isEmpty())
     {
         conf->setValue("btn/btnSum",btnItemList.size());
@@ -130,6 +147,4 @@ void myScene::slotSaveAllItemOnScene(QString path)
             btnItemList.at(i)->saveItemInfo(savePath,i);
         }
     }
-
-
 }
