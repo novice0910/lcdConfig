@@ -23,7 +23,7 @@ public:
 
         return m_btnInfo;
     }
-    void setProperty(BTN_INFO  btn)//set except QRect
+    void setProperty(BTN_INFO  btn)
     {
         m_btnInfo = btn;
     }
