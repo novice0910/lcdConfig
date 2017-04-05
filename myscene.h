@@ -17,7 +17,7 @@ class myScene :public QGraphicsScene
 {
     Q_OBJECT
 public:
-    myScene(QObject *parent = 0,int page =0);
+    myScene(QObject *parent = 0);
     void setItemType(ITEM_TYPE type);
     void setScenePageIndex(int index);
     void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
