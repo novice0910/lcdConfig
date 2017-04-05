@@ -46,6 +46,7 @@ public:
     ~MainWindow();
 signals:
     void signalSaveAllItemToConfig(QString path);//send the signal to scene save the all item in the path
+    void signalOpenAllItemConfig(QString path);//read all config
 public slots:
     void slotItemHasInserted(myItem *item);//the scene has inserted a new item
     void slotGetBtnInfoFromScene(BTN_INFO *);//get the information from the Scene
@@ -77,7 +78,7 @@ private:
     QFileInfo m_prjFileInfo;//storage the project information include path and project name
     QList<QGraphicsView*> viewList;//storage all the view
     QList<myScene*> sceneList;//storage all the scene
-    int m_pageSum;
+    int m_pageSum;//from zero reality page sum is (m_pageSum + 1)
     QMap <int,QString> m_background;
     QLabel *lableCurrentIndex;//the label show the current page index
     int m_selectedPageNum;//current selected page
@@ -90,6 +91,7 @@ private:
     void rightDockWidgetCreate();//create right dockwidget and widge on it
     void deleteItem();//delete the select Item
     void newOnePage();
+    void newOnePage(int index);
     void delectOnePage();
 };
 

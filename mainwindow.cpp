@@ -173,11 +173,16 @@ void MainWindow::slotOpenProject()
     else
     {
         m_prjFileInfo = fileInfo;
+        emit signalOpenAllItemConfig(m_prjFileInfo.path());
+        newOnePage();
     }
 }
 
 void MainWindow::slotSaveProject()
 {
+    QSettings *conf = new QSettings(m_prjFileInfo.path() + "/setUp/config.ini",QSettings::IniFormat);
+    conf->setValue("PAGE/pageSum",m_pageSum + 1);
+    delete conf;
     emit signalSaveAllItemToConfig(m_prjFileInfo.path());
 }
 
@@ -264,9 +269,34 @@ void MainWindow::newOnePage()
     stackedView->addWidget(page);
     int w =static_cast< QWidget *>(stackedView)->size().width();
     int h =static_cast< QWidget *>(stackedView)->size().height();
-    myScene *pageScene = new myScene(page,m_pageSum);
+    myScene *pageScene = new myScene(page);
     sceneList.append(pageScene);
     pageScene->setScenePageIndex(m_pageSum);
+    pageScene->setSceneRect(QRectF(0,0,w,h));
+    connect(pageScene,SIGNAL(signalItemHasInserted(myItem*)),this,SLOT(slotItemHasInserted(myItem*)));
+    QGraphicsView * pageView_0 = new QGraphicsView(pageScene,page);
+    viewList.append(pageView_0);
+    pageView_0->resize(QSize(800,480));
+    pageView_0->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    pageView_0->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    pageView_0->centerOn(0,0);
+    pageView_0->show();
+    connect(btnPropertyShow,SIGNAL(signalSendBtnInfoToScene(BTN_INFO)),pageScene,SLOT(slotGetBtnInfoChanged(BTN_INFO)));
+    connect(btnPropertyShow,SIGNAL(signalSendBtnRectChanged(QRectF)),pageScene,SLOT(slotSelectRectChanged(QRectF)));
+    connect(pageScene,SIGNAL(signalSendBtnItemQRectF(QRectF)),btnPropertyShow,SLOT(slotGetBtnItemQRectF(QRectF)));
+    connect(pageScene,SIGNAL(signalSendWhichItemHasSelected(PROPERETY_SHOW_INDEX)),this,SLOT(slotGetWhichItemHasSelected(PROPERETY_SHOW_INDEX)));
+    connect(this,SIGNAL(signalSaveAllItemToConfig(QString)),pageScene,SLOT(slotSaveAllItemOnScene(QString)));
+}
+
+void MainWindow::newOnePage(int index)
+{
+    QWidget *page = new QWidget(stackedView);
+    stackedView->addWidget(page);
+    int w =static_cast< QWidget *>(stackedView)->size().width();
+    int h =static_cast< QWidget *>(stackedView)->size().height();
+    myScene *pageScene = new myScene(page);
+    sceneList.append(pageScene);
+    pageScene->setScenePageIndex(index);
     pageScene->setSceneRect(QRectF(0,0,w,h));
     connect(pageScene,SIGNAL(signalItemHasInserted(myItem*)),this,SLOT(slotItemHasInserted(myItem*)));
     QGraphicsView * pageView_0 = new QGraphicsView(pageScene,page);
