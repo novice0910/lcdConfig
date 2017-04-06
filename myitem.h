@@ -46,14 +46,16 @@ public:
     bool m_isSelected;
 
     void changeRect(QRectF rect);//change Rect by others
-signals:
-    void signalSendItemQRectF(QRectF rectF);//only emit when it has been selected
 public slots:
+signals:
+    void signalSendItemQRectF(QRectF);
 
 protected:
     QRectF boundingRect()const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     QPainterPath shape()const;
+    QVariant itemChange(GraphicsItemChange change,
+                         const QVariant &value);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
@@ -67,6 +69,8 @@ private:
     QPointF end;
     DIRECTION direction;
     void judgeMousePosition(QPointF pointF);
+    void sendItemQRectF();
+
 };
 
 #endif // MYITEM_H

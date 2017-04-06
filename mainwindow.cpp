@@ -297,8 +297,9 @@ void MainWindow::newOnePage()
     pageView_0->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     pageView_0->centerOn(0,0);
     pageView_0->show();
-    connect(btnPropertyShow,SIGNAL(signalSendBtnInfoToScene(BTN_INFO)),pageScene,SLOT(slotGetBtnInfoChanged(BTN_INFO)));
-    connect(btnPropertyShow,SIGNAL(signalSendBtnRectChanged(QRectF)),pageScene,SLOT(slotSelectRectChanged(QRectF)));
+    connect(btnPropertyShow,SIGNAL(signalSendBtnInfoToScene(BTN_INFO)),pageScene,SLOT(slotGetBtnInfoChangedFromShow(BTN_INFO)));
+    connect(btnPropertyShow,SIGNAL(signalSendBtnRectChanged(QRectF)),pageScene,SLOT(slotSelectRectChangedByShow(QRectF)));
+    connect(pageScene,SIGNAL(signalSendBtnInfoToBtnShow(BTN_INFO *)),btnPropertyShow,SLOT(slotGetBtnInfoFromScene(BTN_INFO*)));
     connect(pageScene,SIGNAL(signalSendBtnItemQRectF(QRectF)),btnPropertyShow,SLOT(slotGetBtnItemQRectF(QRectF)));
     connect(pageScene,SIGNAL(signalSendWhichItemHasSelected(PROPERETY_SHOW_INDEX)),this,SLOT(slotGetWhichItemHasSelected(PROPERETY_SHOW_INDEX)));
     connect(this,SIGNAL(signalSaveAllItemToConfig(QString)),pageScene,SLOT(slotSaveAllItemOnScene(QString)));
@@ -322,8 +323,9 @@ void MainWindow::newOnePage(int index)
     pageView_0->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     pageView_0->centerOn(0,0);
     pageView_0->show();
-    connect(btnPropertyShow,SIGNAL(signalSendBtnInfoToScene(BTN_INFO)),pageScene,SLOT(slotGetBtnInfoChanged(BTN_INFO)));
-    connect(btnPropertyShow,SIGNAL(signalSendBtnRectChanged(QRectF)),pageScene,SLOT(slotSelectRectChanged(QRectF)));
+    connect(btnPropertyShow,SIGNAL(signalSendBtnInfoToScene(BTN_INFO)),pageScene,SLOT(slotGetBtnInfoChangedFromShow(BTN_INFO)));
+    connect(btnPropertyShow,SIGNAL(signalSendBtnRectChanged(QRectF)),pageScene,SLOT(slotSelectRectChangedByShow(QRectF)));
+    connect(pageScene,SIGNAL(signalSendBtnInfoToBtnShow(BTN_INFO *)),btnPropertyShow,SLOT(slotGetBtnInfoFromScene(BTN_INFO*)));
     connect(pageScene,SIGNAL(signalSendBtnItemQRectF(QRectF)),btnPropertyShow,SLOT(slotGetBtnItemQRectF(QRectF)));
     connect(pageScene,SIGNAL(signalSendWhichItemHasSelected(PROPERETY_SHOW_INDEX)),this,SLOT(slotGetWhichItemHasSelected(PROPERETY_SHOW_INDEX)));
     connect(this,SIGNAL(signalSaveAllItemToConfig(QString)),pageScene,SLOT(slotSaveAllItemOnScene(QString)));

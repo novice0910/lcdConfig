@@ -31,8 +31,9 @@ void myItem::setBrushColor(QColor color)
     m_brushColor = color;
 }
 
-void myItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget){
-//    Q_UNUSED(option);
+void myItem::paint(QPainter *painter,
+                   const QStyleOptionGraphicsItem *option,
+                   QWidget *widget){
     Q_UNUSED(widget);
     if (option->state & this->isSelected())
     {
@@ -53,6 +54,14 @@ void myItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
             painter->setPen(pen);
             painter->drawRect(QRectF(0,0,m_width,m_height));
     }
+}
+
+QVariant myItem::itemChange(GraphicsItemChange change,
+                     const QVariant &value)
+{
+    Q_UNUSED(change);
+    sendItemQRectF();
+    return value;
 }
 
 void myItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -77,172 +86,171 @@ void myItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void myItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
+    sendItemQRectF();
+    QPointF dis;
+    end=event->scenePos();
+    dis=end-start;
+    start=end;
+    switch (direction) {
+    case TOP://top
     {
-        QPointF dis;
-        end=event->scenePos();
-        dis=end-start;
-        start=end;
-        switch (direction) {
-        case TOP://top
+        if(end.y()>=0)
         {
-            if(end.y()>=0)
-            {
-                m_height = m_height - dis.y();
-                update(boundingRect());
-                this->moveBy(0,dis.y());
-            }
+            m_height = m_height - dis.y();
+            update(boundingRect());
+            this->moveBy(0,dis.y());
         }
-            break;
-        case BOTTOM:
+    }
+        break;
+    case BOTTOM:
+    {
+        if(end.y() <= SIZE_HIGHT)
         {
-            if(end.y() <= SIZE_HIGHT)
-            {
-                m_height = m_height + dis.y();
-                update(boundingRect());
-                prepareGeometryChange();
-                this->moveBy(0,0);
-            }
+            m_height = m_height + dis.y();
+            update(boundingRect());
+            prepareGeometryChange();
+            this->moveBy(0,0);
         }
-            break;
-        case LEFT:
+    }
+        break;
+    case LEFT:
+    {
+        if(end.x() >= 0)
         {
-            if(end.x() >= 0)
-            {
-                m_width = m_width - dis.x();
-                update(boundingRect());
-                prepareGeometryChange();
-                this->moveBy(dis.x(),0);
-            }
+            m_width = m_width - dis.x();
+            update(boundingRect());
+            prepareGeometryChange();
+            this->moveBy(dis.x(),0);
         }
-            break;
-        case RIGHT:
+    }
+        break;
+    case RIGHT:
+    {
+        if(end.x() <= SIZE_WIDTH)
         {
-            if(end.x() <= SIZE_WIDTH)
-            {
-                m_width = m_width + dis.x();
-                update(boundingRect());
-                prepareGeometryChange();
-                this->moveBy(0,0);
-            }
+            m_width = m_width + dis.x();
+            update(boundingRect());
+            prepareGeometryChange();
+            this->moveBy(0,0);
         }
-            break;
-        case LEFT_TOP:
+    }
+        break;
+    case LEFT_TOP:
+    {
+        if(end.x()>=0 && end.y() >= 0)
         {
-            if(end.x()>=0 && end.y() >= 0)
-            {
-                m_width = m_width - dis.x();
-                m_height = m_height - dis.y();
-                this->moveBy(dis.x(),dis.y());
-            }
-            else if(end.x() >= 0 && end.y() <= 0)
-            {
-                m_width = m_width - dis.x();
-                m_height = m_height;
-                this->moveBy(dis.x(),0);
-            }
-            else if(end.x() <= 0 && end.y() >= 0)
-            {
-                m_width = m_width;
-                m_height = m_height - dis.y();
-                this->moveBy(0,dis.y());
-            }
+            m_width = m_width - dis.x();
+            m_height = m_height - dis.y();
+            this->moveBy(dis.x(),dis.y());
+        }
+        else if(end.x() >= 0 && end.y() <= 0)
+        {
+            m_width = m_width - dis.x();
+            m_height = m_height;
+            this->moveBy(dis.x(),0);
+        }
+        else if(end.x() <= 0 && end.y() >= 0)
+        {
+            m_width = m_width;
+            m_height = m_height - dis.y();
+            this->moveBy(0,dis.y());
+        }
+        update(boundingRect());
+        prepareGeometryChange();
+    }
+        break;
+    case LEFT_BOTTOM:
+    {
+        if(end.x() >= 0 && end.y() <= SIZE_HIGHT)
+        {
+            m_width = m_width - dis.x();
+            m_height = m_height + dis.y();
+            this->moveBy(dis.x(),0);
+        }
+        else if(end.x() <= 0 && end.y() <= SIZE_HIGHT)
+        {
+            m_width = m_width;
+            m_height = m_height + dis.y();
+            this->moveBy(0,0);
+        }
+        else if(end.x() >= 0 && end.y() >= SIZE_HIGHT)
+        {
+            m_width = m_width - dis.x();
+            m_height = m_height;
+            this->moveBy(dis.x(),0);
+        }
+        update(boundingRect());
+        prepareGeometryChange();
+    }
+        break;
+    case RIGHT_TOP:
+    {
+        if(end.x() <= SIZE_WIDTH && end.y() >= 0)
+        {
+            m_width = m_width + dis.x();
+            m_height = m_height - dis.y();
+            this->moveBy(0,dis.y());
+        }
+        else if(end.x() >= SIZE_WIDTH && end.y() >= 0)
+        {
+            m_height = m_height - dis.y();
+            m_width = m_width;
+            this->moveBy(0,dis.y());
+        }
+        else if(end.x() <= SIZE_WIDTH && end.y() <= 0)
+        {
+            m_height = m_height;
+            m_width = m_width + dis.x();
+            this->moveBy(0,0);
+        }
+        update(boundingRect());
+        prepareGeometryChange();
+    }
+        break;
+    case RIGHT_BOTTOM:
+    {
+        if(end.x() <= SIZE_WIDTH && end.y() <= SIZE_HIGHT)
+        {
+            m_width = m_width + dis.x();
+            m_height = m_height + dis.y();
+            this->moveBy(0,0);
+        }
+        else if(end.x() >= SIZE_WIDTH && end.y() <= SIZE_HIGHT)
+        {
+            m_height = m_height + dis.y();
+            m_width = m_width;
+            this->moveBy(0,0);
+        }
+        else if(end.x() <= SIZE_WIDTH && end.y() >= SIZE_HIGHT)
+        {
+            m_height = m_height;
+            m_width = m_width + dis.x();
+            this->moveBy(0,0);
+        }
+        update(boundingRect());
+        prepareGeometryChange();
+    }
+        break;
+    case MOVE:
+    {
+        QPointF leftTop,rightTop,leftBottom,rightBottom;
+        leftTop = this->scenePos();
+        rightTop = QPointF(leftTop.x() + m_width,leftTop.x());
+        leftBottom = QPointF(leftTop.x(),leftTop.y() + m_height);
+        rightBottom = QPointF(leftTop.x() + m_width,leftTop.y() + m_height);
+        if(leftTop.x() >=0 && leftTop.y()>=0 &&
+           leftBottom.x() >= 0 && leftBottom.y() <= SIZE_HIGHT &&
+           rightTop.x() <= SIZE_WIDTH && rightTop.y() >= 0 &&
+           rightBottom.x() <= SIZE_WIDTH && rightBottom.y() <= SIZE_HIGHT)
+        {
+            this->moveBy(dis.x(),dis.y());
             update(boundingRect());
             prepareGeometryChange();
         }
-            break;
-        case LEFT_BOTTOM:
-        {
-            if(end.x() >= 0 && end.y() <= SIZE_HIGHT)
-            {
-                m_width = m_width - dis.x();
-                m_height = m_height + dis.y();
-                this->moveBy(dis.x(),0);
-            }
-            else if(end.x() <= 0 && end.y() <= SIZE_HIGHT)
-            {
-                m_width = m_width;
-                m_height = m_height + dis.y();
-                this->moveBy(0,0);
-            }
-            else if(end.x() >= 0 && end.y() >= SIZE_HIGHT)
-            {
-                m_width = m_width - dis.x();
-                m_height = m_height;
-                this->moveBy(dis.x(),0);
-            }
-            update(boundingRect());
-            prepareGeometryChange();
-        }
-            break;
-        case RIGHT_TOP:
-        {
-            if(end.x() <= SIZE_WIDTH && end.y() >= 0)
-            {
-                m_width = m_width + dis.x();
-                m_height = m_height - dis.y();
-                this->moveBy(0,dis.y());
-            }
-            else if(end.x() >= SIZE_WIDTH && end.y() >= 0)
-            {
-                m_height = m_height - dis.y();
-                m_width = m_width;
-                this->moveBy(0,dis.y());
-            }
-            else if(end.x() <= SIZE_WIDTH && end.y() <= 0)
-            {
-                m_height = m_height;
-                m_width = m_width + dis.x();
-                this->moveBy(0,0);
-            }
-            update(boundingRect());
-            prepareGeometryChange();
-        }
-            break;
-        case RIGHT_BOTTOM:
-        {
-            if(end.x() <= SIZE_WIDTH && end.y() <= SIZE_HIGHT)
-            {
-                m_width = m_width + dis.x();
-                m_height = m_height + dis.y();
-                this->moveBy(0,0);
-            }
-            else if(end.x() >= SIZE_WIDTH && end.y() <= SIZE_HIGHT)
-            {
-                m_height = m_height + dis.y();
-                m_width = m_width;
-                this->moveBy(0,0);
-            }
-            else if(end.x() <= SIZE_WIDTH && end.y() >= SIZE_HIGHT)
-            {
-                m_height = m_height;
-                m_width = m_width + dis.x();
-                this->moveBy(0,0);
-            }
-            update(boundingRect());
-            prepareGeometryChange();
-        }
-            break;
-        case MOVE:
-        {
-            QPointF leftTop,rightTop,leftBottom,rightBottom;
-            leftTop = this->scenePos();
-            rightTop = QPointF(leftTop.x() + m_width,leftTop.x());
-            leftBottom = QPointF(leftTop.x(),leftTop.y() + m_height);
-            rightBottom = QPointF(leftTop.x() + m_width,leftTop.y() + m_height);
-            if(leftTop.x() >=0 && leftTop.y()>=0 &&
-               leftBottom.x() >= 0 && leftBottom.y() <= SIZE_HIGHT &&
-               rightTop.x() <= SIZE_WIDTH && rightTop.y() >= 0 &&
-               rightBottom.x() <= SIZE_WIDTH && rightBottom.y() <= SIZE_HIGHT)
-            {
-                this->moveBy(dis.x(),dis.y());
-                update(boundingRect());
-                prepareGeometryChange();
-            }
-        }
-            break;
-        default:
-            break;
-        }
+    }
+        break;
+    default:
+        break;
     }
     QGraphicsItem::mouseMoveEvent(event);
 }
@@ -272,6 +280,20 @@ void myItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
     QGraphicsItem::hoverMoveEvent(event);
 }
 
+void myItem::sendItemQRectF()
+{
+    if(this->isSelected())
+    {
+
+        QRectF rectF;
+        rectF.setX(this->scenePos().x());
+        rectF.setY(this->scenePos().y());
+        rectF.setWidth(m_width);
+        rectF.setHeight(m_height);
+        emit signalSendItemQRectF(rectF);
+    }
+}
+
 void myItem::changeRect(QRectF rect)
 {
     if(this->isSelected())
@@ -283,6 +305,7 @@ void myItem::changeRect(QRectF rect)
         this->setPos(rect.x(),rect.y());
     }
 }
+
 
 void myItem::judgeMousePosition(QPointF pointF)
 {

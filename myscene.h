@@ -23,16 +23,16 @@ public:
     void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
 public slots:
     void slotBtnRectQRectF(QRectF rect);//get item rect QRectF from myItem
-    void slotGetBtnInfoChanged(BTN_INFO btn);
-    void slotSelectRectChanged(QRectF rect);//change the selected item QRectF
-    void slotSaveAllItemOnScene(QString path);
+    void slotGetBtnInfoChangedFromShow(BTN_INFO btn);//get btn info change From btn show
+    void slotSelectRectChangedByShow(QRectF rect);//change the selected item QRectF
+    void slotSaveAllItemOnScene(QString path);//when save all item infomation
     void slotOpenReadAllItemOnScene(QString path);//open project read all item
+    void slotGetBtnInfoChangedFromMyWidget(BTN_INFO btn);
 signals:
     void signalSendBtnItemQRectF(QRectF rect);//retransmission btn Item QRectF to btn
     void signalItemHasInserted(myItem *item);
-    void signalSendBtnInfoToUI(BTN_INFO *);
+    void signalSendBtnInfoToBtnShow(BTN_INFO *btn);
     void signalSendWhichItemHasSelected(PROPERETY_SHOW_INDEX);//set index of propertyShow index
-    void signalSendInitBtnInfo(BTN_INFO *info);
 private:
     int m_page;// which page this scene belongs to ?
     ITEM_LIST itemList;

@@ -6,6 +6,21 @@ BtnWidget::BtnWidget()
     setItemType(BTN);
     setToolTip("btn");
 }
+void BtnWidget::setProperty(BTN_INFO  btn)
+{
+    m_btnInfo = btn;
+    if(this->isSelected())
+    emit signalSendItemInfoToScene(btn);
+}
+
+QVariant BtnWidget::itemChange(GraphicsItemChange change,
+                     const QVariant &value)
+{
+    Q_UNUSED(change);
+    if(this->isSelected())
+    emit signalSendItemInfoToScene(m_btnInfo);
+    return value;
+}
 
 void BtnWidget::saveItemInfo(QString path,int num)
 {
@@ -21,34 +36,6 @@ void BtnWidget::saveItemInfo(QString path,int num)
     conf->setValue(tr("btn/btn%1DataType").arg(num + 1),m_btnInfo.dataType);
     conf->setValue(tr("btn/btn%1DataData").arg(num + 1),m_btnInfo.dataData);
     delete conf;
-}
-
-void BtnWidget::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
-{
-    sendItemQRectF();
-    QGraphicsItem::mouseMoveEvent(event);
-}
-
-QVariant BtnWidget::itemChange(GraphicsItemChange change,
-                     const QVariant &value)
-{
-    Q_UNUSED(change);
-    sendItemQRectF();
-    return value;
-}
-
-void BtnWidget::sendItemQRectF()
-{
-    if(this->isSelected())
-    {
-
-        QRectF rectF;
-        rectF.setX(this->scenePos().x());
-        rectF.setY(this->scenePos().y());
-        rectF.setWidth(m_width);
-        rectF.setHeight(m_height);
-        emit signalSendItemQRectF(rectF);
-    }
 }
 
 LabelWidget::LabelWidget()

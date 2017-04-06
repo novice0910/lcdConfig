@@ -23,6 +23,7 @@ void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         this->addItem(item);
         item->setPos(mouseEvent->scenePos());
         connect(item,SIGNAL(signalSendItemQRectF(QRectF)),this,SLOT(slotBtnRectQRectF(QRectF)));
+        connect(item,SIGNAL(signalSendItemInfoToScene(BTN_INFO)),this,SLOT(slotGetBtnInfoChangedFromMyWidget(BTN_INFO)));
     }
         break;
     case LABEL:
@@ -80,7 +81,7 @@ void myScene::slotBtnRectQRectF(QRectF rect)
     emit signalSendBtnItemQRectF(rect);
 }
 
-void myScene::slotGetBtnInfoChanged(BTN_INFO btn)
+void myScene::slotGetBtnInfoChangedFromShow(BTN_INFO btn)
 {
     BtnWidget *btnItem;
     foreach (btnItem , btnItemList) {
@@ -91,13 +92,18 @@ void myScene::slotGetBtnInfoChanged(BTN_INFO btn)
     }
 }
 
-void myScene::slotSelectRectChanged(QRectF rect)
+void myScene::slotSelectRectChangedByShow(QRectF rect)
 {
     if(m_selectedItem == 0)
     {
         return;
     }
     m_selectedItem->changeRect(rect);
+}
+
+void myScene::slotGetBtnInfoChangedFromMyWidget(BTN_INFO btn)
+{
+    emit signalSendBtnInfoToBtnShow(&btn);
 }
 
 void myScene::slotOpenReadAllItemOnScene(QString path)
@@ -129,8 +135,8 @@ void myScene::slotOpenReadAllItemOnScene(QString path)
         this->addItem(item);
         item->setPos(btnInit.x,btnInit.y);
         connect(item,SIGNAL(signalSendItemQRectF(QRectF)),this,SLOT(slotBtnRectQRectF(QRectF)));
+        connect(item,SIGNAL(signalSendItemInfoToScene(BTN_INFO)),this,SLOT(slotGetBtnInfoChangedFromMyWidget(BTN_INFO)));
 
-        emit signalSendInitBtnInfo(&btnInit);
     }
     conf->endGroup();
     delete conf;
