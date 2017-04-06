@@ -11,7 +11,6 @@ myItem::myItem(qreal width, qreal height)
     setOpacity(0.5);
     m_cursor=new QCursor;
     direction = NONE;
-    m_isSelected = false;
 }
 
 QRectF myItem::boundingRect()const{

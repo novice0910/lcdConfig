@@ -43,7 +43,6 @@ public:
     ITEM_TYPE m_itemType;
     qreal m_width;
     qreal m_height;
-    bool m_isSelected;
 
     void changeRect(QRectF rect);//change Rect by others
 public slots:
