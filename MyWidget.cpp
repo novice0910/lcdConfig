@@ -23,6 +23,34 @@ void BtnWidget::saveItemInfo(QString path,int num)
     delete conf;
 }
 
+void BtnWidget::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+    sendItemQRectF();
+    QGraphicsItem::mouseMoveEvent(event);
+}
+
+QVariant BtnWidget::itemChange(GraphicsItemChange change,
+                     const QVariant &value)
+{
+    Q_UNUSED(change);
+    sendItemQRectF();
+    return value;
+}
+
+void BtnWidget::sendItemQRectF()
+{
+    if(this->isSelected())
+    {
+
+        QRectF rectF;
+        rectF.setX(this->scenePos().x());
+        rectF.setY(this->scenePos().y());
+        rectF.setWidth(m_width);
+        rectF.setHeight(m_height);
+        emit signalSendItemQRectF(rectF);
+    }
+}
+
 LabelWidget::LabelWidget()
 {
     setBrushColor(QColor(128,255,255));

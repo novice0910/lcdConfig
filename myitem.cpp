@@ -4,7 +4,6 @@ myItem::myItem(qreal width, qreal height)
 {
     m_width=width;
     m_height=height;
-    m_brushColor = Qt::yellow;
     setAcceptDrops(true);
     setAcceptHoverEvents(true);
     setFlags(ItemIgnoresTransformations|ItemIsSelectable | ItemIsFocusable);
@@ -78,7 +77,6 @@ void myItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void myItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    sendItemQRectF();
     {
         QPointF dis;
         end=event->scenePos();
@@ -274,29 +272,7 @@ void myItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
     QGraphicsItem::hoverMoveEvent(event);
 }
 
-QVariant myItem::itemChange(GraphicsItemChange change,
-                     const QVariant &value)
-{
-    Q_UNUSED(change);
-    sendItemQRectF();
-    return value;
-}
-
-void myItem::sendItemQRectF()
-{
-    if(this->isSelected())
-    {
-
-        QRectF rectF;
-        rectF.setX(this->scenePos().x());
-        rectF.setY(this->scenePos().y());
-        rectF.setWidth(m_width);
-        rectF.setHeight(m_height);
-        emit signalSendItemQRectF(rectF);
-    }
-}
-
-void myItem::slotChangeRect(QRectF rect)
+void myItem::changeRect(QRectF rect)
 {
     if(this->isSelected())
     {

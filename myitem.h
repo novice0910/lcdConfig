@@ -45,10 +45,11 @@ public:
     qreal m_height;
     bool m_isSelected;
 
+    void changeRect(QRectF rect);//change Rect by others
 signals:
     void signalSendItemQRectF(QRectF rectF);//only emit when it has been selected
 public slots:
-    void slotChangeRect(QRectF rect);//change Rect by other
+
 protected:
     QRectF boundingRect()const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
@@ -59,7 +60,6 @@ protected:
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
     void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
-    QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 private:
     QColor m_brushColor;
     QCursor *m_cursor;
@@ -67,7 +67,6 @@ private:
     QPointF end;
     DIRECTION direction;
     void judgeMousePosition(QPointF pointF);
-    void sendItemQRectF();
 };
 
 #endif // MYITEM_H

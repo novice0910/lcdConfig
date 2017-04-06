@@ -201,6 +201,52 @@ void BtnPropertyShow::slotGetBtnInfoFromScene(BTN_INFO * btnInfo)
     btn_y->setValue(btnInfo->y);
     btn_h->setValue(btnInfo->h);
     btn_w->setValue(btnInfo->w);
+    lEditAddr->setText(QString::number(btnInfo->dataStartAddr));
+    lEditkeyNum->setText(QString::number(btnInfo->dataData));
+    sBoxNextPage->setValue(btnInfo->regesitData);
+    switch (btnInfo->dataType) {
+    case BY_BYTE:
+        rBtninputByByte->setChecked(true);
+        break;
+    case BY_BIT:
+        rBtninputByBit->setChecked(true);
+        break;
+    case BY_MSB:
+        rBtninputByHighByte->setChecked(true);
+        break;
+    case BY_LSB:
+        rBtninputByLowByte->setChecked(true);
+        break;
+    default:
+        break;
+    }
+}
+
+void BtnPropertyShow::slotGetInitBtnInfoFromScene(BTN_INFO *btnInfo)
+{
+    btn_x->setValue(btnInfo->x);
+    btn_y->setValue(btnInfo->y);
+    btn_h->setValue(btnInfo->h);
+    btn_w->setValue(btnInfo->w);
+    lEditAddr->setText(QString::number(btnInfo->dataStartAddr));
+    lEditkeyNum->setText(QString::number(btnInfo->dataData));
+    sBoxNextPage->setValue(btnInfo->regesitData);
+    switch (btnInfo->dataType) {
+    case BY_BYTE:
+        rBtninputByByte->setChecked(true);
+        break;
+    case BY_BIT:
+        rBtninputByBit->setChecked(true);
+        break;
+    case BY_MSB:
+        rBtninputByHighByte->setChecked(true);
+        break;
+    case BY_LSB:
+        rBtninputByLowByte->setChecked(true);
+        break;
+    default:
+        break;
+    }
 }
 
 void BtnPropertyShow::slotSpinBoxChanged(int value)

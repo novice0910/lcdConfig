@@ -28,7 +28,12 @@ public:
         m_btnInfo = btn;
     }
     void saveItemInfo(QString path, int num);//save the item in the path  btn?=btn(num)
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    QVariant itemChange(GraphicsItemChange change,const QVariant &value);
+
 private:
+    void sendItemQRectF();
+
 };
 
 class LabelWidget : public myItem

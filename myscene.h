@@ -32,7 +32,7 @@ signals:
     void signalItemHasInserted(myItem *item);
     void signalSendBtnInfoToUI(BTN_INFO *);
     void signalSendWhichItemHasSelected(PROPERETY_SHOW_INDEX);//set index of propertyShow index
-
+    void signalSendInitBtnInfo(BTN_INFO *info);
 private:
     int m_page;// which page this scene belongs to ?
     ITEM_LIST itemList;

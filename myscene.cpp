@@ -97,7 +97,7 @@ void myScene::slotSelectRectChanged(QRectF rect)
     {
         return;
     }
-    m_selectedItem->slotChangeRect(rect);
+    m_selectedItem->changeRect(rect);
 }
 
 void myScene::slotOpenReadAllItemOnScene(QString path)
@@ -129,6 +129,8 @@ void myScene::slotOpenReadAllItemOnScene(QString path)
         this->addItem(item);
         item->setPos(btnInit.x,btnInit.y);
         connect(item,SIGNAL(signalSendItemQRectF(QRectF)),this,SLOT(slotBtnRectQRectF(QRectF)));
+
+        emit signalSendInitBtnInfo(&btnInit);
     }
     conf->endGroup();
     delete conf;
