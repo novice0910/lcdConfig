@@ -347,6 +347,7 @@ void MainWindow::slotActionDown()
 
 void MainWindow::slotPageTableWidgetSelectedChanged()
 {
+    sceneList.at(m_selectedPageNum)->clearAllItemSelected();//before the m_selected changed
     m_selectedPageNum = pageTableWidget->currentRow();
     lableCurrentIndex->setText(QString::number(m_selectedPageNum));
     stackedView->setCurrentIndex(m_selectedPageNum);

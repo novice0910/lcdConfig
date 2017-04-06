@@ -156,3 +156,12 @@ void myScene::slotSaveAllItemOnScene(QString path)
         }
     }
 }
+
+void myScene::clearAllItemSelected()
+{
+    if(!btnItemList.isEmpty())
+    {
+        for(int i=0;i<btnItemList.size();i++)
+        btnItemList.at(i)->setSelected(false);
+    }
+}

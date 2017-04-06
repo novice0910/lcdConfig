@@ -21,6 +21,7 @@ public:
     void setItemType(ITEM_TYPE type);
     void setScenePageIndex(int index);
     void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
+    void clearAllItemSelected();//when this scene is not show clear item select status
 public slots:
     void slotBtnRectQRectF(QRectF rect);//get item rect QRectF from myItem
     void slotGetBtnInfoChangedFromShow(BTN_INFO btn);//get btn info change From btn show
