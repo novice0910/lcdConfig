@@ -90,11 +90,18 @@ void MainWindow::leftDockWidgetCreate()
     pageTableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
     pageTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);//item no edit
     connect(pageTableWidget,SIGNAL(itemSelectionChanged()),this,SLOT(slotPageTableWidgetSelectedChanged()));
+
+    QMenu *menu = new QMenu;
+    menu->addAction(tr("删除选中行"),this,SLOT(actionDeleteOnePage()));
+    menu->addAction(tr("删除所有"),this,SLOT(actionDeleteAllPage()));
+    QPushButton *btn = new QPushButton("删除");
+    btn->setMenu(menu);
+
     QToolBar *pToolBar = leftDockMainwindow->addToolBar("new");
-    pToolBar->addAction(tr("新增"),this,SLOT(slotActionNewPage()));
-    pToolBar->addAction(tr("删除"),this,SLOT(slotActionNewPage()));
-    pToolBar->addAction(tr("上移"),this,SLOT(slotActionNewPage()));
-    pToolBar->addAction(tr("下移"),this,SLOT(slotActionNewPage()));
+    pToolBar->addAction(tr("新增"),this,SLOT(actionNewPage()));
+    pToolBar->addWidget(btn);
+    pToolBar->addAction(tr("上移"),this,SLOT(actionPageUp()));
+    pToolBar->addAction(tr("下移"),this,SLOT(actionPageDown()));
 //    dockWidgetPageProperty->hide();
 }
 
@@ -249,35 +256,7 @@ void MainWindow::slotGetBtnInfoFromScene(BTN_INFO * btn)
     propertyShow->setCurrentIndex(BTN_INDEX);
 }
 
-void MainWindow::slotActionNewPage()
-{
-    QFileInfo fileInfo =  QFileDialog::getOpenFileName(this,tr("请选择图片"),"","image file(*.bmp)");
-    if(fileInfo.filePath().isEmpty())
-    {
-        QMessageBox::information(NULL, tr("提示"), tr("选择失败!"));
-    }
-    else
-    {
-//        QFileInfo targetFile(m_prjFileInfo.path() + "/background/" +fileInfo.fileName());
-//        QFile::copy(fileInfo.filePath(), targetFile.filePath());
-        //将页码背景图 改为页码.bmp pageSum 等于当前增加页的值 当前页的值从0 开始
-        QFileInfo targetFile(m_prjFileInfo.path() + tr("/background/%1.bmp").arg(m_pageSum));
-        QFile::copy(fileInfo.filePath(), targetFile.filePath());
 
-        m_background.insert(m_pageSum,targetFile.fileName());
-        pageTableWidget->insertRow(m_pageSum);
-        pageTableWidget->setItem(m_pageSum,0,new QTableWidgetItem(QString::number(m_pageSum)));
-        pageTableWidget->setItem(m_pageSum,1,new QTableWidgetItem(m_background.value(m_pageSum)));
-        m_selectedPageNum = m_pageSum;
-
-        //new the page_? folder
-        QDir newDir(m_prjFileInfo.path());
-        newDir.mkdir(tr("page%1").arg(m_pageSum));
-        newOnePage();
-        m_pageSum ++;// pageSum 等于当前增加页的值 当前页的值从0 开始
-
-    }
-}
 
 void MainWindow::newOnePage()
 {
@@ -332,15 +311,51 @@ void MainWindow::newOnePage(int index)
     connect(this,SIGNAL(signalOpenAllItemConfig(QString)),pageScene,SLOT(slotOpenReadAllItemOnScene(QString)));
 }
 
-void MainWindow::slotActionDeletePage()
+void MainWindow::actionNewPage()
+{
+    QFileInfo fileInfo =  QFileDialog::getOpenFileName(this,tr("请选择图片"),"","image file(*.bmp)");
+    if(fileInfo.filePath().isEmpty())
+    {
+        QMessageBox::information(NULL, tr("提示"), tr("选择失败!"));
+    }
+    else
+    {
+//        QFileInfo targetFile(m_prjFileInfo.path() + "/background/" +fileInfo.fileName());
+//        QFile::copy(fileInfo.filePath(), targetFile.filePath());
+        //将页码背景图 改为页码.bmp pageSum 等于当前增加页的值 当前页的值从0 开始
+        QFileInfo targetFile(m_prjFileInfo.path() + tr("/background/%1.bmp").arg(m_pageSum));
+        QFile::copy(fileInfo.filePath(), targetFile.filePath());
+
+        m_background.insert(m_pageSum,targetFile.fileName());
+        pageTableWidget->insertRow(m_pageSum);
+        pageTableWidget->setItem(m_pageSum,0,new QTableWidgetItem(QString::number(m_pageSum)));
+        pageTableWidget->setItem(m_pageSum,1,new QTableWidgetItem(m_background.value(m_pageSum)));
+        m_selectedPageNum = m_pageSum;
+
+        //new the page_? folder
+        QDir newDir(m_prjFileInfo.path());
+        newDir.mkdir(tr("page%1").arg(m_pageSum));
+        newOnePage();
+        m_pageSum ++;// pageSum 等于当前增加页的值 当前页的值从0 开始
+    }
+}
+
+void MainWindow::actionDeleteOnePage()
 {
 
 }
-void MainWindow::slotActionUp()
+
+void MainWindow::actionDeleteAllPage()
 {
 
 }
-void MainWindow::slotActionDown()
+
+void MainWindow::actionPageUp()
+{
+
+}
+
+void MainWindow::actionPageDown()
 {
 
 }
@@ -365,6 +380,8 @@ void MainWindow::slotGetWhichItemHasSelected(PROPERETY_SHOW_INDEX index)
 void MainWindow::mouseDoubleClickEvent(QMouseEvent *)
 {
     qDebug()<<"doubule click";
+    QMenu *menu = new QMenu;
+    menu->show();
 }
 
 void MainWindow::mouseMoveEvent(QMouseEvent *ev)

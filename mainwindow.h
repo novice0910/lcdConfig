@@ -56,10 +56,12 @@ private slots:
     void slotDrawLabTrigger();//select draw the label item
     void mouseDoubleClickEvent(QMouseEvent *);
     void mouseMoveEvent(QMouseEvent *ev);
-    void slotActionNewPage();
-    void slotActionDeletePage();
-    void slotActionUp();
-    void slotActionDown();
+    void actionNewPage();
+    void actionDeleteOnePage();
+    void actionDeleteAllPage();
+    void actionPageUp();
+    void actionPageDown();
+
     void slotNewProject();
     void slotOpenProject();
     void slotSaveProject();
