@@ -29,6 +29,7 @@ public slots:
     void slotSaveAllItemOnScene(QString path);//when save all item infomation
     void slotOpenReadAllItemOnScene(QString path);//open project read all item
     void slotGetBtnInfoChangedFromMyWidget(BTN_INFO btn);
+    void slotGetDeleteSelectedItemFromUI(PROPERETY_SHOW_INDEX index);
 signals:
     void signalSendBtnItemQRectF(QRectF rect);//retransmission btn Item QRectF to btn
     void signalItemHasInserted(myItem *item);

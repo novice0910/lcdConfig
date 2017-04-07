@@ -309,6 +309,7 @@ void MainWindow::newOnePage(int index)
     connect(pageScene,SIGNAL(signalSendWhichItemHasSelected(PROPERETY_SHOW_INDEX)),this,SLOT(slotGetWhichItemHasSelected(PROPERETY_SHOW_INDEX)));
     connect(this,SIGNAL(signalSaveAllItemToConfig(QString)),pageScene,SLOT(slotSaveAllItemOnScene(QString)));
     connect(this,SIGNAL(signalOpenAllItemConfig(QString)),pageScene,SLOT(slotOpenReadAllItemOnScene(QString)));
+    connect(this,SIGNAL(signalDeleteSelectedItemToScene(PROPERETY_SHOW_INDEX)),pageScene,SLOT(slotGetDeleteSelectedItemFromUI(PROPERETY_SHOW_INDEX)));
 }
 
 void MainWindow::actionNewPage()
@@ -377,6 +378,16 @@ void MainWindow::slotGetWhichItemHasSelected(PROPERETY_SHOW_INDEX index)
     propertyShow->setCurrentIndex(index);
 }
 
+void MainWindow::keyPressEvent(QKeyEvent *key)
+{
+    if(key->key()== Qt::Key_Delete)
+    {
+        qDebug()<<"delecte press";
+        PROPERETY_SHOW_INDEX index = (PROPERETY_SHOW_INDEX) propertyShow->currentIndex();
+        emit signalDeleteSelectedItemToScene(index);
+    }
+}
+
 void MainWindow::mouseDoubleClickEvent(QMouseEvent *)
 {
     qDebug()<<"doubule click";
@@ -390,3 +401,4 @@ void MainWindow::mouseMoveEvent(QMouseEvent *ev)
     size = tr("this pos is %1,%2").arg(ev->pos().x()).arg(ev->pos().y());
 //    this->setToolTip(size);
 }
+

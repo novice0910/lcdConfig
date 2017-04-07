@@ -78,6 +78,29 @@ void myScene::slotBtnRectQRectF(QRectF rect)
     emit signalSendBtnItemQRectF(rect);
 }
 
+void myScene::slotGetDeleteSelectedItemFromUI(PROPERETY_SHOW_INDEX index)
+{
+    switch (index) {
+    case BTN_INDEX:
+        {
+            BtnWidget *btnItem;
+            foreach (btnItem,btnItemList) {
+                if(btnItem->isSelected())
+                {
+                    btnItemList.removeOne(btnItem);
+                    delete btnItem;
+                }
+            }
+        }
+        break;
+    case LABEL_INDEX:
+
+        break;
+    default:
+        break;
+    }
+}
+
 void myScene::slotGetBtnInfoChangedFromShow(BTN_INFO btn)
 {
     BtnWidget *btnItem;
@@ -145,14 +168,12 @@ void myScene::slotSaveAllItemOnScene(QString path)
     QString savePath = path + tr("/page%1/").arg(m_page) + "config.ini";
     QSettings *conf = new QSettings(savePath,QSettings::IniFormat);
     conf->setValue("PAGE/page",m_page);
-    if(!btnItemList.isEmpty())
+
+    for(int i= 0;i<btnItemList.size();i++)
     {
-        conf->setValue("btn/btnSum",btnItemList.size());
-        for(int i= 0;i<btnItemList.size();i++)
-        {
-            btnItemList.at(i)->saveItemInfo(savePath,i);
-        }
+        btnItemList.at(i)->saveItemInfo(savePath,i);
     }
+    conf->setValue("btn/btnSum",btnItemList.size());
 }
 
 void myScene::clearAllItemSelected()

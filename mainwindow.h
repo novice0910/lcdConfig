@@ -26,6 +26,7 @@
 #include <QFileDialog>
 #include <QList>
 #include <QMap>
+#include <QKeyEvent>
 #include "myitem.h"
 #include "BtnPropertyShow.h"
 #include "myscene.h"
@@ -47,6 +48,7 @@ public:
 signals:
     void signalSaveAllItemToConfig(QString path);//send the signal to scene save the all item in the path
     void signalOpenAllItemConfig(QString path);//read all config
+    void signalDeleteSelectedItemToScene(PROPERETY_SHOW_INDEX index);//send witch  kind item and tell scene to delecte the selected one
 public slots:
     void slotItemHasInserted(myItem *item);//the scene has inserted a new item
     void slotGetBtnInfoFromScene(BTN_INFO *);//get the information from the Scene
@@ -56,6 +58,7 @@ private slots:
     void slotDrawLabTrigger();//select draw the label item
     void mouseDoubleClickEvent(QMouseEvent *);
     void mouseMoveEvent(QMouseEvent *ev);
+    void keyPressEvent(QKeyEvent *key);
     void actionNewPage();
     void actionDeleteOnePage();
     void actionDeleteAllPage();
