@@ -15,10 +15,8 @@ void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     switch (m_ItemType) {
     case BTN:
     {
-        BTN_INFO btn;
         m_ItemType = MOVE_ITEM;
         BtnWidget *item = new BtnWidget;
-        m_selectedItem = item;
         btnItemList.append(item);
         this->addItem(item);
         item->setPos(mouseEvent->scenePos());
@@ -30,7 +28,6 @@ void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
     {
         m_ItemType = MOVE_ITEM;
         LabelWidget *item = new LabelWidget;
-        m_selectedItem = item;
         this->addItem(item);
         item->setPos(mouseEvent->scenePos());
     }
