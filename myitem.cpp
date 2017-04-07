@@ -30,6 +30,12 @@ void myItem::setBrushColor(QColor color)
     m_brushColor = color;
 }
 
+void myItem::setWidthAndHeight(int width, int height)
+{
+    m_width = width;
+    m_height = height;
+}
+
 void myItem::paint(QPainter *painter,
                    const QStyleOptionGraphicsItem *option,
                    QWidget *widget){
@@ -59,6 +65,7 @@ QVariant myItem::itemChange(GraphicsItemChange change,
                      const QVariant &value)
 {
     Q_UNUSED(change);
+    if(change == ItemSelectedHasChanged)
     sendItemQRectF();
     return value;
 }

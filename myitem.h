@@ -45,6 +45,7 @@ public:
     qreal m_height;
 
     void changeRect(QRectF rect);//change Rect by others
+    void setWidthAndHeight(int width,int height);
 public slots:
 signals:
     void signalSendItemQRectF(QRectF);
@@ -69,7 +70,6 @@ private:
     DIRECTION direction;
     void judgeMousePosition(QPointF pointF);
     void sendItemQRectF();
-
 };
 
 #endif // MYITEM_H

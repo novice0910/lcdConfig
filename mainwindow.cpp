@@ -177,7 +177,7 @@ void MainWindow::slotOpenProject()
         m_pageSum = conf->value("PAGE/pageSum").toInt();
         delete conf;
 
-        for(int i=0;i<= m_pageSum;i++)
+        for(int i=0;i< m_pageSum;i++)
         {
             m_background.insert(i,tr("%1.bmp").arg(i));
             pageTableWidget->insertRow(i);

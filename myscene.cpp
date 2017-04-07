@@ -133,6 +133,7 @@ void myScene::slotOpenReadAllItemOnScene(QString path)
         item->setProperty(btnInit);
         btnItemList.append(item);
         this->addItem(item);
+        item->setWidthAndHeight(btnInit.w,btnInit.h);
         item->setPos(btnInit.x,btnInit.y);
         connect(item,SIGNAL(signalSendItemQRectF(QRectF)),this,SLOT(slotBtnRectQRectF(QRectF)));
         connect(item,SIGNAL(signalSendItemInfoToScene(BTN_INFO)),this,SLOT(slotGetBtnInfoChangedFromMyWidget(BTN_INFO)));

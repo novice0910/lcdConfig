@@ -16,8 +16,7 @@ void BtnWidget::setProperty(BTN_INFO  btn)
 QVariant BtnWidget::itemChange(GraphicsItemChange change,
                      const QVariant &value)
 {
-    Q_UNUSED(change);
-    if(this->isSelected())
+    if((change == ItemSelectedHasChanged)&& (this->isSelected()))
     emit signalSendItemInfoToScene(m_btnInfo);
     return value;
 }
