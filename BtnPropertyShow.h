@@ -25,7 +25,6 @@ signals:
 public slots:
     void slotGetBtnItemQRectF(QRectF rect);//get item QRectF from scene because of item has changed
     void slotGetBtnInfoFromScene(BTN_INFO *btnInfo);//show the btn information when it has selected
-    void slotGetInitBtnInfoFromScene(BTN_INFO *btnInfo);
 private slots:
     void slotSpinBoxChanged(int value);
     void slotRBtnClicked();
