@@ -80,9 +80,9 @@ private:
     QList<myScene*> sceneList;//storage all the scene
     QMap <int,QString> m_background;//storage all the background image name
 
-    int m_pageSum;//from zero reality page sum is (m_pageSum + 1)
+    int m_pageSum;// page sum
     QLabel *lableCurrentIndex;//the label show the current page index
-    int m_selectedPageNum;//current selected page
+    int m_selectedPageNum;//current selected page from zero
 
     void dataInit();
     void centralWidgetCreate();

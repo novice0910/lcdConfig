@@ -125,7 +125,7 @@ void MainWindow::rightDockWidgetCreate()
 
 void MainWindow::dataInit()
 {
-    m_pageSum = -1;
+    m_pageSum = 0;
     m_selectedPageNum = 0;
 }
 
@@ -193,7 +193,7 @@ void MainWindow::slotOpenProject()
 void MainWindow::slotSaveProject()
 {
     QSettings *conf = new QSettings(m_prjFileInfo.path() + "/setUp/config.ini",QSettings::IniFormat);
-    conf->setValue("PAGE/pageSum",m_pageSum + 1);
+    conf->setValue("PAGE/pageSum",m_pageSum);
     delete conf;
     emit signalSaveAllItemToConfig(m_prjFileInfo.path());
 }
@@ -260,8 +260,7 @@ void MainWindow::slotActionNewPage()
     {
 //        QFileInfo targetFile(m_prjFileInfo.path() + "/background/" +fileInfo.fileName());
 //        QFile::copy(fileInfo.filePath(), targetFile.filePath());
-        m_pageSum ++;
-        //将页码背景图 改为页码.bmp
+        //将页码背景图 改为页码.bmp pageSum 等于当前增加页的值 当前页的值从0 开始
         QFileInfo targetFile(m_prjFileInfo.path() + tr("/background/%1.bmp").arg(m_pageSum));
         QFile::copy(fileInfo.filePath(), targetFile.filePath());
 
@@ -274,8 +273,9 @@ void MainWindow::slotActionNewPage()
         //new the page_? folder
         QDir newDir(m_prjFileInfo.path());
         newDir.mkdir(tr("page%1").arg(m_pageSum));
-
         newOnePage();
+        m_pageSum ++;// pageSum 等于当前增加页的值 当前页的值从0 开始
+
     }
 }
 
