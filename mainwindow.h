@@ -51,7 +51,6 @@ signals:
     void signalDeleteSelectedItemToScene(PROPERETY_SHOW_INDEX index);//send witch  kind item and tell scene to delecte the selected one
 public slots:
     void slotItemHasInserted(myItem *item);//the scene has inserted a new item
-    void slotGetBtnInfoFromScene(BTN_INFO *);//get the information from the Scene
     void slotGetWhichItemHasSelected(PROPERETY_SHOW_INDEX index);//set the stackedView index
 private slots:
     void slotDrawBtnTriggered();//select draw the btn item
@@ -95,7 +94,6 @@ private:
     void toolBarCreate();//create toolBar and all aciton on this
     void leftDockWidgetCreate();//create left DockWidget and widget on it
     void rightDockWidgetCreate();//create right dockwidget and widge on it
-    void deleteItem();//delete the select Item
     void newOnePage();
     void newOnePage(int index); //when read project
     void delectOnePage();

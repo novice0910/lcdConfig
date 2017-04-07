@@ -223,40 +223,12 @@ void MainWindow::slotDrawLabTrigger()
     sceneList.at(m_selectedPageNum)->setItemType(LABEL);
 }
 
-void MainWindow::deleteItem()
-{
-//    foreach (QGraphicsItem *item, scene->selectedItems()) {
-//        if (item->type() == Arrow::Type) {
-//            scene->removeItem(item);
-//            Arrow *arrow = qgraphicsitem_cast<Arrow *>(item);
-//            arrow->startItem()->removeArrow(arrow);
-//            arrow->endItem()->removeArrow(arrow);
-//            delete item;
-//        }
-//    }
-
-//    foreach (QGraphicsItem *item, scene->selectedItems()) {
-//         if (item->type() == DiagramItem::Type) {
-//             qgraphicsitem_cast<DiagramItem *>(item)->removeArrows();
-//         }
-//         scene->removeItem(item);
-//         delete item;
-//     }
-}
 void MainWindow::slotItemHasInserted(myItem *item)
 {
     Q_UNUSED(item);
     if(!sceneList.isEmpty())
     sceneList.at(m_selectedPageNum)->setItemType(MOVE_ITEM);
 }
-
-void MainWindow::slotGetBtnInfoFromScene(BTN_INFO * btn)
-{
-    Q_UNUSED(btn);
-    propertyShow->setCurrentIndex(BTN_INDEX);
-}
-
-
 
 void MainWindow::newOnePage()
 {
