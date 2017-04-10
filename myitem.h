@@ -62,7 +62,7 @@ protected:
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
     void hoverMoveEvent(QGraphicsSceneHoverEvent *event);
-    virtual void sendItemSpecialProperty();
+    virtual void sendItemSpecialProperty();//send the Special property to scene when it has been selected;
 private:
     QColor m_brushColor;
     QCursor *m_cursor;

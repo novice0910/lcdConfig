@@ -153,8 +153,6 @@ void MainWindow::actionNewProject()
         prj->setValue("IMG/00",0);
         delete prj;
 
-        QDir newDir(m_prjFileInfo.path());
-        qDebug()<<"rm dir"<<newDir.rmdir(m_prjFileInfo.path());
         newDir.mkdir("setUp");
         newDir.mkdir("background");
         newDir.mkdir("keyboard");
@@ -237,7 +235,6 @@ void MainWindow::newOnePage()
     sceneList.append(pageScene);
     pageScene->setScenePageIndex(m_pageSum);
     pageScene->setSceneRect(QRectF(0,0,w,h));
-    connect(pageScene,SIGNAL(signalItemHasInserted(myItem*)),this,SLOT(slotItemHasInserted(myItem*)));
     QGraphicsView * pageView_0 = new QGraphicsView(pageScene,page);
     viewList.append(pageView_0);
     pageView_0->resize(QSize(800,480));
@@ -256,6 +253,7 @@ void MainWindow::newOnePage()
 void MainWindow::newOnePage(int index)
 {
     QWidget *page = new QWidget(stackedView);
+    pageList.append(page);
     stackedView->addWidget(page);
     int w =static_cast< QWidget *>(stackedView)->size().width();
     int h =static_cast< QWidget *>(stackedView)->size().height();
@@ -313,10 +311,11 @@ void MainWindow::actionDeleteOnePage()
 {
     m_selectedPageNum = pageTableWidget->currentRow();
     qDebug()<<"m_selectedPageNum"<<m_selectedPageNum;
-    pageList.removeAt(m_selectedPageNum);
-    viewList.removeAt(m_selectedPageNum);
     sceneList.removeAt(m_selectedPageNum);
-    pageTableWidget->removeRow(m_selectedPageNum);
+    viewList.removeAt(m_selectedPageNum);
+    stackedView->removeWidget(pageList.at(m_selectedPageNum));
+    pageList.removeAt(m_selectedPageNum);
+//    pageTableWidget->removeRow(m_selectedPageNum);
 }
 
 void MainWindow::actionDeleteAllPage()
