@@ -27,18 +27,18 @@ void MainWindow::toolBarCreate()
     actionNewProject->setToolTip(tr("新建工程"));
     connect(actionNewProject,SIGNAL(triggered()),this,SLOT(slotNewProject()));
     toolBarProject->addAction(actionNewProject);
-    QAction *actionOpenProject = new QAction(tr("打开"),this);
-    actionOpenProject->setToolTip(tr("打开工程"));
-    connect(actionOpenProject,SIGNAL(triggered()),this,SLOT(slotOpenProject()));
-    toolBarProject->addAction(actionOpenProject);
+    QAction *openProject = new QAction(tr("打开"),this);
+    openProject->setToolTip(tr("打开工程"));
+    connect(openProject,SIGNAL(triggered()),this,SLOT(actionOpenProject()));
+    toolBarProject->addAction(openProject);
     QAction *actionSaveProject = new QAction(tr("Debug"),this);
     actionSaveProject->setToolTip(tr("生成配置文件"));
     connect(actionSaveProject,SIGNAL(triggered()),this,SLOT(slotSaveProject()));
     toolBarProject->addAction(actionSaveProject);
-    QAction *actionSetProject = new QAction(tr("设置"),this);
-    actionSetProject->setToolTip(tr("串口设置"));
-    connect(actionSetProject,SIGNAL(triggered()),this,SLOT(slotSetProject()));
-    toolBarProject->addAction(actionSetProject);
+    QAction *setProject = new QAction(tr("设置"),this);
+    setProject->setToolTip(tr("串口设置"));
+    connect(setProject,SIGNAL(triggered()),this,SLOT(actionSetProject()));
+    toolBarProject->addAction(setProject);
     //draw the item
     QToolBar *toolBar = new QToolBar;
     this->addToolBar(toolBar);
@@ -147,12 +147,14 @@ void MainWindow::slotNewProject()
     else
     {
         m_prjFileInfo = fileInfo;
+//        removeFolderContent(fileInfo.path());
         QSettings *prj = new QSettings(m_prjFileInfo.filePath(),QSettings::IniFormat);
         prj->setValue("INIT/SIZE","800*480");
         prj->setValue("IMG/00",0);
         delete prj;
 
         QDir newDir(m_prjFileInfo.path());
+        qDebug()<<"rm dir"<<newDir.rmdir(m_prjFileInfo.path());
         newDir.mkdir("setUp");
         newDir.mkdir("background");
         newDir.mkdir("keyboard");
@@ -170,7 +172,7 @@ void MainWindow::slotNewProject()
     }
 }
 
-void MainWindow::slotOpenProject()
+void MainWindow::actionOpenProject()
 {
     QFileInfo  fileInfo = QFileDialog::getOpenFileName(this,tr("请选择工程"),"GKprj.hmi","GKHMI(*.hmi)");
     if(fileInfo.filePath().isEmpty())
@@ -205,7 +207,7 @@ void MainWindow::slotSaveProject()
     emit signalSaveAllItemToConfig(m_prjFileInfo.path());
 }
 
-void MainWindow::slotSetProject()
+void MainWindow::actionSetProject()
 {
     ComSet *comSet = new ComSet;
     comSet->setSavePath(m_prjFileInfo.path() + "/setUp/config.ini");
@@ -315,7 +317,7 @@ void MainWindow::actionNewPage()
 
 void MainWindow::actionDeleteOnePage()
 {
-
+//    stackedView->removeWidget();
 }
 
 void MainWindow::actionDeleteAllPage()
@@ -374,3 +376,50 @@ void MainWindow::mouseMoveEvent(QMouseEvent *ev)
 //    this->setToolTip(size);
 }
 
+bool MainWindow::removeFolderContent(const QString &folderDir)
+{
+    QDir dir(folderDir);
+    QFileInfoList fileList;
+    QFileInfo curFile;
+    if(!dir.exists())  {return false;}//文件不存，则返回false
+    fileList=dir.entryInfoList(QDir::Dirs|QDir::Files
+                               |QDir::Readable|QDir::Writable
+                               |QDir::Hidden|QDir::NoDotAndDotDot
+                               ,QDir::Name);
+    while(fileList.size()>0)
+    {
+        int infoNum=fileList.size();
+        for(int i=infoNum-1;i>=0;i--)
+        {
+            curFile=fileList[i];
+            if(curFile.isFile())//如果是文件，删除文件
+            {
+                QFile fileTemp(curFile.filePath());
+                fileTemp.remove();
+                fileList.removeAt(i);
+            }
+            if(curFile.isDir())//如果是文件夹
+            {
+                QDir dirTemp(curFile.filePath());
+                QFileInfoList fileList1=dirTemp.entryInfoList(QDir::Dirs|QDir::Files
+                                                              |QDir::Readable|QDir::Writable
+                                                              |QDir::Hidden|QDir::NoDotAndDotDot
+                                                              ,QDir::Name);
+                if(fileList1.size()==0)//下层没有文件或文件夹
+                {
+                    dirTemp.rmdir(".");
+                    fileList.removeAt(i);
+                }
+                else//下层有文件夹或文件
+                {
+                    for(int j=0;j<fileList1.size();j++)
+                    {
+                        if(!(fileList.contains(fileList1[j])))
+                            fileList.append(fileList1[j]);
+                    }
+                }
+            }
+        }
+    }
+    return true;
+}

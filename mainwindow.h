@@ -65,13 +65,12 @@ private slots:
     void actionPageDown();
 
     void slotNewProject();
-    void slotOpenProject();
+    void actionOpenProject();
     void slotSaveProject();
-    void slotSetProject();
+    void actionSetProject();
     void slotPageTableWidgetSelectedChanged();
 private:
     Ui::MainWindow *ui;
-    QWidget *centralWidget;
     QTabWidget * tabWidget;//show the welcome page and stackedView
     QStackedWidget *stackedView;//stackedView to show different page and item
     QTableWidget *pageTableWidget;//on left dockwidget show the page information
@@ -97,6 +96,8 @@ private:
     void newOnePage();
     void newOnePage(int index); //when read project
     void delectOnePage();
+    bool removeFolderContent(const QString &folderDir);
+
 };
 
 #endif // MAINWINDOW_H
