@@ -65,9 +65,17 @@ QVariant myItem::itemChange(GraphicsItemChange change,
                      const QVariant &value)
 {
     Q_UNUSED(change);
-    if(change == ItemSelectedHasChanged)
-    sendItemQRectF();
+    if((change == ItemSelectedHasChanged) && this->isSelected())
+    {
+        sendItemQRectF();
+        sendItemSpecialProperty();
+    }
     return value;
+}
+
+void myItem::sendItemSpecialProperty()
+{
+
 }
 
 void myItem::mousePressEvent(QGraphicsSceneMouseEvent *event)

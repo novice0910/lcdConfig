@@ -5,6 +5,14 @@ BtnWidget::BtnWidget()
     setBrushColor(Qt::yellow);
     setItemType(BTN);
     setToolTip("btn");
+    m_btnInfo.x = 0;
+    m_btnInfo.y = 0;
+    m_btnInfo.w =100;
+    m_btnInfo.h = 30;
+    m_btnInfo.dataData = 0;
+    m_btnInfo.dataStartAddr = -1;
+    m_btnInfo.dataType = 0;
+    m_btnInfo.regesitData = -1;
 }
 void BtnWidget::setProperty(BTN_INFO  btn)
 {
@@ -13,12 +21,16 @@ void BtnWidget::setProperty(BTN_INFO  btn)
     emit signalSendItemInfoToScene(btn);
 }
 
-QVariant BtnWidget::itemChange(GraphicsItemChange change,
-                     const QVariant &value)
+void BtnWidget::setInitProperty(QPointF pointf)
 {
-    if((change == ItemSelectedHasChanged)&& (this->isSelected()))
+    m_btnInfo.x = pointf.x();
+    m_btnInfo.y = pointf.y();
     emit signalSendItemInfoToScene(m_btnInfo);
-    return value;
+}
+
+void BtnWidget::sendItemSpecialProperty()
+{
+    emit signalSendItemInfoToScene(m_btnInfo);
 }
 
 void BtnWidget::saveItemInfo(QString path,int num)

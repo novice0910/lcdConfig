@@ -15,9 +15,9 @@ public:
 
     BTN_INFO m_btnInfo;
     void setProperty(BTN_INFO  btn);
+    void setInitProperty(QPointF pointf);
     void saveItemInfo(QString path, int num);//save the item in the path  btn?=btn(num)
-    QVariant itemChange(GraphicsItemChange change,
-                         const QVariant &value);
+    void sendItemSpecialProperty();
 signals:
     void signalSendItemInfoToScene(BTN_INFO info);//only emit when it has been selected
 
