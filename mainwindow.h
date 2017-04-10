@@ -50,7 +50,6 @@ signals:
     void signalOpenAllItemConfig(QString path);//read all config
     void signalDeleteSelectedItemToScene(PROPERETY_SHOW_INDEX index);//send witch  kind item and tell scene to delecte the selected one
 public slots:
-    void slotItemHasInserted(myItem *item);//the scene has inserted a new item
     void slotGetWhichItemHasSelected(PROPERETY_SHOW_INDEX index);//set the stackedView index
 private slots:
     void slotDrawBtnTriggered();//select draw the btn item
@@ -64,7 +63,7 @@ private slots:
     void actionPageUp();
     void actionPageDown();
 
-    void slotNewProject();
+    void actionNewProject();
     void actionOpenProject();
     void slotSaveProject();
     void actionSetProject();
@@ -78,7 +77,10 @@ private:
     BtnPropertyShow *btnPropertyShow;//show the btn property
     QDockWidget * dockWidgetPageProperty;
     QDockWidget *dockWidgetPropertyShow;
+
+    //store information
     QFileInfo m_prjFileInfo;//storage the project information include path and project name
+    QList<QWidget *> pageList;//storage all the page on stackedView
     QList<QGraphicsView*> viewList;//storage all the view
     QList<myScene*> sceneList;//storage all the scene
     QMap <int,QString> m_background;//storage all the background image name
@@ -95,7 +97,6 @@ private:
     void rightDockWidgetCreate();//create right dockwidget and widge on it
     void newOnePage();
     void newOnePage(int index); //when read project
-    void delectOnePage();
     bool removeFolderContent(const QString &folderDir);
 
 };

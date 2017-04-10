@@ -22,6 +22,8 @@ void myScene::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
         item->setPos(mouseEvent->scenePos());
         connect(item,SIGNAL(signalSendItemQRectF(QRectF)),this,SLOT(slotBtnRectQRectF(QRectF)));
         connect(item,SIGNAL(signalSendItemInfoToScene(BTN_INFO)),this,SLOT(slotGetBtnInfoChangedFromMyWidget(BTN_INFO)));
+        item->setInitProperty(mouseEvent->scenePos());
+        emit signalSendWhichItemHasSelected(BTN_INDEX);
     }
         break;
     case LABEL:
@@ -124,6 +126,7 @@ void myScene::slotSelectRectChangedByShow(QRectF rect)
 void myScene::slotGetBtnInfoChangedFromMyWidget(BTN_INFO btn)
 {
     emit signalSendBtnInfoToBtnShow(&btn);
+    emit signalSendWhichItemHasSelected(BTN_INDEX);
 }
 
 void myScene::slotOpenReadAllItemOnScene(QString path)

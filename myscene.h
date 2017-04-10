@@ -32,7 +32,6 @@ public slots:
     void slotGetDeleteSelectedItemFromUI(PROPERETY_SHOW_INDEX index);
 signals:
     void signalSendBtnItemQRectF(QRectF rect);//retransmission btn Item QRectF to btn
-    void signalItemHasInserted(myItem *item);
     void signalSendBtnInfoToBtnShow(BTN_INFO *btn);
     void signalSendWhichItemHasSelected(PROPERETY_SHOW_INDEX);//set index of propertyShow index
 private:

@@ -23,10 +23,10 @@ void MainWindow::toolBarCreate()
     QToolBar *toolBarProject = new QToolBar;
     this->addToolBar(toolBarProject);
     this->addToolBarBreak(Qt::TopToolBarArea);
-    QAction *actionNewProject = new QAction(tr("新建"),this);
-    actionNewProject->setToolTip(tr("新建工程"));
-    connect(actionNewProject,SIGNAL(triggered()),this,SLOT(slotNewProject()));
-    toolBarProject->addAction(actionNewProject);
+    QAction *newProject = new QAction(tr("新建"),this);
+    newProject->setToolTip(tr("新建工程"));
+    connect(newProject,SIGNAL(triggered()),this,SLOT(actionNewProject()));
+    toolBarProject->addAction(newProject);
     QAction *openProject = new QAction(tr("打开"),this);
     openProject->setToolTip(tr("打开工程"));
     connect(openProject,SIGNAL(triggered()),this,SLOT(actionOpenProject()));
@@ -137,7 +137,7 @@ void MainWindow::dataInit()
 }
 
 //第一行工具栏 新建工程
-void MainWindow::slotNewProject()
+void MainWindow::actionNewProject()
 {
     QFileInfo  fileInfo = QFileDialog::getSaveFileName(this,tr("请选择保存路径"),"GKprj.hmi","GKHMI(*.hmi)");
     if(fileInfo.filePath().isEmpty())
@@ -225,16 +225,11 @@ void MainWindow::slotDrawLabTrigger()
     sceneList.at(m_selectedPageNum)->setItemType(LABEL);
 }
 
-void MainWindow::slotItemHasInserted(myItem *item)
-{
-    Q_UNUSED(item);
-    if(!sceneList.isEmpty())
-    sceneList.at(m_selectedPageNum)->setItemType(MOVE_ITEM);
-}
 
 void MainWindow::newOnePage()
 {
     QWidget *page = new QWidget(stackedView);
+    pageList.append(page);
     stackedView->addWidget(page);
     int w =static_cast< QWidget *>(stackedView)->size().width();
     int h =static_cast< QWidget *>(stackedView)->size().height();
@@ -268,7 +263,6 @@ void MainWindow::newOnePage(int index)
     sceneList.append(pageScene);
     pageScene->setScenePageIndex(index);
     pageScene->setSceneRect(QRectF(0,0,w,h));
-    connect(pageScene,SIGNAL(signalItemHasInserted(myItem*)),this,SLOT(slotItemHasInserted(myItem*)));
     QGraphicsView * pageView_0 = new QGraphicsView(pageScene,page);
     viewList.append(pageView_0);
     pageView_0->resize(QSize(800,480));
@@ -317,7 +311,12 @@ void MainWindow::actionNewPage()
 
 void MainWindow::actionDeleteOnePage()
 {
-//    stackedView->removeWidget();
+    m_selectedPageNum = pageTableWidget->currentRow();
+    qDebug()<<"m_selectedPageNum"<<m_selectedPageNum;
+    pageList.removeAt(m_selectedPageNum);
+    viewList.removeAt(m_selectedPageNum);
+    sceneList.removeAt(m_selectedPageNum);
+    pageTableWidget->removeRow(m_selectedPageNum);
 }
 
 void MainWindow::actionDeleteAllPage()
