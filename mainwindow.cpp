@@ -153,6 +153,7 @@ void MainWindow::actionNewProject()
         prj->setValue("IMG/00",0);
         delete prj;
 
+        QDir newDir(m_prjFileInfo.path());
         newDir.mkdir("setUp");
         newDir.mkdir("background");
         newDir.mkdir("keyboard");
